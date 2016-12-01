@@ -1,18 +1,56 @@
-# Collision 大作业
+# Project Collision
 
-## 简要介绍
+## Introduction
 
-这是 2016 年计算概论 (实验班) 的三维建模 + 碰撞的大作业 Collision.
+This is the project Collision, groupwork of the course Introduction to
+Computing (A) (Honor Track) in the year of 2016. This project aims at 3-D
+modeling, rendering and collision detection.
 
-## 版本更改
+## Changelog
 
-1. lzh @ 2016.12.01.00.46
-  1.1 建立了大体的框架, 分为 display, draw, update, game 四个部分, 分别对应渲染, 建模, 碰撞测试与界面逻辑.  
-  1.2 使用 Cmake 来达到跨平台编译的效果.
+* lzh @ 2016.12.01.14.44
+  1. Add commentary to each files.
 
-## 目标与注释
+* lzh @ 2016.12.01.13.27
+  1. Substitute *Sleep* with *glutTimerFunc* to solve compatibility
+  issues.
 
-1. lzh @ 2016.12.01.00.46
-  1.1 CMakelists 中 Unix 系统的编译命令需要更新, 现在在 Unix 下编译会出错, 待更新, 目前可以使用命令行编译, 编译的文件应为 main.cpp display.cpp draw.cpp update.cpp game.cpp, 需要使用 glut 或 freeglut 库与 glm 库.  
-  1.2 global.hpp 中声明的 Object 类与 Model 类的写法很愚蠢, 待建模的同学重写.  
-  1.3 display.cpp 里面做了一个简单的demo, 可以将里面的东西删掉.
+* lzh @ 2016.12.01.11.17
+  1. Rewrite *Readme.md* in English in order to enhance compatibility and
+  to practise English for the approaching CET-4 test.
+
+* lzh @ 2016.12.01.00.46
+  1. Create the basic framework consisting of four parts including
+  *display*, *draw*, *update*, *game*, which is exactly the rendering,
+  modeling, collision detection and application part of the project
+  correspondingly.
+  2. Use Cmake to ensure Cross-platform Compile compatibility.
+
+## TodoList and Remarks
+
+* lzh @ 2016.12.01.14.44
+  1. Feel free to correct typos in the *Readme.md* and the source files.
+
+* lzh @ 2016.12.01.13.27
+  1. None.
+
+* lzh @ 2016.12.01.11.17
+  1. Please help to correct typos in *Readme.md*, which accounts for my
+  poor English.
+
+* lzh @ 2016.12.01.00.46
+  1. The compile argument for UNIX in CMakelists.txt need updating.
+  Therefore, attempt to use Cmake to generate Makefile in Unix leads to
+  fatal errors. An alternative is to compile in command-line by hand,
+  which needs to compile *main.cpp*, *display.cpp*, *draw.cpp*,
+  *update.cpp* and *game.cpp* with the libraries *glut* (or *freeglut*)
+  and *glm*. Additionally, I suggest thost who want to compile the project
+  in UNIX contact lzh in time to update the arguments.
+  2. The classes Object and Model in global.hpp use stupid and clumsy
+  declarations, especially forcing all the members to be *public*, which
+  should be overriden in time.
+  3. *display.cpp* contains a naive demo, which is to be overriden
+  eventually.
+  4. It is **strongly recommended** to log your change and remarks in the
+  file *Readme.md*. The grammar of *.md* files is quite easy and
+  tutorials can be easily found on the Internet.
