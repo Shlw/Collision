@@ -13,12 +13,14 @@
 #else
 #define FREEGLUT_STATIC
 #include <GL/glut.h>
-#include <GL/GLU.h>
+#include <GL/glu.h>
 #endif
 
 #include <iostream>
 #include <cmath>
 #include <cstring>
+#include <cstdio>
+#include <cstdlib>
 using namespace std;
 
 
@@ -408,3 +410,4 @@ int main(int argc, char* argv[]) {
     glutSpecialFunc(specialFunc);
     glutTimerFunc(FRAME_PITCH, TimerFunction, 1);
     glutMainLoop();
+}
