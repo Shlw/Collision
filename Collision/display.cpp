@@ -1,7 +1,8 @@
 /*************************************************************************
  * display.cpp for project Collision
  * Author : lzh
- * Rev : 2016.12.02.14.53
+ * Modifier : lzh
+ * Rev : 2016.12.01.22.13
  * Description : Source file to handle things releated to display,
  * including the initialization of window, mouse event, and calls Game,
  * Object::Draw and Object::Update.
@@ -34,11 +35,11 @@ void WindowInit(void)
     // Add a new model of RGB triangle
     mpModelList->nLength = 3;
     mpModelList->vpVertex[0] = glm::vec4(0.0, 0.0, 0.0, 1.0);
-    mpModelList->vpColor[0] = glm::vec4(1.0, 0.0, 0.0, 0.0);
+    mpModelList->vpColor[0] = glm::vec4(1.0, 0.0, 0.0, 1.0);
     mpModelList->vpVertex[1] = glm::vec4(0.0, 0.5, 0.0, 1.0);
-    mpModelList->vpColor[1] = glm::vec4(0.0, 1.0, 0.0, 0.0);
+    mpModelList->vpColor[1] = glm::vec4(0.0, 1.0, 0.0, 1.0);
     mpModelList->vpVertex[2] = glm::vec4(0.5, 0.0, 0.0, 1.0);
-    mpModelList->vpColor[2] = glm::vec4(0.0, 0.0, 1.0, 0.0);
+    mpModelList->vpColor[2] = glm::vec4(0.0, 0.0, 1.0, 1.0);
     nModelCtr++;
     
     // Add three objects of Model 0
@@ -61,10 +62,22 @@ void WindowInit(void)
     
     // Enable OpenGL features
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glEnable(GL_POINT_SMOOTH);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_POLYGON_SMOOTH);
     
     // Set up the values when clearing buffers
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClearDepth(1.0);
+    
+    // Set up blend function
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    // Set up smooth hints
+    glHint(GL_POINT_SMOOTH, GL_NICEST);
+    glHint(GL_LINE_SMOOTH, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH, GL_NICEST);
     
     // Set up the projection
     glMatrixMode(GL_PROJECTION); 

@@ -8,6 +8,11 @@ modeling, rendering and collision detection.
 
 ## Changelog
 
+* lzh @ 2016.12.01.22.13
+  1. Fix bug about CLOKS_PER_SEC.
+  2. Enable blend and anti-alias in *display*.
+  3. Add *Modifier* entry in commentary of each file.
+
 * lzh @ 2016.12.02.20.10
   1. Fix link flags *-static* in CMakeLists.txt for static linking.
 
@@ -37,6 +42,9 @@ modeling, rendering and collision detection.
   2. Use Cmake to ensure Cross-platform Compile compatibility.
 
 ## TodoList and Remarks
+
+* lzh @ 2016.12.01.22.13
+  1. None.
 
 * lzh @ 2016.12.02.20.10
   1. None.

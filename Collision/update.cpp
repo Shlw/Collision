@@ -1,7 +1,8 @@
 /*************************************************************************
  * update.cpp for project Collision
  * Author : lzh
- * Rev : 2016.12.02.14.53
+ * Modifier : lzh
+ * Rev : 2016.12.01.22.13
  * Description : Source file to implement Object::Update, which updates
  * mFrame of each Object in order to achieve movement of Objects and
  * collision detection.
