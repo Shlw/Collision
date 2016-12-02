@@ -1,7 +1,7 @@
 /*************************************************************************
  * display.cpp for project Collision
  * Author : lzh
- * Rev : 2016.12.02.10.18
+ * Rev : 2016.12.02.14.53
  * Description : Source file to handle things releated to display,
  * including the initialization of window, mouse event, and calls Game,
  * Object::Draw and Object::Update.
@@ -33,12 +33,12 @@ void WindowInit(void)
     
     // Add a new model of RGB triangle
     mpModelList->nLength = 3;
-    mpModelList->vpVertex[0] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    mpModelList->vpColor[0] = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
-    mpModelList->vpVertex[1] = glm::vec4(0.0f, 0.5f, 0.0f, 1.0f);
-    mpModelList->vpColor[1] = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
-    mpModelList->vpVertex[2] = glm::vec4(0.5f, 0.0f, 0.0f, 1.0f);
-    mpModelList->vpColor[2] = glm::vec4(0.0f, 0.0f, 1.0f, 0.0f);
+    mpModelList->vpVertex[0] = glm::vec4(0.0, 0.0, 0.0, 1.0);
+    mpModelList->vpColor[0] = glm::vec4(1.0, 0.0, 0.0, 0.0);
+    mpModelList->vpVertex[1] = glm::vec4(0.0, 0.5, 0.0, 1.0);
+    mpModelList->vpColor[1] = glm::vec4(0.0, 1.0, 0.0, 0.0);
+    mpModelList->vpVertex[2] = glm::vec4(0.5, 0.0, 0.0, 1.0);
+    mpModelList->vpColor[2] = glm::vec4(0.0, 0.0, 1.0, 0.0);
     nModelCtr++;
     
     // Add three objects of Model 0
@@ -46,16 +46,16 @@ void WindowInit(void)
     // therefore you may observe Object 1 get through other Object, which
     // is resulted from that Object 1 is not in the same plane as other
     // Objects.
-    opObjectList->mFrame = glm::translate(glm::mat4(1.0f), glm::vec3(0.2f, 0.4f, 0.0f));
-    opObjectList->vSpeed = glm::vec3(0.005f, 0.005f, 0.0f);
+    opObjectList->mFrame = glm::translate(glm::mat4(1.0), glm::vec3(0.2, 0.4, 0.0));
+    opObjectList->vSpeed = glm::vec3(0.005, 0.005, 0.0);
     opObjectList->nModelIndex = 0;
     nObjectCtr++;
-    (opObjectList+1)->mFrame = glm::translate(glm::rotate(glm::mat4(1.0f), (float)M_PI/6.0f, glm::vec3(1.0f, 1.0f, 1.0f)), glm::vec3(0.8f, 0.4f, 0.0f));
-    (opObjectList+1)->vSpeed = glm::vec3(-0.005f, 0.005f, 0.0f);
+    (opObjectList+1)->mFrame = glm::translate(glm::rotate(glm::mat4(1.0), (float)(M_PI/6.0), glm::vec3(1.0, 1.0, 1.0)), glm::vec3(0.8, 0.4, 0.0));
+    (opObjectList+1)->vSpeed = glm::vec3(-0.005, 0.005, 0.0);
     (opObjectList+1)->nModelIndex = 0;
     nObjectCtr++;
-    (opObjectList+2)->mFrame = glm::mat4(1.0f);
-    (opObjectList+2)->vSpeed = glm::vec3(0.002f, 0.004f, 0.0f);
+    (opObjectList+2)->mFrame = glm::mat4(1.0);
+    (opObjectList+2)->vSpeed = glm::vec3(0.002, 0.004, 0.0);
     (opObjectList+2)->nModelIndex = 0;
     nObjectCtr++;
     
@@ -63,18 +63,18 @@ void WindowInit(void)
     glEnable(GL_DEPTH_TEST);
     
     // Set up the values when clearing buffers
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepth(1.0d);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearDepth(1.0);
     
     // Set up the projection
     glMatrixMode(GL_PROJECTION); 
     glLoadIdentity(); 
-    gluPerspective(45.0d, double(nInitWindowWidth) / double(nInitWindowHeight), 0.1d, 10.0d);
+    gluPerspective(45.0, double(nInitWindowWidth) / double(nInitWindowHeight), 0.1, 10.0);
     
     // Set up the camera
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0.0d, 0.0d, 4.0d, 0.0d, 0.0d, 0.0d, 0.0d, 1.0d, 0.0d);
+    gluLookAt(0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     
     return;
 }

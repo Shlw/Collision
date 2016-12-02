@@ -1,7 +1,7 @@
 /*************************************************************************
  * game.cpp for project Collision
  * Author : lzh
- * Rev : 2016.12.02.10.18
+ * Rev : 2016.12.02.14.53
  * Description : Source file to implement Game, which handles the game
  * logic, that is, to determine when to release a new object and something
  * like that.
@@ -27,8 +27,8 @@ void Game(void)
         if (nObjectCtr < 30)
         {
             // Release a new object.
-            (opObjectList+nObjectCtr)->mFrame = glm::mat4(1.0f);
-            (opObjectList+nObjectCtr)->vSpeed = glm::vec3(0.002f, 0.004f, 0.0f);
+            (opObjectList+nObjectCtr)->mFrame = glm::mat4(1.0);
+            (opObjectList+nObjectCtr)->vSpeed = glm::vec3(0.002, 0.004, 0.0);
             (opObjectList+nObjectCtr)->nModelIndex = 0;
             nObjectCtr++;
         }
