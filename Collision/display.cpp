@@ -1,7 +1,7 @@
 /*************************************************************************
  * display.cpp for project Collision
  * Author : lzh
- * Rev : 2016.12.01.14.44
+ * Rev : 2016.12.02.10.18
  * Description : Source file to handle things releated to display,
  * including the initialization of window, mouse event, and calls Game,
  * Object::Draw and Object::Update.
@@ -80,7 +80,7 @@ void WindowInit(void)
 }
 
 // Call for display when timer is on, as well as updating some variables
-void OnTimer(int nvalue)
+void OnTimer(int nValue)
 {
     // Update nLastClock to supply a stable time counter
     nLastClock = clock();

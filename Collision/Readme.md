@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog
 
+* lzh @ 2016.12.02.10.18
+  1. Use CLOCKS_PER_SEC to enhance compatibility.
+  2. Update UNIX arguments in CMakelists.txt.
+
 * lzh @ 2016.12.01.14.44
   1. Add commentary to each files.
 
@@ -27,6 +31,9 @@ modeling, rendering and collision detection.
   2. Use Cmake to ensure Cross-platform Compile compatibility.
 
 ## TodoList and Remarks
+
+* lzh @ 2016.12.02.10.18
+  1. Contact lzh if CMakelists.txt doesn't work in UNIX.
 
 * lzh @ 2016.12.01.14.44
   1. Feel free to correct typos in the *Readme.md* and the source files.

@@ -1,7 +1,7 @@
 /*************************************************************************
  * game.cpp for project Collision
  * Author : lzh
- * Rev : 2016.12.01.14.44
+ * Rev : 2016.12.02.10.18
  * Description : Source file to implement Game, which handles the game
  * logic, that is, to determine when to release a new object and something
  * like that.
@@ -18,7 +18,7 @@ void Game(void)
     static int nSecCtr = 0;
     
     // Judge weather to release a new object
-    if (nLastClock/1000 > nSecCtr)
+    if (nLastClock/CLOCKS_PER_SEC > nSecCtr)
     {
         // Update nSecCtr
         nSecCtr = clock()/1000;
