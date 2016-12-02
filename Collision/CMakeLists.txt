@@ -1,7 +1,7 @@
 ##########################################################################
 # CMakeLists.txt of project Collision
 # Author : lzh
-# Rev : 2016.12.02.10.18
+# Rev : 2016.12.02.20.10
 # Description : Instruction file for CMake to generate Makefile.
 ##########################################################################
 
@@ -44,7 +44,7 @@ ENDIF ()
 
 TARGET_LINK_LIBRARIES (${COLLISION_EXE_NAME} ${COLLISION_LIBS})
 
-# Setup flags like -static
+# Setup link flags like -static
 
 IF (WIN32)
     SET(COLLISION_FLAGS -static)
@@ -54,7 +54,7 @@ ENDIF ()
 
 # Add flags for the target
 
-SET_TARGET_PROPERTIES(${COLLISION_EXE_NAME} PROPERTIES COMPILE_FLAGS ${COLLISION_FLAGS})
+SET_TARGET_PROPERTIES(${COLLISION_EXE_NAME} PROPERTIES LINK_FLAGS -static)
 
 # Do miscellaneous things for the target
 
