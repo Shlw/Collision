@@ -1,7 +1,8 @@
 ##########################################################################
 # CMakeLists.txt of project Collision
 # Author : lzh
-# Rev : 2016.12.02.20.10
+# Modifier : lzh
+# Rev : 2016.12.01.22.13
 # Description : Instruction file for CMake to generate Makefile.
 ##########################################################################
 

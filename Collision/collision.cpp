@@ -1,7 +1,8 @@
 /*************************************************************************
  * main.cpp for project Collision
  * Author : lzh
- * Rev : 2016.12.01.14.44
+ * Modifier : lzh
+ * Rev : 2016.12.01.22.13
  * Description : Source file to implement main, which calls functions and
  * enters glutMainLoop.
  ************************************************************************/
