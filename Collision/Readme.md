@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog
 
+* lzh @ 2016.12.02.20.10
+  1. Fix link flags *-static* in CMakeLists.txt for static linking.
+
 * lzh @ 2016.12.02.14.53
   1. Fix unrecognized suffices under XCode with LLVM.
 
@@ -34,6 +37,9 @@ modeling, rendering and collision detection.
   2. Use Cmake to ensure Cross-platform Compile compatibility.
 
 ## TodoList and Remarks
+
+* lzh @ 2016.12.02.20.10
+  1. None.
 
 * lzh @ 2016.12.02.14.53
   1. None.
