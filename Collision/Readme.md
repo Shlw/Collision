@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog
 
+* lzh @ 2016.12.02.14.53
+  1. Fix unrecognized suffices under XCode with LLVM.
+
 * lzh @ 2016.12.02.10.18
   1. Use CLOCKS_PER_SEC to enhance compatibility.
   2. Update UNIX arguments in CMakelists.txt.
@@ -31,6 +34,9 @@ modeling, rendering and collision detection.
   2. Use Cmake to ensure Cross-platform Compile compatibility.
 
 ## TodoList and Remarks
+
+* lzh @ 2016.12.02.14.53
+  1. None.
 
 * lzh @ 2016.12.02.10.18
   1. Contact lzh if CMakelists.txt doesn't work in UNIX.
