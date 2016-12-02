@@ -1,7 +1,7 @@
 ##########################################################################
 # CMakeLists.txt of project Collision
 # Author : lzh
-# Rev : 2016.12.01.14.44
+# Rev : 2016.12.02.10.18
 # Description : Instruction file for CMake to generate Makefile.
 ##########################################################################
 
@@ -35,9 +35,9 @@ ADD_EXECUTABLE(${COLLISION_EXE_NAME} ${COLLISION_SRCS})
 # this leads to FATAL_ERROR. This will be resolved later.
 
 IF (WIN32)
-    SET(COLLISION_LIBS freeglut_static glu32 opengl32 winmm gdi32)
+    SET(COLLISION_LIBS freeglut_static glu32 opengl32 winmm gdi32 m)
 ELSEIF (UNIX)
-    MESSAGE(FATAL_ERROR "Unix detected, please tell lzh the arguments you're using.")
+    SET(COLLISION_LIBS glut GL GLU m)
 ENDIF ()
 
 # Add libraries to link for the target
@@ -62,6 +62,7 @@ IF (WIN32)
 # In MSYS environments, freeglut is used instead of the original glut,
 # which requires a specific definition to switch on usage of the static
 # libraries.
-    ADD_DEFINITIONS(-DFREEGLUT_STATIC)
+    ADD_DEFINITIONS(-DFREEGLUT_STATIC -DCL_SYSTEM_WIN)
 ELSEIF (UNIX)
+    ADD_DEFINITIONS(-DCL_SYSTEM_UNIX)
 ENDIF ()
