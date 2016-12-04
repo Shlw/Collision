@@ -17,19 +17,19 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
     glutInitDisplayMode(nWindowFlags);
     glutInitWindowSize(nInitWindowWidth, nInitWindowHeight);
-    
+
     // Create a window and initialilze
     glutCreateWindow(cpWindowTitle);
     WindowInit();
-    
+
     // Register display function
     glutDisplayFunc(Display);
-    
+
     // Setup a timer to refresh
     glutTimerFunc(nTimerSpeed, OnTimer, 1);
-    
+
     // Go on main loop until Quit is called
     glutMainLoop();
-    
+
     return 0;
 }

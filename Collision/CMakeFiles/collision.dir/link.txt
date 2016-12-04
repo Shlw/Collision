@@ -1,0 +1,1 @@
+/usr/bin/c++     -static CMakeFiles/collision.dir/collision.cpp.o CMakeFiles/collision.dir/display.cpp.o CMakeFiles/collision.dir/draw.cpp.o CMakeFiles/collision.dir/update.cpp.o CMakeFiles/collision.dir/game.cpp.o  -o collision -rdynamic -lglut -lGL -lGLU -lm 

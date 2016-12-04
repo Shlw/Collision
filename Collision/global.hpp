@@ -1,8 +1,8 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : lzh
- * Rev : 2016.12.01.22.13
+ * Modifier : Shlw
+ * Rev : 2016.12.04.23.40
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -39,6 +39,37 @@
 // The class to store models which can be used repeatedly, only storing
 // vertices coordinates and colors. The vertices coordinates will be drawn
 // with respect to the coordinates of each Object individually.
+
+glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b);
+
+class Point{
+public:
+	glm::vec4* vpCoordinate;
+	glm::vec4* vpColor;
+
+	Point():vpCoordinate(NULL),vpColor(NULL){}
+	Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha){
+		vpCoordinate=new glm::vec4(x,y,z,1.0);
+		vpColor=new glm::vec4(r,g,b,alpha);
+	}
+	~Point(){delete vpCoordinate; delete vpColor;}
+};
+
+class Triangle{
+public:
+	Point* pVertex;
+	glm::vec4* normal_vector;
+	
+	Triangle():pVertex(NULL),normal_vector(NULL){}
+	Triangle(Point* a,Point* b,Point* c){
+		pVertex=new Point[3];
+		pVertex[0]=*a; pVertex[1]=*b; pVertex[2]=*c;
+		normal_vector=new glm::vec4(v4Cross(*(b->vpCoordinate)-*(a->vpCoordinate)
+								     	   ,*(c->vpCoordinate)-*(b->vpCoordinate)));
+	}
+	~Triangle(){delete[] pVertex; delete normal_vector;}
+};
+
 class Model
 {
 public:
@@ -63,7 +94,7 @@ public:
     glm::mat4 mFrame;
     glm::vec3 vSpeed;
     int nModelIndex;
-    
+
     void Draw(void);
     void Update(void);
 };
