@@ -84,7 +84,7 @@ extern int nMaterialtot;
 extern Model mModellist[100];
 extern GLfloat fMateriallist[100][2]; //first is density, second is elasticity
 // Declarations of global variables defined in .cpp files
-/*
+
 extern int nWindowFlags;
 extern int nInitWindowWidth;
 extern int nInitWindowHeight;
@@ -100,8 +100,7 @@ void OnTimer(int nValue);
 void Display(void);
 
 void Game(void);
-*/
-void preinput();
+
 int main(int argc, char *argv[]);
 
 #endif

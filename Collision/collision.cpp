@@ -10,6 +10,17 @@
 // Inclusion of global header
 #include "global.hpp"
 
+int nModeltot;
+int nMaterialtot;
+Model mModellist[100];
+GLfloat fMateriallist[100][2]; //first is density, second is elasticity
+int nWindowFlags;
+int nInitWindowWidth;
+int nInitWindowHeight;
+int nTimerSpeed;
+const char* cpWindowTitle;
+int nLastClock;
+
 void preinput(){
 	FILE* materialin=fopen("material.txt","r");
 	FILE* modelin=fopen("model.txt","r");
