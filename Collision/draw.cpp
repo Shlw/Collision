@@ -2,7 +2,6 @@
  * draw.cpp for project Collision
  * Author : lzh
  * Modifier : lzh
- * Rev : 2016.12.01.22.13
  * Description : Source file to implement Object::Draw, which draws
  * objects in different coordinates of Object.
  * Note : This source file is a naive example and should be rewritten.

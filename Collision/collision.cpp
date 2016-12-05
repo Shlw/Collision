@@ -25,25 +25,26 @@ void preinput(){
 		fscanf(modelin,"%d%f",&len,&vol);
 		mModellist[i].nLength=len;
 		mModellist[i].fVolume=vol;
-		mModellist[i].tCone=new Triangle[len];
+		mModellist[i].tCone=new Triangle*[len];
 
 		for (int j=0;j<len;++j){
-			Point p[3];
+			Point* p[3];
 			for (int k=0;k<3;++k){
 				GLfloat x,y,z;
 				fscanf(modelin,"%f%f%f",&x,&y,&z);
-				p[i]=Point(x,y,z,
-						   (rand()%100)/100.0,
-						   (rand()%100)/100.0,
-						   (rand()%100)/100.0,0);
+				p[i]=new Point(x,y,z,
+						   	   (rand()%100)/100.0,
+						   	   (rand()%100)/100.0,
+						   	   (rand()%100)/100.0,0);
 			}
-			mModellist[i].tCone[j]=Triangle(p,p+1,p+2);
+			mModellist[i].tCone[j]=new Triangle(p[0],p[1],p[2]);
+			p[0]->~Point(); p[1]->~Point(); p[2]->~Point();
 		}
 
 	}
 
-	close(materialin):
-	close(modelin);
+	fclose(materialin);
+	fclose(modelin);
 }
 
 // The main function
@@ -51,8 +52,13 @@ int main(int argc, char *argv[])
 {
 	srand(time(0));
 	preinput();
+	int test;
+	scanf("%d",&test);
+	glm::vec4 hello=glm::vec4(1,2,3,4);
+	printf("%lf\n",hello[test]);
+	//printf("%lf\n",*((mModellist[test].tCone[0])->pVertex[0]->vpCoordinate)[0]);
     // Initialize function of glut
-    glutInit(&argc, argv);
+/*    glutInit(&argc, argv);
     glutInitDisplayMode(nWindowFlags);
     glutInitWindowSize(nInitWindowWidth, nInitWindowHeight);
 
@@ -68,6 +74,6 @@ int main(int argc, char *argv[])
 
     // Go on main loop until Quit is called
     glutMainLoop();
-
+*/
     return 0;
 }

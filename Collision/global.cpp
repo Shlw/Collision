@@ -2,7 +2,6 @@
  * global.cpp for project Collision
  * Author : Shlw
  * Modifier : Shlw
- * Rev : 2016.12.05.13.06
  * Description : Fundamental implementation of global.hpp
  ************************************************************************/
 
@@ -20,19 +19,23 @@ GLfloat v4Dots(glm::vec4 a,glm::vec4 b){
 }
 
 Triangle* Object::is_inside(Point* tp){
-	Model dup=Model(mStill);
-	int len=dup.nLength;
-	for (int i=0;i<len;++i){
-		for (int j=0;j<3;++j)
-			dup.tCone[i].pVertex[j].vpCoordinate=mFrame*dup.tCone[i].pVertex[j].vpCoordinate;
-		glm::mat4 rot=mFrame;
-		glm::value_ptr(rot)[12]=0;
-		glm::value_ptr(rot)[13]=0;
-		glm::value_ptr(rot)[14]=0;
-		dup.tCone[i].vNormal_vector=rot*dup.tCone[i].vNormal_vector;
-	}
 
 
+
+
+	return NULL;
+}
+
+Object::Object(){
+	nModeltype=0;
+	fMomentInertia=fElastic=fMass=0.0;
+	mFrame=NULL;
+	vSpeed=NULL;
+}
+
+Object::~Object(){
+	delete mFrame;
+	delete vSpeed;
 }
 
 bool Object::Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz){
@@ -41,47 +44,55 @@ bool Object::Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat
 			printf("Unknown Model or Material\n");
 			return 0;
 		}
-	vSpeed=glm::vec3(vx,vy,vz);
-	mFrame=glm::mat4(1.0);
-	mStill=Model(mModellist[model_type]);
-	mStill.fMass=mStill.fVolume*fMateriallist[material_type][0];
-	mStill.fElastic=fMateriallist[material_type][1];
-	mStill.fMomentInertia=0;//need to calculate,later update
+	vSpeed=new glm::vec3(vx,vy,vz);
+	mFrame=new glm::mat4(1.0);
+	nModeltype=model_type;
+	fMass=mModellist[model_type].fVolume*fMateriallist[material_type][0];
+	fElastic=fMateriallist[material_type][1];
+	fMomentInertia=0; 						//need to calculate,later update
 	return 1;
 }
 
 Point::Point(){
-	vpCoordinate=glm::vec4(0,0,0,0);
-	vpColor=glm::vec4(0,0,0,0);
+	vpCoordinate=NULL;
+	vpColor=NULL;
 }
 
 Point::Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha){
-	vpCoordinate=glm::vec4(x,y,z,1.0);
-	vpColor=glm::vec4(r,g,b,alpha);
+	vpCoordinate=new glm::vec4(x,y,z,1.0);
+	vpColor=new glm::vec4(r,g,b,alpha);
+}
+
+Point::~Point(){
+	delete vpCoordinate;
+	delete vpColor;
 }
 
 Triangle::Triangle(){
-	pVertex[0]=pVertex[1]=pVertex[2]=Point();
-	vNormal_vector=glm::vec4(0,0,0,0);
+	pVertex[0]=pVertex[1]=pVertex[2]=NULL;
+	vNormal_vector=NULL;
 }
 
 Triangle::Triangle(Point* a,Point* b,Point* c){
-	pVertex[0]=*a; pVertex[1]=*b; pVertex[2]=*c;
-	vNormal_vector=v4Cross(b->vpCoordinate - a->vpCoordinate,c->vpCoordinate - b->vpCoordinate);
+	pVertex[0]=new Point(*a); pVertex[1]=new Point(*b); pVertex[2]=new Point(*c);
+	vNormal_vector=new glm::vec4(v4Cross(*(b->vpCoordinate) - *(a->vpCoordinate),
+										 *(c->vpCoordinate) - *(b->vpCoordinate)));
+}
+
+Triangle::~Triangle(){
+	delete pVertex[0]; delete pVertex[1]; delete pVertex[2];
+	delete vNormal_vector;
 }
 
 Model::Model(){
 	nLength=0;
-	fMass=fMomentInertia=fElastic=fVolume=0;
+	fVolume=0.0;
 	tCone=NULL;
 }
 
-Model::Model(Model* example){
-	nLength=example->nLength;
-	fMass=example->fMass;
-	fMomentInertia=example->fMomentInertia;
-	fElastic=example->fElastic;
-	fVolume=example->fVolume;
-	tCone=new Triangle[nLength];
-	for (int i=0;i<nLength;++i) tCone[i]=example->tCone[i];
+Model::~Model(){
+	for (int i=0;i<nLength;++i) delete tCone[i];
+	delete[] tCone;
 }
+
+//int main(int argc,char* argv[]){}

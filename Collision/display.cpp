@@ -2,7 +2,6 @@
  * display.cpp for project Collision
  * Author : lzh
  * Modifier : lzh
- * Rev : 2016.12.01.22.13
  * Description : Source file to handle things releated to display,
  * including the initialization of window, mouse event, and calls Game,
  * Object::Draw and Object::Update.

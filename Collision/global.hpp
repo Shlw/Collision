@@ -2,7 +2,6 @@
  * global.hpp for project Collision
  * Author : lzh
  * Modifier : Shlw
- * Rev : 2016.12.04.23.40
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -37,52 +36,58 @@ GLfloat v4Dots(glm::vec4 a,glm::vec4 b);
 
 class Point{
 public:
-	glm::vec4 vpCoordinate;
-	glm::vec4 vpColor;
+	glm::vec4* vpCoordinate;
+	glm::vec4* vpColor;
 
 	Point();
 	Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha);
+	~Point();
 };
 
 class Triangle{
 public:
-	Point pVertex[3];
-	glm::vec4 vNormal_vector;
+	Point* pVertex[3];
+	glm::vec4* vNormal_vector;
 
 	Triangle();
 	Triangle(Point* a,Point* b,Point* c);
+	~Triangle();
 };
 
 class Model{
 public:
     int nLength;
-	Triangle* tCone;
-	GLfloat fMass,fMomentInertia,fElastic,fVolume;
+	Triangle* (*tCone);
+	GLfloat fVolume;
 
 	Model();
-	Model(Model* example);
-	~Model(){delete[] tCone;}
+	~Model();
 };
 
 class Object{
 public:
-	Model mStill;
-    glm::mat4 mFrame;
-    glm::vec3 vSpeed;
+	int nModeltype;
+    glm::mat4* mFrame;
+    glm::vec3* vSpeed;
+	GLfloat fMomentInertia,fElastic,fMass;
 
 	bool Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz);
 	Triangle* is_inside(Point* tp);
-    void Draw(void);
-    void Update(void);
+    //void Draw(void);
+    //void Update(void);
+	Object();
+	~Object();
 };
 
-extern int nModeltot,nMaterialtot;
+extern int nModeltot;
+extern int nMaterialtot;
 extern Model mModellist[100];
 extern GLfloat fMateriallist[100][2]; //first is density, second is elasticity
 // Declarations of global variables defined in .cpp files
-
+/*
 extern int nWindowFlags;
-extern int nInitWindowWidth, nInitWindowHeight;
+extern int nInitWindowWidth;
+extern int nInitWindowHeight;
 extern int nTimerSpeed;
 extern const char* cpWindowTitle;
 extern int nLastClock;
@@ -95,7 +100,8 @@ void OnTimer(int nValue);
 void Display(void);
 
 void Game(void);
-
+*/
+void preinput();
 int main(int argc, char *argv[]);
 
 #endif

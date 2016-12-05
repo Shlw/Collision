@@ -2,7 +2,6 @@
  * game.cpp for project Collision
  * Author : lzh
  * Modifier : Shlw
- * Rev : 2016.12.04.23.40
  * Description : Source file to implement Game, which handles the game
  * logic, that is, to determine when to release a new object and something
  * like that.
