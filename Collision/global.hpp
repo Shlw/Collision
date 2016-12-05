@@ -53,8 +53,7 @@ public:
 	Triangle(Point* a,Point* b,Point* c);
 };
 
-class Model
-{
+class Model{
 public:
     int nLength;
 	Triangle* tCone;
@@ -65,14 +64,14 @@ public:
 	~Model(){delete[] tCone;}
 };
 
-class Object
-{
+class Object{
 public:
 	Model mStill;
     glm::mat4 mFrame;
     glm::vec3 vSpeed;
 
 	bool Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz);
+	Triangle* is_inside(Point* tp);
     void Draw(void);
     void Update(void);
 };

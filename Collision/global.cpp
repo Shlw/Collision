@@ -19,6 +19,20 @@ GLfloat v4Dots(glm::vec4 a,glm::vec4 b){
 	return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 }
 
+Triangle* Object::is_inside(Point* tp){
+	Model dup=Model(mStill);
+	int len=dup.nLength;
+	for (int i=0;i<len;++i){
+		for (int j=0;j<3;++j)
+			dup.tCone[i].pVertex[j]=mFrame*dup.tCone[i].pVertex[j];
+		glm::mat4 rot=mFrame;
+		glm::value_ptr(rot)[12]=0;
+		glm::value_ptr(rot)[13]=0;
+		glm::value_ptr(rot)[14]=0;
+		dup.tCone[i].vNormal_vector=rot*dup.tCone[i];
+	}
+}
+
 bool Object::Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz){
 	if (model_type>nModeltot || material_type>nMaterialtot ||
 		model_type<1 || material_type<1) {
@@ -27,10 +41,11 @@ bool Object::Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat
 		}
 	vSpeed=glm::vec3(vx,vy,vz);
 	mFrame=glm::mat4(1.0);
-	mStill=Model(mMateriallist[model_type]);
+	mStill=Model(mModellist[model_type]);
 	mStill.fMass=mStill.fVolume*fMateriallist[material_type][0];
 	mStill.fElastic=fMateriallist[material_type][1];
 	mStill.fMomentInertia=0;//need to calculate,later update
+	return 1;
 }
 
 Point::Point(){
