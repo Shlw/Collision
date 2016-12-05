@@ -41,6 +41,7 @@
 // with respect to the coordinates of each Object individually.
 
 glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b);
+GLfloat v4Dots(glm::vec4 a,glm::vec4 b);
 
 class Point{
 public:
@@ -59,7 +60,7 @@ class Triangle{
 public:
 	Point* pVertex;
 	glm::vec4* normal_vector;
-	
+
 	Triangle():pVertex(NULL),normal_vector(NULL){}
 	Triangle(Point* a,Point* b,Point* c){
 		pVertex=new Point[3];
