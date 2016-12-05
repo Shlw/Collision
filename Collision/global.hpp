@@ -19,6 +19,10 @@
 #include <cmath>
 #include <ctime>
 #include <iostream>
+#include <cstdio>
+#include <ctime>
+#include <algorithm>
+#include <vector>
 
 #include <GL/gl.h>
 #include <GL/glext.h>
@@ -28,47 +32,25 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-// Class declarations of Model and Object
-// **ATTENTION** Public here is convenient but ugly, these classes are
-// suggested to be overridden.
-// **ATTENTION** Here used glm::vec* and glm::mat* to represent vectors
-// and matrices, but frequent construction and destruction which is
-// automatically called by the classes may result in low efficiency. Using
-// pointers to create instance of these object may be better.
-
-// The class to store models which can be used repeatedly, only storing
-// vertices coordinates and colors. The vertices coordinates will be drawn
-// with respect to the coordinates of each Object individually.
-
 glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b);
 GLfloat v4Dots(glm::vec4 a,glm::vec4 b);
 
 class Point{
 public:
-	glm::vec4* vpCoordinate;
-	glm::vec4* vpColor;
+	glm::vec4 vpCoordinate;
+	glm::vec4 vpColor;
 
-	Point():vpCoordinate(NULL),vpColor(NULL){}
-	Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha){
-		vpCoordinate=new glm::vec4(x,y,z,1.0);
-		vpColor=new glm::vec4(r,g,b,alpha);
-	}
-	~Point(){delete vpCoordinate; delete vpColor;}
+	Point();
+	Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha);
 };
 
 class Triangle{
 public:
-	Point* pVertex;
-	glm::vec4* vNormal_vector;
+	Point pVertex[3];
+	glm::vec4 vNormal_vector;
 
-	Triangle():pVertex(NULL),vNormal_vector(NULL){}
-	Triangle(Point* a,Point* b,Point* c){
-		pVertex=new Point[3];
-		pVertex[0]=*a; pVertex[1]=*b; pVertex[2]=*c;
-		vNormal_vector=new glm::vec4(v4Cross(*(b->vpCoordinate)-*(a->vpCoordinate)
-								     	   ,*(c->vpCoordinate)-*(b->vpCoordinate)));
-	}
-	~Triangle(){delete[] pVertex; delete vNormal_vector;}
+	Triangle();
+	Triangle(Point* a,Point* b,Point* c);
 };
 
 class Model
@@ -76,36 +58,28 @@ class Model
 public:
     int nLength;
 	Triangle* tCone;
-	GLfloat fMass,fMoment_of_inertia,fElastic;
+	GLfloat fMass,fMomentInertia,fElastic,fVolume;
 
-	Model():nLength(0),tCone(NULL),fMass(0),fMoment_of_inertia(0),fElastic(0){}
+	Model();
+	Model(Model* example);
 	~Model(){delete[] tCone;}
 };
 
-// The class to store objects, only storing the index of model in the
-// mpModelList and the center, the vector of x, y, z-axes and the speed.
-// To be exactly, the entries [0][0:2], [1][0:2], [2][0:2] represent the
-// vector of x, y, z-axes respectively, and [3][0:2] represent the center
-// of the Object, where [i][j] represent the ith row and jth column of the
-// matrix and all the coordinates are that in OpenGL global coordinates.
-// Each Object use mFrame to establish a new coordinates, and the Model is
-// drawn with respect to the new coordinates. Note that the entry [0:2][3]
-// must be 0 and the entry [3][3] 1.
-// **ATTENTION** glm::mat4 stores in column-major, see glm Manual.
 class Object
 {
 public:
-	Model* mStill;
-    glm::mat4* mFrame;
-    glm::vec3* vSpeed;
+	Model mStill;
+    glm::mat4 mFrame;
+    glm::vec3 vSpeed;
 
-	bool init(int num,GLfloat node[][3],int which_type);
+	bool Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz);
     void Draw(void);
     void Update(void);
-	Object():mStill(NULL),mFrame(NULL),vSpeed(NULL){}
-	~Object(){delete mStill; delete mFrame; delete vSpeed;}
 };
 
+extern int nModeltot,nMaterialtot;
+extern Model mModellist[100];
+extern GLfloat fMateriallist[100][2]; //first is density, second is elasticity
 // Declarations of global variables defined in .cpp files
 
 extern int nWindowFlags;
@@ -113,13 +87,6 @@ extern int nInitWindowWidth, nInitWindowHeight;
 extern int nTimerSpeed;
 extern const char* cpWindowTitle;
 extern int nLastClock;
-
-// Declarations of Model list and Object lists
-
-extern int nModelCtr;
-extern Model mpModelList[30];
-extern int nObjectCtr;
-extern Object opObjectList[30];
 
 // Declarations of functions
 

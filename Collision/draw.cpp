@@ -16,15 +16,15 @@ void Object::Draw(void)
 {
     // Switch to ModelView Matrix
     glMatrixMode(GL_MODELVIEW);
-    
+
     // Save current matrix
     glPushMatrix();
-    
+
     // Multiply mFrame to the right of current matrix in order to
     // transform coordinates in each Object to the global coordinates of
     // OpenGL.
     glMultMatrixf(glm::value_ptr(mFrame));
-    
+
     // Draw triangles
     glBegin(GL_TRIANGLES);
         for (int i = 0; i < (mpModelList+nModelIndex)->nLength; i++)
@@ -33,9 +33,9 @@ void Object::Draw(void)
             glColor4fv(glm::value_ptr((mpModelList+nModelIndex)->vpColor[i]));
         }
     glEnd();
-    
+
     // Restore matrix
     glPopMatrix();
-    
+
     return ;
 }
