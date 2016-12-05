@@ -59,24 +59,27 @@ public:
 class Triangle{
 public:
 	Point* pVertex;
-	glm::vec4* normal_vector;
+	glm::vec4* vNormal_vector;
 
-	Triangle():pVertex(NULL),normal_vector(NULL){}
+	Triangle():pVertex(NULL),vNormal_vector(NULL){}
 	Triangle(Point* a,Point* b,Point* c){
 		pVertex=new Point[3];
 		pVertex[0]=*a; pVertex[1]=*b; pVertex[2]=*c;
-		normal_vector=new glm::vec4(v4Cross(*(b->vpCoordinate)-*(a->vpCoordinate)
+		vNormal_vector=new glm::vec4(v4Cross(*(b->vpCoordinate)-*(a->vpCoordinate)
 								     	   ,*(c->vpCoordinate)-*(b->vpCoordinate)));
 	}
-	~Triangle(){delete[] pVertex; delete normal_vector;}
+	~Triangle(){delete[] pVertex; delete vNormal_vector;}
 };
 
 class Model
 {
 public:
     int nLength;
-    glm::vec4 vpVertex[30];
-    glm::vec4 vpColor[30];
+	Triangle* tCone;
+	GLfloat fMass,fMoment_of_inertia,fElastic;
+
+	Model():nLength(0),tCone(NULL),fMass(0),fMoment_of_inertia(0),fElastic(0){}
+	~Model(){delete[] tCone;}
 };
 
 // The class to store objects, only storing the index of model in the
@@ -92,12 +95,15 @@ public:
 class Object
 {
 public:
-    glm::mat4 mFrame;
-    glm::vec3 vSpeed;
-    int nModelIndex;
+	Model* mStill;
+    glm::mat4* mFrame;
+    glm::vec3* vSpeed;
 
+	bool init(int num,GLfloat node[][3],int which_type);
     void Draw(void);
     void Update(void);
+	Object():mStill(NULL),mFrame(NULL),vSpeed(NULL){}
+	~Object(){delete mStill; delete mFrame; delete vSpeed;}
 };
 
 // Declarations of global variables defined in .cpp files
