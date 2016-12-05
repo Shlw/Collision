@@ -40,6 +40,7 @@ public:
 	glm::vec4* vpColor;
 
 	Point();
+	Point(Point* prttp);
 	Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha);
 	~Point();
 };
@@ -54,10 +55,12 @@ public:
 	~Triangle();
 };
 
+typedef Triangle* PTriangle;
+
 class Model{
 public:
     int nLength;
-	Triangle* (*tCone);
+	PTriangle* tCone;
 	GLfloat fVolume;
 
 	Model();

@@ -36,7 +36,8 @@ void preinput(){
 		fscanf(modelin,"%d%f",&len,&vol);
 		mModellist[i].nLength=len;
 		mModellist[i].fVolume=vol;
-		mModellist[i].tCone=new Triangle*[len];
+		mModellist[i].tCone=new PTriangle[len];
+printf("hello\n");
 
 		for (int j=0;j<len;++j){
 			Point* p[3];
@@ -48,7 +49,9 @@ void preinput(){
 						   	   (rand()%100)/100.0,
 						   	   (rand()%100)/100.0,0);
 			}
+printf("hellonewtri\n");
 			mModellist[i].tCone[j]=new Triangle(p[0],p[1],p[2]);
+printf("hello\n");
 			p[0]->~Point(); p[1]->~Point(); p[2]->~Point();
 		}
 
