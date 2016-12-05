@@ -24,13 +24,15 @@ Triangle* Object::is_inside(Point* tp){
 	int len=dup.nLength;
 	for (int i=0;i<len;++i){
 		for (int j=0;j<3;++j)
-			dup.tCone[i].pVertex[j]=mFrame*dup.tCone[i].pVertex[j];
+			dup.tCone[i].pVertex[j].vpCoordinate=mFrame*dup.tCone[i].pVertex[j].vpCoordinate;
 		glm::mat4 rot=mFrame;
 		glm::value_ptr(rot)[12]=0;
 		glm::value_ptr(rot)[13]=0;
 		glm::value_ptr(rot)[14]=0;
-		dup.tCone[i].vNormal_vector=rot*dup.tCone[i];
+		dup.tCone[i].vNormal_vector=rot*dup.tCone[i].vNormal_vector;
 	}
+
+
 }
 
 bool Object::Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz){
