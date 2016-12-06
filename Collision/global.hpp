@@ -31,20 +31,25 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+// class headers
 class Point;
 class Triangle;
 class Model;
 class Object;
 
+// typedef headers
 typedef Triangle* PTriangle;
 
+// vector operations
 glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b);
-GLfloat v4Dots(glm::vec4 a,glm::vec4 b);
+GLfloat v4Dot(glm::vec4 a,glm::vec4 b);
 GLfloat v4Length(glm::vec4 a);
 
+// matrix operations
 Point* MultPoint(glm::mat4* matrix,Point* p);
 PTriangle MultTriangle(glm::mat4* matrix,PTriangle cone);
 
+// point class represents the still point in local coordinate system
 class Point{
 public:
 	glm::vec4* vpCoordinate;
@@ -56,6 +61,7 @@ public:
 	~Point();
 };
 
+// triangle class represents the still triangle(cone) in local coordinate system
 class Triangle{
 public:
 	Point* pVertex[3];
@@ -66,16 +72,20 @@ public:
 	~Triangle();
 };
 
+// model class represents the still model in local coordinate system
 class Model{
 public:
-    int nLength;
-	PTriangle* tCone;
+    int nLength;  // the number of triangular cones
+	PTriangle* tCone;  // the point array of triangle pointers
 	GLfloat fVolume;
 
 	Model();
 	~Model();
 };
 
+// object class contains
+// the matrix(mFrame) to transform between local and global coordinate system
+// and several indispensable descriptive aspect of the object
 class Object{
 public:
 	int nModeltype;
@@ -85,14 +95,14 @@ public:
 
 	bool Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz);
 	PTriangle Is_inside(Point* tp);
-    //void Draw(void);
-    //void Update(void);
+    //void Draw(void);                 //////////ATTENTION!!! need to be re-written
+    //void Update(void);               //////////ATTENTION!!! need to be re-written
 	Object();
 	~Object();
 };
 
-extern int nModeltot;
-extern int nMaterialtot;
+extern int nModeltot; // number of model examples
+extern int nMaterialtot; // number of material examples
 extern Model mModellist[100];
 extern GLfloat fMateriallist[100][2]; //first is density, second is elasticity
 

@@ -6,7 +6,16 @@ This is the project Collision, groupwork of the course Introduction to
 Computing (A) (Honor Track) in the year of 2016. This project aims at 3-D
 modeling, rendering and collision detection.
 
+## Attention
+
+makefile is for linux system.
+material.txt & model.txt is the example.
+
 ## Changelog
+* Shlw @ 2016.12.06.16.10
+  1. Finally finished global.cpp, global.hpp, collision.cpp.
+  2. Update the master directory Collision.
+
 * Shlw @ 2016.12.04.23.40
   1. Create Point, Triangle Class.
   2. Create global.cpp & function v4Cross.
@@ -46,10 +55,13 @@ modeling, rendering and collision detection.
   2. Use Cmake to ensure Cross-platform Compile compatibility.
 
 ## TodoList and Remarks
+* Shlw @ 2016.12.06.16.11
+  1. Re-write the draw.cpp, display.cpp, game.cpp, update.cpp.
+  2. Implement moment-of-inertia formula.
 
 * Shlw @ 2016.12.04.23.33
   1. Rewrite Class Model&Object.
-  2. Add Function is_inside. 
+  2. Add Function is_inside.
 
 * lzh @ 2016.12.01.22.13
   1. None.
