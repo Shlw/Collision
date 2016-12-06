@@ -40,7 +40,7 @@ public:
 	glm::vec4* vpColor;
 
 	Point();
-	Point(Point* prttp);
+	Point(Point* example);
 	Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha);
 	~Point();
 };

@@ -58,9 +58,9 @@ Point::Point(){
 	vpColor=NULL;
 }
 
-Point::Point(Point* prttp){
-	vpColor=new glm::vec4(*(prttp->vpColor));
-	vpCoordinate=new glm::vec4(*(prttp->vpCoordinate));
+Point::Point(Point* example){
+	vpColor=new glm::vec4(*example->vpColor);
+	vpCoordinate=new glm::vec4(*example->vpCoordinate);
 }
 
 Point::Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha){
@@ -83,8 +83,8 @@ Triangle::Triangle(Point* a,Point* b,Point* c){
 	pVertex[1]=new Point(b);
 	pVertex[2]=new Point(c);
 	vNormal_vector=new glm::vec4;
-	*vNormal_vector=v4Cross(*(b->vpCoordinate) - *(a->vpCoordinate),
-							*(c->vpCoordinate) - *(b->vpCoordinate));
+	*vNormal_vector=v4Cross(*b->vpCoordinate - *a->vpCoordinate,
+							*c->vpCoordinate - *b->vpCoordinate);
 }
 
 Triangle::~Triangle(){

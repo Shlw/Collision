@@ -63,11 +63,6 @@ int main(int argc, char *argv[])
 {
 	srand(time(0));
 	preinput();
-	int testmodellist;
-	//scanf("%d",&testmodellist);
-	//printf("%lf\n",(*mModellist[testmodellist].tCone[0]->pVertex[0]->vpCoordinate)[1]);
-	//Object* testobj=new Object;
-	//testobj->Init(1,1,1,1,1);
 	
     // Initialize function of glut
 /*    glutInit(&argc, argv);
