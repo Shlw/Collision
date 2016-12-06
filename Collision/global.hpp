@@ -31,8 +31,19 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+class Point;
+class Triangle;
+class Model;
+class Object;
+
+typedef Triangle* PTriangle;
+
 glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b);
 GLfloat v4Dots(glm::vec4 a,glm::vec4 b);
+GLfloat v4Length(glm::vec4 a);
+
+Point* MultPoint(glm::mat4* matrix,Point* p);
+PTriangle MultTriangle(glm::mat4* matrix,PTriangle cone);
 
 class Point{
 public:
@@ -55,8 +66,6 @@ public:
 	~Triangle();
 };
 
-typedef Triangle* PTriangle;
-
 class Model{
 public:
     int nLength;
@@ -75,7 +84,7 @@ public:
 	GLfloat fMomentInertia,fElastic,fMass;
 
 	bool Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz);
-	Triangle* Is_inside(Point* tp);
+	PTriangle Is_inside(Point* tp);
     //void Draw(void);
     //void Update(void);
 	Object();
@@ -86,6 +95,7 @@ extern int nModeltot;
 extern int nMaterialtot;
 extern Model mModellist[100];
 extern GLfloat fMateriallist[100][2]; //first is density, second is elasticity
+
 // Declarations of global variables defined in .cpp files
 
 extern int nWindowFlags;

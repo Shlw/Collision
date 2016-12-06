@@ -58,12 +58,31 @@ void preinput(){
 	fclose(modelin);
 }
 
+void printTri(PTriangle t){
+	for (int i=0;i<3;++i){
+		for (int j=0;j<3;++j)
+			printf("%f ",(*t->pVertex[i]->vpCoordinate)[j]);
+		printf("\n");
+	}
+}
+
 // The main function
 int main(int argc, char *argv[])
 {
 	srand(time(0));
 	preinput();
-	
+
+	Object* testobj=new Object;
+	testobj->Init(1,1,0,0,0);
+	Point* testp=new Point(0.9,0.99,0.95,1,1,1,0);
+
+	PTriangle testinside=testobj->Is_inside(testp);
+
+	if (!testinside) printf("Not inside!\n");
+		else {
+			printf("Inside!\nClosest Plane is\n");
+			printTri(testinside);
+		}
     // Initialize function of glut
 /*    glutInit(&argc, argv);
     glutInitDisplayMode(nWindowFlags);

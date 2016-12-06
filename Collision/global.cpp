@@ -18,12 +18,40 @@ GLfloat v4Dots(glm::vec4 a,glm::vec4 b){
 	return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 }
 
-Triangle* Object::Is_inside(Point* tp){
+GLfloat v4Length(glm::vec4 a){
+	return sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]);
+}
 
+Point* MultPoint(glm::mat4* matrix,Point* p){
+	Point* ret=new Point(p);
+	*ret->vpCoordinate=(*matrix) * (*ret->vpCoordinate);
+	return ret;
+}
 
+PTriangle MultTriangle(glm::mat4* matrix,PTriangle cone){
+	PTriangle ret=new Triangle;
+	for (int i=0;i<3;++i)
+		ret->pVertex[i]=MultPoint(matrix,cone->pVertex[i]);
+	ret->vNormal_vector=new glm::vec4((*matrix) * (*cone->vNormal_vector));
+	return ret;
+}
 
+PTriangle Object::Is_inside(Point* tp){
+	glm::vec4* plocat=tp->vpCoordinate;
+	int len=mModellist[nModeltype].nLength;
+	GLfloat dist=INT_MAX;
+	PTriangle ret=NULL;
 
-	return NULL;
+	for (int i=0;i<len;++i){
+		PTriangle now=MultTriangle(mFrame,mModellist[nModeltype].tCone[i]);
+		GLfloat vl=v4Dots(*now->vNormal_vector,
+						  *tp->vpCoordinate - *now->pVertex[0]->vpCoordinate);
+		if (vl>0){delete now; delete ret; return NULL;}
+		vl=-vl/v4Length(*now->vNormal_vector);
+		if (vl<dist) {dist=vl; delete ret; ret=now;}
+	}
+
+	return ret;
 }
 
 Object::Object(){
@@ -64,7 +92,7 @@ Point::Point(Point* example){
 }
 
 Point::Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha){
-	vpCoordinate=new glm::vec4(x,y,z,1.0);
+	vpCoordinate=new glm::vec4(x,y,z,1);
 	vpColor=new glm::vec4(r,g,b,alpha);
 }
 
