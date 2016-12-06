@@ -37,22 +37,19 @@ void preinput(){
 		mModellist[i].nLength=len;
 		mModellist[i].fVolume=vol;
 		mModellist[i].tCone=new PTriangle[len];
-printf("hello\n");
 
 		for (int j=0;j<len;++j){
 			Point* p[3];
 			for (int k=0;k<3;++k){
 				GLfloat x,y,z;
 				fscanf(modelin,"%f%f%f",&x,&y,&z);
-				p[i]=new Point(x,y,z,
+				p[k]=new Point(x,y,z,
 						   	   (rand()%100)/100.0,
 						   	   (rand()%100)/100.0,
 						   	   (rand()%100)/100.0,0);
 			}
-printf("hellonewtri\n");
 			mModellist[i].tCone[j]=new Triangle(p[0],p[1],p[2]);
-printf("hello\n");
-			p[0]->~Point(); p[1]->~Point(); p[2]->~Point();
+			delete p[0]; delete p[1]; delete p[2];
 		}
 
 	}
@@ -66,11 +63,12 @@ int main(int argc, char *argv[])
 {
 	srand(time(0));
 	preinput();
-	int test;
-	scanf("%d",&test);
-	glm::vec4 hello=glm::vec4(1,2,3,4);
-	printf("%lf\n",hello[test]);
-	//printf("%lf\n",*((mModellist[test].tCone[0])->pVertex[0]->vpCoordinate)[0]);
+	int testmodellist;
+	//scanf("%d",&testmodellist);
+	//printf("%lf\n",(*mModellist[testmodellist].tCone[0]->pVertex[0]->vpCoordinate)[1]);
+	//Object* testobj=new Object;
+	//testobj->Init(1,1,1,1,1);
+	
     // Initialize function of glut
 /*    glutInit(&argc, argv);
     glutInitDisplayMode(nWindowFlags);

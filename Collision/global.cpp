@@ -18,7 +18,7 @@ GLfloat v4Dots(glm::vec4 a,glm::vec4 b){
 	return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 }
 
-Triangle* Object::is_inside(Point* tp){
+Triangle* Object::Is_inside(Point* tp){
 
 
 
@@ -59,13 +59,8 @@ Point::Point(){
 }
 
 Point::Point(Point* prttp){
-printf("hellopoint\n");
-	vpColor=new glm::vec4;
-	*vpColor=*(prttp->vpColor);
-printf("midpoint\n");
-	vpCoordinate=new glm::vec4;
-	*vpCoordinate=*(prttp->vpCoordinate);
-printf("byepoint\n");
+	vpColor=new glm::vec4(*(prttp->vpColor));
+	vpCoordinate=new glm::vec4(*(prttp->vpCoordinate));
 }
 
 Point::Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha){
@@ -84,18 +79,12 @@ Triangle::Triangle(){
 }
 
 Triangle::Triangle(Point* a,Point* b,Point* c){
-printf("hello\n");
-
 	pVertex[0]=new Point(a);
-printf("hello0\n");
 	pVertex[1]=new Point(b);
-printf("hello1\n");
 	pVertex[2]=new Point(c);
-printf("hello2\n");
 	vNormal_vector=new glm::vec4;
 	*vNormal_vector=v4Cross(*(b->vpCoordinate) - *(a->vpCoordinate),
 							*(c->vpCoordinate) - *(b->vpCoordinate));
-printf("hello\n");
 }
 
 Triangle::~Triangle(){

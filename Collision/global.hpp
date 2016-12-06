@@ -75,7 +75,7 @@ public:
 	GLfloat fMomentInertia,fElastic,fMass;
 
 	bool Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz);
-	Triangle* is_inside(Point* tp);
+	Triangle* Is_inside(Point* tp);
     //void Draw(void);
     //void Update(void);
 	Object();
