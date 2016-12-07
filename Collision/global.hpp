@@ -1,8 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : lzh
- * Rev : 2016.12.01.22.13
+ * Modifier : Shlw
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -19,6 +18,10 @@
 #include <cmath>
 #include <ctime>
 #include <iostream>
+#include <cstdio>
+#include <ctime>
+#include <algorithm>
+#include <vector>
 
 #include <GL/gl.h>
 #include <GL/glext.h>
@@ -28,60 +31,79 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-// Class declarations of Model and Object
-// **ATTENTION** Public here is convenient but ugly, these classes are
-// suggested to be overridden.
-// **ATTENTION** Here used glm::vec* and glm::mat* to represent vectors
-// and matrices, but frequent construction and destruction which is
-// automatically called by the classes may result in low efficiency. Using
-// pointers to create instance of these object may be better.
+class Point;
+class Triangle;
+class Model;
+class Object;
 
-// The class to store models which can be used repeatedly, only storing
-// vertices coordinates and colors. The vertices coordinates will be drawn
-// with respect to the coordinates of each Object individually.
-class Model
-{
+typedef Triangle* PTriangle;
+
+glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b);
+GLfloat v4Dots(glm::vec4 a,glm::vec4 b);
+GLfloat v4Length(glm::vec4 a);
+
+Point* MultPoint(glm::mat4* matrix,Point* p);
+PTriangle MultTriangle(glm::mat4* matrix,PTriangle cone);
+
+class Point{
+public:
+	glm::vec4* vpCoordinate;
+	glm::vec4* vpColor;
+
+	Point();
+	Point(Point* example);
+	Point(GLfloat x,GLfloat y,GLfloat z,GLfloat r,GLfloat g,GLfloat b,GLfloat alpha);
+	~Point();
+};
+
+class Triangle{
+public:
+	Point* pVertex[3];
+	glm::vec4* vNormal_vector;
+
+	Triangle();
+	Triangle(Point* a,Point* b,Point* c);
+	~Triangle();
+};
+
+class Model{
 public:
     int nLength;
-    glm::vec4 vpVertex[30];
-    glm::vec4 vpColor[30];
+	PTriangle* tCone;
+	GLfloat fVolume;
+
+	Model();
+	~Model();
 };
 
-// The class to store objects, only storing the index of model in the
-// mpModelList and the center, the vector of x, y, z-axes and the speed.
-// To be exactly, the entries [0][0:2], [1][0:2], [2][0:2] represent the
-// vector of x, y, z-axes respectively, and [3][0:2] represent the center
-// of the Object, where [i][j] represent the ith row and jth column of the
-// matrix and all the coordinates are that in OpenGL global coordinates.
-// Each Object use mFrame to establish a new coordinates, and the Model is
-// drawn with respect to the new coordinates. Note that the entry [0:2][3]
-// must be 0 and the entry [3][3] 1.
-// **ATTENTION** glm::mat4 stores in column-major, see glm Manual.
-class Object
-{
+class Object{
 public:
-    glm::mat4 mFrame;
-    glm::vec3 vSpeed;
-    int nModelIndex;
-    
-    void Draw(void);
-    void Update(void);
+	int nModeltype;
+    glm::mat4* mFrame;
+    glm::vec3* vSpeed;
+	GLfloat fMomentInertia,fElastic,fMass;
+
+	bool Init(int model_type,int material_type,GLfloat vx,GLfloat vy,GLfloat vz);
+	PTriangle Is_inside(Point* tp);
+    //void Draw(void);
+    //void Update(void);
+	Object();
+	~Object();
 };
+
+extern int nModeltot;
+extern int nMaterialtot;
+extern Model mModellist[100];
+extern GLfloat fMateriallist[100][2]; //first is density, second is elasticity
 
 // Declarations of global variables defined in .cpp files
 
 extern int nWindowFlags;
-extern int nInitWindowWidth, nInitWindowHeight;
+extern int nInitWindowWidth;
+extern int nInitWindowHeight;
 extern int nTimerSpeed;
 extern const char* cpWindowTitle;
 extern int nLastClock;
-
-// Declarations of Model list and Object lists
-
-extern int nModelCtr;
-extern Model mpModelList[30];
-extern int nObjectCtr;
-extern Object opObjectList[30];
 
 // Declarations of functions
 

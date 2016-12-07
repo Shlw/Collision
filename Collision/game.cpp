@@ -1,12 +1,13 @@
 /*************************************************************************
  * game.cpp for project Collision
  * Author : lzh
- * Modifier : lzh
- * Rev : 2016.12.01.22.13
+ * Modifier : Shlw
  * Description : Source file to implement Game, which handles the game
  * logic, that is, to determine when to release a new object and something
  * like that.
  * Note : This source file is a naive example and should be rewritten.
+ * Note_Shlw : This file should consider the different time setting in MacOS Linux & windows,
+ 			   since it can not work properly on my Ubuntu QAQ
  ************************************************************************/
 
 // Inclusion of global header
@@ -17,13 +18,13 @@ void Game(void)
 {
     // Counter to count the number of seconds passed
     static int nSecCtr = 0;
-    
-    // Judge weather to release a new object
-    if (nLastClock/CLOCKS_PER_SEC > nSecCtr)
+
+    // Judge whether to release a new object
+    if (nLastClock*10/CLOCKS_PER_SEC > nSecCtr)
     {
         // Update nSecCtr
-        nSecCtr = clock()/CLOCKS_PER_SEC;
-        
+        nSecCtr = clock()*10/CLOCKS_PER_SEC;
+
         // Judge whether space is available
         if (nObjectCtr < 30)
         {
@@ -34,6 +35,6 @@ void Game(void)
             nObjectCtr++;
         }
     }
-    
+
     return ;
 }

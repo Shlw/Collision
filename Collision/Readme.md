@@ -7,6 +7,10 @@ Computing (A) (Honor Track) in the year of 2016. This project aims at 3-D
 modeling, rendering and collision detection.
 
 ## Changelog
+* Shlw @ 2016.12.04.23.40
+  1. Create Point, Triangle Class.
+  2. Create global.cpp & function v4Cross.
+  3. Add Linux makefile & Executable File-run.
 
 * lzh @ 2016.12.01.22.13
   1. Fix bug about CLOKS_PER_SEC.
@@ -42,6 +46,10 @@ modeling, rendering and collision detection.
   2. Use Cmake to ensure Cross-platform Compile compatibility.
 
 ## TodoList and Remarks
+
+* Shlw @ 2016.12.04.23.33
+  1. Rewrite Class Model&Object.
+  2. Add Function is_inside. 
 
 * lzh @ 2016.12.01.22.13
   1. None.
