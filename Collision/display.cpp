@@ -3,8 +3,8 @@
  * Author : lzh
  * Modifier : lzh
  * Description : Source file to handle things releated to display,
- * including the initialization of window, mouse event, and calls Game,
- * Object::Draw and Object::Update.
+ * including the initialization of window, mouse event, and calls other
+ * functional parts.
  ************************************************************************/
 
 // Inclusion of global header

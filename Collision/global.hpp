@@ -7,16 +7,15 @@
  ************************************************************************/
 
 // Check whether included
-
 #ifndef CL_GLOBAL_HPP
 
 #define CL_GLOBAL_HPP
 
 // Include public headers
-
 #include <cstdlib>
 #include <cmath>
 #include <ctime>
+#include <climits>
 #include <iostream>
 #include <cstdio>
 #include <ctime>
@@ -32,15 +31,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // Exception Flags
-
 #define ERROR_UNKNOWN_MODEL 0x0001
 #define ERROR_UNKNOWN_MATERIAL 0x0002
 
+// class declarations
 class Point;
 class Triangle;
 class Model;
 class Object;
 
+// typedef definitions
 typedef glm::vec3* PVec3;
 typedef glm::vec4* PVec4;
 typedef glm::mat4* PMat4;
@@ -49,13 +49,16 @@ typedef Triangle* PTriangle;
 typedef Model* PModel;
 typedef Object* PObject;
 
+// vector operations
 glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b);
 float v4Dots(glm::vec4 a,glm::vec4 b);
 float v4Length(glm::vec4 a);
 
+// matrix operations
 PPoint MultPoint(PMat4 matrix,PPoint p);
 PTriangle MultTriangle(PMat4 matrix,PTriangle cone);
 
+// point class represents the still point in local coordinate system
 class Point{
 public:
     PVec4 vpCoordinate;
@@ -72,6 +75,7 @@ public:
     void DrawVertex();
 };
 
+// triangle class represents the still triangle(cone) in local coordinate system
 class Triangle{
 public:
     PPoint pppVertex[3];
@@ -84,10 +88,11 @@ public:
     void Draw();
 };
 
+// model class represents the still model in local coordinate system
 class Model{
 public:
-    int nLength;
-    PTriangle* tppCone;
+    int nLength; // the number of triangular cones
+    PTriangle* tppCone; // the point array of triangle pointers
     float fVolume;
     
     Model();
@@ -96,6 +101,9 @@ public:
     void Draw();
 };
 
+// object class contains
+// the matrix(mFrame) to transform between local and global coordinate system
+// and several indispensable descriptive aspect of the object
 class Object{
 public:
     int nModelType;

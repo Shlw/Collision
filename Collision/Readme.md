@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.08.01.31
+  1. I'm sorry to ignore some changes before I start working and I have
+  already merged those additional commentaries in now.
+
 * lzh @ 2016.12.08.00.52
   1. Modify classes and merge changes.
   2. Create a naive demo using the new classes.
@@ -15,6 +19,12 @@ modeling, rendering and collision detection.
   Makefile and CMakeLists.txt.
   4. Contact me if Configure doesn't work.
   5. Modify *Readme.md*.
+
+* Shlw @ 2016.12.06.16.11
+  1. Re-write the draw.cpp, display.cpp, game.cpp, update.cpp.
+  2. Implement moment-of-inertia formula.
+  3. Re-write the draw.cpp, display.cpp, game.cpp, update.cpp.
+  4. Implement moment-of-inertia formula.
 
 * Shlw @ 2016.12.04.23.40
   1. Create Point, Triangle Class.
