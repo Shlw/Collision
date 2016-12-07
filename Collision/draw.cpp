@@ -4,14 +4,37 @@
  * Modifier : lzh
  * Description : Source file to implement Object::Draw, which draws
  * objects in different coordinates of Object.
- * Note : This source file is a naive example and should be rewritten.
  ************************************************************************/
 
 // Inclusion of global header
 #include "global.hpp"
 
+void Point::DrawVertex()
+{
+    glVertex4fv(glm::value_ptr(*vpCoordinate));
+    glColor4fv(glm::value_ptr(*vpColor));
+    return ;
+}
+
+void Triangle::Draw()
+{
+    glBegin(GL_TRIANGLES);
+        pppVertex[0]->DrawVertex();
+        pppVertex[1]->DrawVertex();
+        pppVertex[2]->DrawVertex();
+    glEnd();
+    return ;
+}
+
+void Model::Draw()
+{
+    for (int i = 0; i < nLength; i++)
+        tppCone[i]->Draw();
+    return ;
+}
+
 // Implementation of Object::Draw
-void Object::Draw(void)
+void Object::Draw()
 {
     // Switch to ModelView Matrix
     glMatrixMode(GL_MODELVIEW);
@@ -22,19 +45,20 @@ void Object::Draw(void)
     // Multiply mFrame to the right of current matrix in order to
     // transform coordinates in each Object to the global coordinates of
     // OpenGL.
-    glMultMatrixf(glm::value_ptr(mFrame));
-
-    // Draw triangles
-    glBegin(GL_TRIANGLES);
-        for (int i = 0; i < (mpModelList+nModelIndex)->nLength; i++)
-        {
-            glVertex4fv(glm::value_ptr((mpModelList+nModelIndex)->vpVertex[i]));
-            glColor4fv(glm::value_ptr((mpModelList+nModelIndex)->vpColor[i]));
-        }
-    glEnd();
+    glMultMatrixf(glm::value_ptr(*mpFrame));
+    
+    // Draw Model
+    mppModelList[nModelType]->Draw();
 
     // Restore matrix
     glPopMatrix();
 
+    return ;
+}
+
+void Draw()
+{
+    for (int i = 0; i < nObjectTot; i++)
+        oppObjectList[i]->Draw();
     return ;
 }

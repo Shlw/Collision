@@ -1,40 +1,50 @@
 /*************************************************************************
  * game.cpp for project Collision
  * Author : lzh
- * Modifier : Shlw
+ * Modifier : Shlw lzh
  * Description : Source file to implement Game, which handles the game
  * logic, that is, to determine when to release a new object and something
  * like that.
- * Note : This source file is a naive example and should be rewritten.
- * Note_Shlw : This file should consider the different time setting in MacOS Linux & windows,
- 			   since it can not work properly on my Ubuntu QAQ
  ************************************************************************/
 
 // Inclusion of global header
 #include "global.hpp"
 
+void GameInit()
+{
+    oppObjectList[nObjectTot] = new Object(1, 1, 0.0, 0.0, 0.0);
+    *oppObjectList[nObjectTot]->mpFrame = glm::translate(glm::mat4(1.0), glm::vec3(0.2, 0.4, 0.0));
+    *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(0.005, 0.005, 0.0);
+    oppObjectList[nObjectTot] = new Object(1, 1, 0.0, 0.0, 0.0);
+    *oppObjectList[nObjectTot]->mpFrame = glm::translate(glm::rotate(glm::mat4(1.0), (float)(M_PI/6.0), glm::vec3(1.0, 1.0, 1.0)), glm::vec3(0.8, 0.4, 0.0));
+    *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(-0.005, 0.005, 0.0);
+    oppObjectList[nObjectTot] = new Object(1, 1, 0.0, 0.0, 0.0);
+    *oppObjectList[nObjectTot]->mpFrame = glm::mat4(1.0);
+    *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(0.002, 0.004, 0.0);
+    return ;
+}
+
 // Implementation of Game
-void Game(void)
+void Game()
 {
     // Counter to count the number of seconds passed
     static int nSecCtr = 0;
-
+    
     // Judge whether to release a new object
-    if (nLastClock*10/CLOCKS_PER_SEC > nSecCtr)
+    if (nLastClock/CLOCKS_PER_SEC > nSecCtr)
     {
         // Update nSecCtr
-        nSecCtr = clock()*10/CLOCKS_PER_SEC;
+        nSecCtr = nLastClock/CLOCKS_PER_SEC;
 
         // Judge whether space is available
-        if (nObjectCtr < 30)
+        if (nObjectTot < 5)
         {
             // Release a new object.
-            (opObjectList+nObjectCtr)->mFrame = glm::mat4(1.0);
-            (opObjectList+nObjectCtr)->vSpeed = glm::vec3(0.002, 0.004, 0.0);
-            (opObjectList+nObjectCtr)->nModelIndex = 0;
-            nObjectCtr++;
+            oppObjectList[nObjectTot] = new Object(2, 2, 0.0, 0.0, 0.0);
+            *oppObjectList[nObjectTot]->mpFrame = glm::translate(glm::mat4(1.0), glm::vec3(0.2, 0.4, 0.0));
+            *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(0.005, 0.005, 0.0);
         }
     }
-
+    
     return ;
 }
