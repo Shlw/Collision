@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.08.13.08
+  1. Change collision to Collision, which is caused by a typo when using
+  git .
+
 * lzh @ 2016.12.08.11.42
   1. Merge again.
 
