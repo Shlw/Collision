@@ -14,7 +14,6 @@
 // Include public headers
 #include <cstdlib>
 #include <cmath>
-#include <ctime>
 #include <climits>
 #include <iostream>
 #include <cstdio>
