@@ -31,10 +31,10 @@ void Game()
     static int nSecCtr = 0;
     
     // Judge whether to release a new object
-    if (nLastClock/CLOCKS_PER_SEC > nSecCtr)
+    if (nLastClock/1000 > nSecCtr)
     {
         // Update nSecCtr
-        nSecCtr = nLastClock/CLOCKS_PER_SEC;
+        nSecCtr = nLastClock/1000;
 
         // Judge whether space is available
         if (nObjectTot < 5)

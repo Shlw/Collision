@@ -1,8 +1,7 @@
 ##########################################################################
-# build/CMakeLists.txt.Win.msys64 of project Collision
+# build/CMakeLists-Win-msys64.txt of project Collision
 # Author : lzh
 # Modifier : lzh
-# Rev : 2016.12.01.22.13
 # Description : Instruction file for CMake to generate Makefile.
 ##########################################################################
 

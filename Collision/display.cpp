@@ -50,7 +50,7 @@ void WindowInit()
 void OnTimer(int nValue)
 {
     // Update nLastClock to supply a stable time counter
-    nLastClock = clock();
+    nLastClock = glutGet(GLUT_ELAPSED_TIME);
 
     // Call for display
     glutPostRedisplay();

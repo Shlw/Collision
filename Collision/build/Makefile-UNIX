@@ -1,8 +1,7 @@
 ##########################################################################
-# build/Makefile.UNIX of project Collision
+# build/Makefile-UNIX of project Collision
 # Author : Shwl
 # Modifier : lzh
-# Rev : 2016.12.01.22.13
 # Description : Hand-written Makefile for UNIX systems.
 ##########################################################################
 

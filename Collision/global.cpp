@@ -128,6 +128,7 @@ Object::~Object(){
 // use specific model and material type to initialize the object
 // also need to input the velocity
 Object::Object(int model,int material,float vx,float vy,float vz){
+    // lzh : use throw to handle exceptions
     if (model>nModelTot || model<1)
         throw ERROR_UNKNOWN_MODEL;
     else if(material>nMaterialTot || material<1)
@@ -147,6 +148,7 @@ Object::Object(int model,int material,float vx,float vy,float vz){
 PTriangle Object::IsInside(PPoint tp){
     glm::vec4* plocat=tp->vpCoordinate;
     int len=mppModelList[nModelType]->nLength;
+    // lzh : I changed INT_MAX into FLT_MAX
     float dist=FLT_MAX;
     PTriangle ret=NULL;
     

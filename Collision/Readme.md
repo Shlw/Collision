@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.09.14.31
+  1. Substitute clock() with glutGet(GLUT_ELAPSED_TIME) to get time in the
+  unit of milliseconds to enhance compatibility.
+
 * lzh @ 2016.12.08.13.08
   1. Change collision to Collision, which is caused by a typo when using
   git .
