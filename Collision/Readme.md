@@ -7,6 +7,11 @@ Computing (A) (Honor Track) in the year of 2016. This project aims at 3-D
 modeling, rendering and collision detection.
 
 ## Changelog and Note
+* Shlw @ 2016.1.10.00.10
+  1. Partly re-write class
+  2. Re-write Readfile
+  3. Re-generate model.txt
+  4. TIRANGLE-CONE IS INCORRECT, NEED TO BE CALCULATE AGAIN!!!
 
 * lzh @ 2016.12.09.21.32
   1. Add *event.cpp* to handle mouse events, and now it is possible to use
