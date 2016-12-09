@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh
+ * Modifier : Shlw lzh Shlw
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -62,7 +62,7 @@ class Point{
 public:
     PVec4 vpCoordinate;
     PVec4 vpColor;
-    
+
     Point();
     Point(PPoint example);
     Point(
@@ -70,7 +70,7 @@ public:
         float r,float g,float b,float alpha
     );
     ~Point();
-    
+
     void DrawVertex();
 };
 
@@ -79,11 +79,12 @@ class Triangle{
 public:
     PPoint pppVertex[3];
     PVec4 vpNormalVector;
-    
+
     Triangle();
     Triangle(PPoint a,PPoint b,PPoint c);
+    Triangle(PPoint a,PPoint b,PPoint c,PVec4 v);
     ~Triangle();
-    
+
     void Draw();
 };
 
@@ -92,11 +93,11 @@ class Model{
 public:
     int nLength; // the number of triangular cones
     PTriangle* tppCone; // the point array of triangle pointers
-    float fVolume;
-    
+    float fVolume,fElastic,fMass;
+
     Model();
     ~Model();
-    
+
     void Draw();
 };
 
@@ -108,25 +109,22 @@ public:
     int nModelType;
     PMat4 mpFrame;
     PVec3 vpSpeed;
-    float fMomentInertia,fElastic,fMass;
-    
+    float fMomentInertia;
+
     Object();
-    Object(int model,int material,float vx,float vy,float vz);
+    Object(int model,float vx,float vy,float vz);
     ~Object();
-    
+
     PTriangle IsInside(PPoint tp);
-    
+
     void Draw();
     void Update();
 };
 
 extern int nModelTot;
-extern int nMaterialTot;
 extern int nObjectTot;
 extern PModel mppModelList[100];
 extern PObject oppObjectList[100];
-// first is density, second is elasticity
-extern float fppMaterialList[100][2]; 
 
 // Declarations of global variables defined in .cpp files
 

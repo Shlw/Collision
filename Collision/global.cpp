@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw lzh
+ * Modifier : Shlw lzh Shlw
  * Description : Implementation of fundamental things.
  ************************************************************************/
 
@@ -57,11 +57,11 @@ PPoint MultPoint(PMat4 matrix,PPoint p){
 // matrix multiplication left to a triangle
 PTriangle MultTriangle(PMat4 matrix,PTriangle cone){
     PTriangle ret=new Triangle;
-    
+
     // calculate the global coordinate of vertices
     for (int i=0;i<3;++i)
         ret->pppVertex[i]=MultPoint(matrix,cone->pppVertex[i]);
-    
+
     // rotate the normal vector
     ret->vpNormalVector=new glm::vec4((*matrix) * (*cone->vpNormalVector));
     return ret;
@@ -105,6 +105,13 @@ Triangle::Triangle(PPoint a,PPoint b,PPoint c){
     *vpNormalVector=v4Cross(*b->vpCoordinate - *a->vpCoordinate,
                             *c->vpCoordinate - *b->vpCoordinate);
 }
+// initialize the triangle class with 3 given points(local coordinate system) and normal vector
+Triangle::Triangle(PPoint a,PPoint b,PPoint c,PVec4 v){
+    pppVertex[0]=new Point(a);
+    pppVertex[1]=new Point(b);
+    pppVertex[2]=new Point(c);
+    vpNormalVector=new glm::vec4(*v);
+}
 // destroy the triangle class
 Triangle::~Triangle(){
     delete pppVertex[0]; delete pppVertex[1]; delete pppVertex[2];
@@ -114,7 +121,7 @@ Triangle::~Triangle(){
 // initialize the model class
 Model::Model(){
     nLength=0;
-    fVolume=0.0;
+    fVolume=fElastic=fMass=0.0;
     tppCone=NULL;
 }
 // destroy the model class
@@ -126,7 +133,7 @@ Model::~Model(){
 // initialize the object class
 Object::Object(){
     nModelType=0;
-    fMomentInertia=fElastic=fMass=0.0;
+    fMomentInertia=0.0;
     mpFrame=NULL;
     vpSpeed=NULL;
 }
@@ -137,18 +144,14 @@ Object::~Object(){
 }
 // use specific model and material type to initialize the object
 // also need to input the velocity
-Object::Object(int model,int material,float vx,float vy,float vz){
+Object::Object(int model,float vx,float vy,float vz){
     // lzh : use throw to handle exceptions
     if (model>nModelTot || model<1)
         throw ERROR_UNKNOWN_MODEL;
-    else if(material>nMaterialTot || material<1)
-        throw ERROR_UNKNOWN_MATERIAL;
     vpSpeed=new glm::vec3(vx,vy,vz);
     mpFrame=new glm::mat4(1.0); // load the identity matrix into mFrame
-    
+
     nModelType=model;
-    fMass=mppModelList[model]->fVolume*fppMaterialList[material][0];
-    fElastic=fppMaterialList[material][1];
     // need to calculate, later update
     fMomentInertia=0;
 }
@@ -161,69 +164,67 @@ PTriangle Object::IsInside(PPoint tp){
     // lzh : I changed INT_MAX into FLT_MAX
     float dist=FLT_MAX;
     PTriangle ret=NULL;
-    
+
     for (int i=0;i<len;++i){
         // get the Ith triangle's coordinates in global coordinate system
         // also rotate the normal vector
         PTriangle now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
-        
+
         // calculate the volume of the cone formed by given point and the Ith triangle
         float vl=v4Dots(*now->vpNormalVector,
                           *tp->vpCoordinate - *now->pppVertex[0]->vpCoordinate);
-        
+
         // not inside the left half space , return not_inside
         if (vl>0){delete now; delete ret; return NULL;}
-        
+
         // calculate the distance between the given point and the plane where triangle lies
         vl=-vl/v4Length(*now->vpNormalVector);
-        
+
         // update the dist
         if (vl<dist) {dist=vl; delete ret; ret=now;}
     }
-    
+
     return ret;
 }
 
 void ReadFiles(){
-    
-    // 3 kinds of material
-    FILE* materialin=fopen("material.txt","r");
     // 3 kinds of model--Cube, Cuboid, Regular-Triangular-Pyramid
-    FILE* modelin=fopen("model.txt","r"); 
-    
-    fscanf(materialin,"%d",&nMaterialTot);
-    
-    for (int i=1;i<=nMaterialTot;++i)
-        fscanf(materialin,"%f%f",fppMaterialList[i],fppMaterialList[i]+1);
+    FILE* modelin=fopen("model.txt","r");
 
     fscanf(modelin,"%d",&nModelTot);
     for (int i=1;i<=nModelTot;++i){
         int len;
-        GLfloat vol;
-        fscanf(modelin,"%d%f",&len,&vol);
+        float vol,dens,elas;
+        fscanf(modelin,"%d%f%f%f",&len,&vol,&dens,&elas);
         mppModelList[i] = new Model;
         mppModelList[i]->nLength=len;
         mppModelList[i]->fVolume=vol;
+        mppModelList[i]->fMass=vol*dens;
+        mppModelList[i]->fElastic=elas;
         mppModelList[i]->tppCone=new PTriangle[len];
 
         for (int j=0;j<len;++j){
             PPoint p[3];
             for (int k=0;k<3;++k){ // 3 points form a triangle
-                GLfloat x,y,z;
+                float x,y,z;
                 fscanf(modelin,"%f%f%f",&x,&y,&z);
+
                 // generate random RGBcolor, no transparency
                 p[k]=new Point(x,y,z,
                                (rand()%100)/100.0,
                                (rand()%100)/100.0,
                                (rand()%100)/100.0,1.0);
             }
+            float x,y,z;
+            fscanf(modelin,"%f%f%f",&x,&y,&z);
+
+            glm::vec4 norm=glm::vec4(x,y,z,0);
             // one triangle forms a triangular-cone
-            mppModelList[i]->tppCone[j]=new Triangle(p[0],p[1],p[2]);
+            mppModelList[i]->tppCone[j]=new Triangle(p[0],p[1],p[2],&norm);
             delete p[0]; delete p[1]; delete p[2];
         }
     }
 
-    fclose(materialin);
     fclose(modelin);
     return ;
 }

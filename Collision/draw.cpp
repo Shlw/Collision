@@ -1,7 +1,7 @@
 /*************************************************************************
  * draw.cpp for project Collision
  * Author : lzh
- * Modifier : lzh
+ * Modifier : lzh Shlw
  * Description : Source file to implement Object::Draw, which draws
  * objects in different coordinates of Object.
  ************************************************************************/
@@ -46,7 +46,7 @@ void Object::Draw()
     // transform coordinates in each Object to the global coordinates of
     // OpenGL.
     glMultMatrixf(glm::value_ptr(*mpFrame));
-    
+
     // Draw Model
     mppModelList[nModelType]->Draw();
 
