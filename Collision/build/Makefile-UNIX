@@ -1,12 +1,12 @@
 ##########################################################################
 # build/Makefile-UNIX of project Collision
-# Author : Shwl
+# Author : Shlw
 # Modifier : lzh
 # Description : Hand-written Makefile for UNIX systems.
 ##########################################################################
 
 collision : collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp event.cpp
-	g++ -o collision collision.cpp collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp event.cpp -lm -lglut -lGL -lGLU
+	g++ -o collision collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp event.cpp -lm -lglut -lGL -lGLU
 
 clean :
 	rm collision
