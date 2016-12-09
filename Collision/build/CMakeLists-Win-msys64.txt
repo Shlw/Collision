@@ -24,7 +24,7 @@ ENDIF ()
 
 # Setup source files list
 
-SET(COLLISION_SRCS collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp)
+SET(COLLISION_SRCS collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp event.cpp)
 
 # Generate instruction for target in Makefile
 

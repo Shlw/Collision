@@ -20,6 +20,7 @@ void WindowInit()
     glEnable(GL_POINT_SMOOTH);
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POLYGON_SMOOTH);
+    glEnable(GL_MULTISAMPLE);
     
     // Set up the values when clearing buffers
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -28,21 +29,24 @@ void WindowInit()
     // Set up blend function
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    // Set up smooth hints
-    glHint(GL_POINT_SMOOTH, GL_NICEST);
-    glHint(GL_LINE_SMOOTH, GL_NICEST);
-    glHint(GL_POLYGON_SMOOTH, GL_NICEST);
-
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    
     // Set up the projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0, double(nInitWindowWidth) / double(nInitWindowHeight), 0.1, 10.0);
-
+    gluPerspective(45.0, double(nInitWindowWidth) / double(nInitWindowHeight), 0.1, 40.0);
+    
     // Set up the camera
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-
+    glPushMatrix();
+    
+    glPointSize(2.0);
+    glLineWidth(1.5);
+    
     return;
 }
 
@@ -51,31 +55,37 @@ void OnTimer(int nValue)
 {
     // Update nLastClock to supply a stable time counter
     nLastClock = glutGet(GLUT_ELAPSED_TIME);
-
+    
     // Call for display
     glutPostRedisplay();
-
+    
     // Set up another timer
     glutTimerFunc(nTimerSpeed, OnTimer, 1);
-
+    
     return ;
 }
 void Display()
 {
     // Clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    
     // Draw each Object
     Draw();
-
+    
     // Update each Object
     Update();
     
     // Handle game logic
     Game();
-
+    
     // Swap buffers to refresh
     glutSwapBuffers();
+    
+    return ;
+}
 
+void WindowCleanUp()
+{
+    glPopMatrix();
     return ;
 }

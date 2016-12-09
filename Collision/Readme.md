@@ -8,6 +8,15 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.09.21.32
+  1. Add *event.cpp* to handle mouse events, and now it is possible to use
+  mouse to control the rotation of the model.
+  2. Enable multi-sample, which, unfortunately cannot function properly on
+  my computer. Please help check out weather the polygon drawn has been
+  anti-aliased.
+  3. Use freeglut instead of glut, which requires to substitute the *glut*
+  library with *freeglut*.
+
 * lzh @ 2016.12.09.14.31
   1. Substitute clock() with glutGet(GLUT_ELAPSED_TIME) to get time in the
   unit of milliseconds to enhance compatibility.

@@ -5,8 +5,8 @@
 # Description : Hand-written Makefile for UNIX systems.
 ##########################################################################
 
-collision : collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp
-	g++ -o collision collision.cpp collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp -lm -lglut -lGL -lGLU
+collision : collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp event.cpp
+	g++ -o collision collision.cpp collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp event.cpp -lm -lglut -lGL -lGLU
 
 clean :
 	rm collision

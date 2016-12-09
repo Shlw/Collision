@@ -24,7 +24,7 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glu.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -135,16 +135,31 @@ extern int nInitWindowWidth;
 extern int nInitWindowHeight;
 extern int nTimerSpeed;
 extern const char* cpWindowTitle;
+
 extern int nLastClock;
+extern int nLastMouseX, nLastMouseY;
+extern int npButtonState[3];
+extern glm::mat4 mModelTransformMat;
+
+extern float fRotateSpeed;
+extern float fTranslateSpeed;
+extern float fScrollSpeed;
 
 // Declarations of functions
 
 void ReadFiles();
 
 void WindowInit();
+void WindowCleanUp();
 
 void OnTimer(int nValue);
 void Display();
+
+void EventInit();
+void MouseButtonEvent(int b, int s, int x, int y);
+void MouseMotionEvent(int x, int y);
+void MousePassiveMoveEvent(int x, int y);
+void MouseWhellEvent(int b, int d, int x, int y);
 
 void Draw();
 
@@ -153,7 +168,7 @@ void Update();
 void GameInit();
 void Game();
 
-void CleanUp();
+void ModelCleanUp();
 
 int main(int argc, char *argv[]);
 
