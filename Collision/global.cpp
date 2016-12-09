@@ -7,13 +7,6 @@
 
 #include "global.hpp"
 
-// Declarations of global variables
-int nWindowFlags = GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE;
-int nInitWindowWidth = 1024, nInitWindowHeight = 768;
-int nTimerSpeed = 20;
-const char* cpWindowTitle = "Collision Demo";
-int nLastClock;
-
 int nModelTot; // number of models
 int nMaterialTot; // number of materials
 int nObjectTot; // number of objects
@@ -21,6 +14,23 @@ PModel mppModelList[100];
 PObject oppObjectList[100];
 // first is density, second is elasticity
 float fppMaterialList[100][2];
+
+// Declarations of global variables
+int nWindowFlags = GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_MULTISAMPLE;
+int nInitWindowWidth = 1024, nInitWindowHeight = 768;
+int nTimerSpeed = 20;
+const char* cpWindowTitle = "Collision Demo";
+
+int nLastClock;
+int nLastMouseX, nLastMouseY;
+// Array to store the state of mouse buttons, where [0], [1], [2]
+// represent left, middle and right button resepectively.
+int npButtonState[3];
+glm::mat4 mModelTransformMat;
+
+float fRotateSpeed = 0.005;
+float fTranslateSpeed = 0.005;
+float fScrollSpeed = 0.10;
 
 // glmvec4 cross product
 glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b){
@@ -218,7 +228,7 @@ void ReadFiles(){
     return ;
 }
 
-void CleanUp()
+void ModelCleanUp()
 {
     for (int i = 1; i <= nModelTot; i++)
         delete mppModelList[i];
