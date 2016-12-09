@@ -159,7 +159,7 @@ void EventInit();
 void MouseButtonEvent(int b, int s, int x, int y);
 void MouseMotionEvent(int x, int y);
 void MousePassiveMoveEvent(int x, int y);
-void MouseWhellEvent(int b, int d, int x, int y);
+void MouseWheelEvent(int b, int d, int x, int y);
 
 void Draw();
 

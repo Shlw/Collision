@@ -111,7 +111,7 @@ void MousePassiveMoveEvent(int x, int y)
     return ;
 }
 
-void MouseWhellEvent(int b, int d, int x, int y)
+void MouseWheelEvent(int b, int d, int x, int y)
 {
     mModelTransformMat = glm::translate(glm::mat4(1.0),
         glm::vec3(0.0, 0.0, (float)d*fScrollSpeed)

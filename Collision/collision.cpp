@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     glutMouseFunc(MouseButtonEvent);
     glutMotionFunc(MouseMotionEvent);
     glutPassiveMotionFunc(MousePassiveMoveEvent);
-    glutMouseWheelFunc(MouseWhellEvent);
+    glutMouseWheelFunc(MouseWheelEvent);
     
     // Setup a timer to refresh
     glutTimerFunc(nTimerSpeed, OnTimer, 1);
