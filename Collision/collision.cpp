@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
         return -1;
 
     glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
-    glfwWindowHint(GLFW_SAMPLES, 6);
+    glfwWindowHint(GLFW_SAMPLES, 8);
 
     fwWindow = glfwCreateWindow(nInitWindowWidth, nInitWindowHeight, cpWindowTitle, NULL, NULL);
 
