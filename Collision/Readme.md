@@ -12,6 +12,10 @@ modeling, rendering and collision detection.
   1. Substitute cross, dot and length with the that in glm.
   2. Update drawing strategy to hide the black border of the box's frame.
 
+* Shlw @ 2016.12.10.17.28
+  1. Add MaxRadius.
+  2. Update models.
+
 * lziad @ 2016.12.10.16.44
   1. Update game logic.
   2. Add an exception flag.

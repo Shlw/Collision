@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh lziad
+ * Modifier : Shlw lzh Shlw lzh lziad Shlw
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -38,7 +38,7 @@
 // Exception Flags
 #define ERROR_UNKNOWN_MODEL 0x0001
 #define FILE_NOT_FOUND 0x0002
-#define ERROR_TOO_MANY_OBJ 0x0003 
+#define ERROR_TOO_MANY_OBJ 0x0003
 
 // class declarations
 class Point;
@@ -96,7 +96,7 @@ class Model{
 public:
     int nLength; // the number of triangular cones
     PTriangle* tppCone; // the point array of triangle pointers
-    float fVolume,fElastic,fMass;
+    float fVolume,fElastic,fMass,fMaxRadius;
 
     Model();
     ~Model();
