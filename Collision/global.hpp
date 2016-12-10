@@ -143,6 +143,8 @@ extern float fRotateSpeed;
 extern float fTranslateSpeed;
 extern float fScrollSpeed;
 
+extern float fpBoxLimit[6];
+
 // Declarations of functions
 
 int ReadFiles(const char* str);
@@ -159,6 +161,7 @@ void MouseWheelEvent(GLFWwindow* w, double x, double y);
 void MouseDropEvent(GLFWwindow* w, int c, const char** p);
 
 void Draw();
+void DrawBox();
 
 void Update();
 
