@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw lzh Shlw lzh
+ * Modifier : Shlw lzh Shlw lzh Shlw
  * Description : Implementation of fundamental things.
  ************************************************************************/
 
@@ -126,7 +126,7 @@ Triangle::~Triangle(){
 // initialize the model class
 Model::Model(){
     nLength=0;
-    fVolume=fElastic=fMass=0.0;
+    fVolume=fElastic=fMass=fMaxRadius=0.0;
     tppCone=NULL;
 }
 // destroy the model class
@@ -198,14 +198,15 @@ int ReadFiles(const char* str){
     ++nModelTot;
 
     int len;
-    float vol,dens,elas;
+    float vol,dens,elas,radi;
 
-    fscanf(modelin,"%d%f%f%f",&len,&vol,&dens,&elas);
+    fscanf(modelin,"%d%f%f%f%f",&len,&vol,&dens,&elas,&radi);
     mppModelList[nModelTot] = new Model;
     mppModelList[nModelTot]->nLength=len;
     mppModelList[nModelTot]->fVolume=vol;
     mppModelList[nModelTot]->fMass=vol*dens;
     mppModelList[nModelTot]->fElastic=elas;
+    mppModelList[nModelTot]->fMaxRadius=radi;
     mppModelList[nModelTot]->tppCone=new PTriangle[len];
 
     for (int j=0;j<len;++j){
