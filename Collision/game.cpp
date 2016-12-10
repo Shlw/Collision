@@ -1,7 +1,7 @@
 /*************************************************************************
  * game.cpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw
+ * Modifier : Shlw lzh Shlw lzh
  * Description : Source file to implement Game, which handles the game
  * logic, that is, to determine when to release a new object and something
  * like that.
@@ -31,10 +31,10 @@ void Game()
     static int nSecCtr = 0;
 
     // Judge whether to release a new object
-    if ((int)nLastClock > nSecCtr)
+    if ((int)dLastClock > nSecCtr)
     {
         // Update nSecCtr
-        nSecCtr = (int)nLastClock;
+        nSecCtr = (int)dLastClock;
 
         // Judge whether space is available
         if (nObjectTot < 5)

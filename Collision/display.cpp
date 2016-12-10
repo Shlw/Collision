@@ -54,8 +54,8 @@ void WindowInit()
 
 void Display(GLFWwindow* w)
 {
-    nLastLastClock = nLastClock;
-    nLastClock = glfwGetTime();
+    dLastLastClock = dLastClock;
+    dLastClock = glfwGetTime();
     
     // Clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -1,7 +1,7 @@
 /*************************************************************************
  * main.cpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw
+ * Modifier : Shlw lzh Shlw lzh
  * Rev : 2016.12.05.18.43
  * Description : Source file to implement main, which calls functions and
  * enters glutMainLoop.
@@ -26,7 +26,8 @@ int main(int argc, char *argv[])
     if (!glfwInit())
         return -1;
     
-    // Initialize function of glut
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+    glfwWindowHint(GLFW_SAMPLES, 6);
     
     fwWindow = glfwCreateWindow(nInitWindowWidth, nInitWindowHeight, cpWindowTitle, NULL, NULL);
     
@@ -38,7 +39,12 @@ int main(int argc, char *argv[])
     
     // Create a window and initialilze
     glfwMakeContextCurrent(fwWindow);
+    
     WindowInit();
+    
+    glfwSetCursorPosCallback(fwWindow, MouseMotionEvent);
+    glfwSetScrollCallback(fwWindow, MouseWheelEvent);
+    glfwSetDropCallback(fwWindow, MouseDropEvent);
     
     while (!glfwWindowShouldClose(fwWindow))
     {

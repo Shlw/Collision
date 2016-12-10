@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw lzh Shlw
+ * Modifier : Shlw lzh Shlw lzh
  * Description : Implementation of fundamental things.
  ************************************************************************/
 
@@ -21,8 +21,8 @@ int nInitWindowWidth = 1024, nInitWindowHeight = 768;
 int nTimerSpeed = 20;
 const char* cpWindowTitle = "Collision Demo";
 
-double nLastClock, nLastLastClock;
-double nLastMouseX, nLastMouseY;
+double dLastClock, dLastLastClock;
+double dLastMouseX, dLastMouseY;
 // Array to store the state of mouse buttons, where [0], [1], [2]
 // represent left, middle and right button resepectively.
 int npButtonState[3];
