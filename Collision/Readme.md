@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.10.11.02
+  1. Update CMakeLists.txt on the dependent libraries.
+
 * lzh @ 2016.12.10.10.06
   1. Substitute freeglut with glfw.
 
