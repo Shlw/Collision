@@ -14,46 +14,36 @@ void EventInit()
     for (int i = 0; i < 3; i++)
         npButtonState[i] = 0;
     mModelTransformMat = glm::mat4(1.0);
-    nLastMouseX = INT_MAX;
-    nLastMouseY = INT_MAX;
+    dLastMouseX = FLT_MAX;
+    dLastMouseY = FLT_MAX;
     return ;
 }
 
-void MouseButtonEvent(int b, int s, int x, int y)
-{/*
-    int m = 0;
-    switch (b)
-    {
-        case GLUT_LEFT_BUTTON :
-            m = 0; break;
-        case GLUT_MIDDLE_BUTTON :
-            m = 1; break;
-        case GLUT_RIGHT_BUTTON :
-            m = 2; break;
-    }
-    if (s == GLUT_DOWN)
-        npButtonState[m] = 1;
-    else if (s == GLUT_UP)
-        npButtonState[m] = 0;
-    return ;*/
-}
-
-void MouseMotionEvent(int x, int y)
-{/*
+void MouseMotionEvent(GLFWwindow* w, double x, double y)
+{
+    int npState[3];
     float d = sqrt(
-        (float)((x-nLastMouseX) * (x-nLastMouseX))
-        +(float)((y-nLastMouseY) * (y-nLastMouseY))
+        (float)((x-dLastMouseX) * (x-dLastMouseX))
+        +(float)((y-dLastMouseY) * (y-dLastMouseY))
     ), theta;
-    if (nLastMouseX == INT_MAX || nLastMouseY == INT_MAX)
+    int nWindowWidth, nWindowHeight;
+    npState[0] = glfwGetMouseButton(w, GLFW_MOUSE_BUTTON_LEFT);
+    npState[1] = glfwGetMouseButton(w, GLFW_MOUSE_BUTTON_MIDDLE);
+    npState[2] = glfwGetMouseButton(w, GLFW_MOUSE_BUTTON_RIGHT);
+    if (dLastMouseX == FLT_MAX || dLastMouseY == FLT_MAX)
         ;
-    else if (nLastMouseX == x && nLastMouseY == y)
+    else if (dLastMouseX == x && dLastMouseY == y)
         ;
-    else if (npButtonState[0] && !npButtonState[1] && !npButtonState[2])
+    else if (
+        (npState[0] == GLFW_PRESS) && 
+        (npState[1] == GLFW_RELEASE) &&
+        (npState[2] == GLFW_RELEASE)
+    )
     {
         mModelTransformMat = glm::rotate(glm::mat4(1.0), d*fRotateSpeed ,
             glm::vec3(
-                ((float)(y-nLastMouseY)) / d,
-                ((float)(x-nLastMouseX)) / d,
+                ((float)(y-dLastMouseY)) / d,
+                ((float)(x-dLastMouseX)) / d,
                 0.0
             )
         ) * mModelTransformMat;
@@ -62,12 +52,16 @@ void MouseMotionEvent(int x, int y)
         glPushMatrix();
         glMultMatrixf(glm::value_ptr(mModelTransformMat));
     }
-    else if (!npButtonState[0] && !npButtonState[1] && npButtonState[2])
+    else if (
+        (npState[0] == GLFW_RELEASE) && 
+        (npState[1] == GLFW_RELEASE) &&
+        (npState[2] == GLFW_PRESS)
+    )
     {
         mModelTransformMat = glm::translate(glm::mat4(1.0),
             glm::vec3(
-                ((float)(x-nLastMouseX)) * fTranslateSpeed,
-                -((float)(y-nLastMouseY)) * fTranslateSpeed,
+                ((float)(x-dLastMouseX)) * fTranslateSpeed,
+                -((float)(y-dLastMouseY)) * fTranslateSpeed,
                 0.0
             )
         ) * mModelTransformMat;
@@ -76,19 +70,24 @@ void MouseMotionEvent(int x, int y)
         glPushMatrix();
         glMultMatrixf(glm::value_ptr(mModelTransformMat));
     }
-    else if (!npButtonState[0] && npButtonState[1] && !npButtonState[2])
+    else if (
+        (npState[0] == GLFW_RELEASE) && 
+        (npState[1] == GLFW_PRESS) &&
+        (npState[2] == GLFW_RELEASE)
+    )
     {
+        glfwGetWindowSize(w, &nWindowWidth, &nWindowHeight);
         theta = atan2(
             (float)x - 
-            ((float)(glutGet(GLUT_WINDOW_WIDTH)/2) + 0.5),
-            ((float)(glutGet(GLUT_WINDOW_HEIGHT)/2) + 0.5) 
+            ((float)(nWindowWidth/2) + 0.5),
+            ((float)(nWindowHeight/2) + 0.5) 
             - (float)y
         );
         theta -= atan2(
-            (float)nLastMouseX - 
-            ((float)(glutGet(GLUT_WINDOW_WIDTH)/2) + 0.5),
-            ((float)(glutGet(GLUT_WINDOW_HEIGHT)/2) + 0.5) 
-            - (float)nLastMouseY
+            (float)dLastMouseX - 
+            ((float)(nWindowWidth/2) + 0.5),
+            ((float)(nWindowHeight/2) + 0.5) 
+            - (float)dLastMouseY
         );
         mModelTransformMat = glm::rotate(glm::mat4(1.0),
             -theta,
@@ -99,28 +98,26 @@ void MouseMotionEvent(int x, int y)
         glPushMatrix();
         glMultMatrixf(glm::value_ptr(mModelTransformMat));
     }
-    nLastMouseX = x;
-    nLastMouseY = y;
-    return ;*/
+    dLastMouseX = x;
+    dLastMouseY = y;
+    GameMove(w, x, y);
+    return ;
 }
 
-void MousePassiveMoveEvent(int x, int y)
-{/*
-    nLastMouseX = x;
-    nLastMouseY = y;
-    return ;*/
-}
-
-void MouseWheelEvent(int b, int d, int x, int y)
-{/*
+void MouseWheelEvent(GLFWwindow* w, double x, double y)
+{
     mModelTransformMat = glm::translate(glm::mat4(1.0),
-        glm::vec3(0.0, 0.0, (float)d*fScrollSpeed)
+        glm::vec3(0.0, 0.0, (float)y*fScrollSpeed)
     ) * mModelTransformMat;
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
     glPushMatrix();
     glMultMatrixf(glm::value_ptr(mModelTransformMat));
-    nLastMouseX = x;
-    nLastMouseY = y;
-    return ;*/
+    return ;
+}
+
+void MouseDropEvent(GLFWwindow* w, int c, const char** p)
+{
+    GameDrag(w, c, p);
+    return ;
 }

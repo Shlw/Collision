@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw
+ * Modifier : Shlw lzh Shlw lzh
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -133,8 +133,8 @@ extern int nInitWindowHeight;
 extern int nTimerSpeed;
 extern const char* cpWindowTitle;
 
-extern double nLastClock, nLastLastClock;
-extern double nLastMouseX, nLastMouseY;
+extern double dLastClock, dLastLastClock;
+extern double dLastMouseX, dLastMouseY;
 extern int npButtonState[3];
 extern glm::mat4 mModelTransformMat;
 
@@ -150,19 +150,20 @@ void WindowInit();
 void WindowCleanUp();
 
 void Display(GLFWwindow* w);
+int UnProjectNow(double x, double y, double z, double* rx, double* ry, double* rz);
 
 void EventInit();
-void MouseButtonEvent(int b, int s, int x, int y);
-void MouseMotionEvent(int x, int y);
-void MousePassiveMoveEvent(int x, int y);
-void MouseWheelEvent(int b, int d, int x, int y);
+void MouseMotionEvent(GLFWwindow* w, double x, double y);
+void MouseWheelEvent(GLFWwindow* w, double x, double y);
+void MouseDropEvent(GLFWwindow* w, int c, const char** p);
 
 void Draw();
 
 void Update();
 
 void GameInit();
-void Game();
+void GameMove(GLFWwindow* w, double x, double y);
+void GameDrag(GLFWwindow* w, int c, const char** p);
 
 void ModelCleanUp();
 

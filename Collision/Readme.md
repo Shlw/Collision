@@ -8,6 +8,13 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.10.12.46
+  1. Add a drag and drop demo.
+
+* lzh @ 2016.12.10.11.41
+  1. Add mouse events under glfw.
+  2. Add function to handle drag and drop events.
+
 * lzh @ 2016.12.10.11.02
   1. Update CMakeLists.txt on the dependent libraries.
 
