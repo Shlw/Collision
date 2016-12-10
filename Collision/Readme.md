@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.10.15.34
+  1. Add the show box to indicate the absolute position.
+
 * Shlw @ 2016.12.10.15.00
   1. Re-write Readfile
   
