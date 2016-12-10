@@ -65,6 +65,7 @@ void Draw()
 
 void DrawBox()
 {
+    glDepthMask(GL_FALSE);
     glBegin(GL_LINES);
         glColor4f(0.7, 0.0, 0.0, 1.0);
         glVertex3f(fpBoxLimit[0], fpBoxLimit[2], fpBoxLimit[4]);
@@ -94,4 +95,5 @@ void DrawBox()
         glVertex3f(fpBoxLimit[1], fpBoxLimit[3], fpBoxLimit[4]);
         glVertex3f(fpBoxLimit[1], fpBoxLimit[3], fpBoxLimit[5]);
     glEnd();
+    glDepthMask(GL_TRUE);
 }

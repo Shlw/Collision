@@ -55,11 +55,6 @@ typedef Triangle* PTriangle;
 typedef Model* PModel;
 typedef Object* PObject;
 
-// vector operations
-glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b);
-float v4Dots(glm::vec4 a,glm::vec4 b);
-float v4Length(glm::vec4 a);
-
 // matrix operations
 PPoint MultPoint(PMat4 matrix,PPoint p);
 PTriangle MultTriangle(PMat4 matrix,PTriangle cone);
