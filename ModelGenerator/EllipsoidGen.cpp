@@ -2,7 +2,9 @@
 
 using namespace std;
 
-const float R=0.3;
+const float A=0.4;
+const float B=0.5;
+const float C=0.6;
 const int N=1000;
 typedef long long LL;
 typedef float SEQ[N];
@@ -24,24 +26,24 @@ int main(){
 
     for (int i=0;i<n;++i){
         for (int j=0;j<m;++j)
-            x[i][j]=R*sin(thetam[j])*cos(thetan[i]),
-            y[i][j]=R*cos(thetam[j])*cos(thetan[i]),
-            z[i][j]=R*sin(thetan[i]);
+            x[i][j]=A*sin(thetam[j])*cos(thetan[i]),
+            y[i][j]=B*cos(thetam[j])*cos(thetan[i]),
+            z[i][j]=C*sin(thetan[i]);
         x[i][m]=x[i][0];
         y[i][m]=y[i][0];
         z[i][m]=z[i][0];
     }
 
-    os=fopen("sphere.txt","w");
+    os=fopen("ellipsoid.txt","w");
 
     fprintf(os,"%d\n",m+m+(n-1)*m*2);
     for (int i=0;i<m;++i){
-        fprintf(os,"%.6f %.6f %.6f ",0.0,0.0,R);
+        fprintf(os,"%.6f %.6f %.6f ",0.0,0.0,C);
         prt(n-1,i+1); prt(n-1,i); fprintf(os,"\n");
     }
     for (int i=0;i<m;++i){
         prt(0,i); prt(0,i+1);
-        fprintf(os,"%.6f %.6f %.6f\n",0.0,0.0,-R);
+        fprintf(os,"%.6f %.6f %.6f\n",0.0,0.0,-C);
     }
     for (int i=0;i<n-1;++i)
         for (int j=0;j<m;++j){

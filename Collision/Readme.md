@@ -9,6 +9,11 @@ modeling, rendering and collision detection.
 ## Changelog and Note
 
 * Shlw @ 2016.12.10.15.24
+  1. Modify models.
+  2. Add Ellipsoid.
+  3. Rewrite model-generator.
+
+* Shlw @ 2016.12.10.15.24
   1. Add nFlag.
   2. Modify models.
 

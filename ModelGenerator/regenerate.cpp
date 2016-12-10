@@ -2,6 +2,16 @@
 
 using namespace std;
 
+struct ppp{
+    float x;float y;float z;
+};
+
+struct cmp{
+    bool operator()(ppp a,ppp b){
+        return a.x<b.x || (a.x==b.x && a.y<b.y) || (a.x==b.x && a.y==b.y && a.z<b.z);
+    }
+};
+
 const int N=10000;
 
 FILE* input;
@@ -9,6 +19,7 @@ FILE* output;
 int n,m;
 float vol,elas,dens;
 float x[N][3],y[N][3],z[N][3],vx[N],vy[N],vz[N];
+set<ppp,cmp> a;
 
 void normv(int loca,float x,float y,float z,float xx,float yy,float zz){
     vx[loca]=y*zz-z*yy;
@@ -36,8 +47,12 @@ void trans(){
 
     fprintf(output,"%d %.6f %.6f %.6f\n",n,vol,(rand()%100)/100.0,(rand()%100)/100.0);
     for (int i=0;i<n;++i){
-        for (int j=0;j<3;++j)
+        for (int j=0;j<3;++j){
             prt(i,j);
+            ppp now={x[i][j],y[i][j],z[i][j]};
+            if (a.find(now)==a.end()) {a.insert(now); fprintf(output,"1 ");}
+                else fprintf(output,"0 ");
+        }
         fprintf(output,"%.6f %.6f %.6f\n",vx[i],vy[i],vz[i]);
     }
 }
