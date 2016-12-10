@@ -60,6 +60,8 @@ void Display(GLFWwindow* w)
     // Clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+    DrawBox();
+    
     // Draw each Object
     Draw();
     
