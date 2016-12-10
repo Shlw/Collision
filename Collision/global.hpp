@@ -31,7 +31,6 @@
 
 // Exception Flags
 #define ERROR_UNKNOWN_MODEL 0x0001
-#define ERROR_UNKNOWN_MATERIAL 0x0002
 
 // class declarations
 class Point;
