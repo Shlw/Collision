@@ -6,6 +6,11 @@ This is the Model Generator for Project Collision.
 Sphere, Cylinder, Ellipsoid, Donut
 
 ## Changelog
+* Shlw @ 2016.12.10.22.59
+  1. Add cube-generator and cuboid-generator.
+
+* Shlw @ 2016.12.10.22.22
+  1. Add matrix of moment of inertia.
 
 * Shlw @ 2016.12.10.17.04
   1. Add notes.

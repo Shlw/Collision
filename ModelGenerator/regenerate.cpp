@@ -47,12 +47,17 @@ double dist(float a,float b,float c,float x,float y,float z){
     return sqrt(sqr(a-x)+sqr(b-y)+sqr(c-z));
 }
 
+// calculate part of inertia
+float calc(float ax,float ay,float bx,float by,float cx,float cy){
+    return 2*(ax*ay+bx*by+cx*cy)+(ax*by+ay*bx+ax*cy+ay*cx+bx*cy+by*cx);
+}
+
 void prt(int i,int j){
     fprintf(output,"%.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j]);
 }
 
 void trans(){
-    double maxdist=0;
+    double maxdist=0,ixx=0,iyy=0,izz=0,ixy=0,ixz=0,iyz=0;
 
     fscanf(input,"%d",&n);
     for (int i=0;i<n;++i){
@@ -62,10 +67,18 @@ void trans(){
         }
         normv(i,x[i][1]-x[i][0],y[i][1]-y[i][0],z[i][1]-z[i][0],
                 x[i][2]-x[i][1],y[i][2]-y[i][1],z[i][2]-z[i][1]);
-        vol+=dot(x[i][0],y[i][0],z[i][0],i)/6;
+        float tv=dot(x[i][0],y[i][0],z[i][0],i);
+        vol+=tv/6;
+        ixy+=tv/20*calc(x[i][0],y[i][0],x[i][1],y[i][1],x[i][2],y[i][2]);
+        ixz+=tv/20*calc(x[i][0],z[i][0],x[i][1],z[i][1],x[i][2],z[i][2]);
+        iyz+=tv/20*calc(y[i][0],z[i][0],y[i][1],z[i][1],y[i][2],z[i][2]);
+        ixx+=tv/20*calc(x[i][0],x[i][0],x[i][1],x[i][1],x[i][2],x[i][2]);
+        iyy+=tv/20*calc(y[i][0],y[i][0],y[i][1],y[i][1],y[i][2],y[i][2]);
+        izz+=tv/20*calc(z[i][0],z[i][0],z[i][1],z[i][1],z[i][2],z[i][2]);
     }
 
-    fprintf(output,"%d %.10f %.10f %.10f %.10lf\n",n,vol,(rand()%100)/100.0,(rand()%100)/100.0,maxdist);
+    float dens=(rand()%100)/100.0;
+    fprintf(output,"%d %.10f %.10f %.10f %.10lf\n",n,vol,dens,(rand()%100)/100.0,maxdist);
     for (int i=0;i<n;++i){
         for (int j=0;j<3;++j){
             prt(i,j);
@@ -77,6 +90,8 @@ void trans(){
         }
         fprintf(output,"%.10f %.10f %.10f\n",vx[i],vy[i],vz[i]);
     }
+    fprintf(output,"%.10f %.10f %.10f %.10f %.10f %.10f %.10f %.10f %.10f",
+                    ixx,ixy,ixz,ixy,iyy,iyz,ixz,iyz,izz);
 }
 
 int main(){

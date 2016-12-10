@@ -97,6 +97,7 @@ public:
     int nLength; // the number of triangular cones
     PTriangle* tppCone; // the point array of triangle pointers
     float fVolume,fElastic,fMass,fMaxRadius;
+    glm::mat3* mMomentOfInertia;
 
     Model();
     ~Model();

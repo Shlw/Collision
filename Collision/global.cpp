@@ -115,11 +115,13 @@ Model::Model(){
     nLength=0;
     fVolume=fElastic=fMass=fMaxRadius=0.0;
     tppCone=NULL;
+    mMomentOfInertia=NULL;
 }
 // destroy the model class
 Model::~Model(){
     for (int i=0;i<nLength;++i) delete tppCone[i];
     delete[] tppCone;
+    delete mMomentOfInertia;
 }
 
 // initialize the object class
@@ -218,6 +220,14 @@ int ReadFiles(const char* str){
         mppModelList[nModelTot]->tppCone[j]=new Triangle(p[0],p[1],p[2],&norm);
         delete p[0]; delete p[1]; delete p[2];
     }
+
+    mppModelList[nModelTot]->mMomentOfInertia=new glm::mat3;
+    float* col=glm::value_ptr(*mppModelList[nModelTot]->mMomentOfInertia);
+
+    fscanf(modelin,"%f%f%f%f%f%f%f%f%f",
+                    col,col+3,col+6,
+                    col+1,col+4,col+7,
+                    col+2,col+5,col+8);
 
     fclose(modelin);
     return nModelTot;
