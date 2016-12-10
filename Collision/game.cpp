@@ -24,36 +24,18 @@ void GameInit()
     return ;
 }
 
-// Implementation of Game
-void Game()
+void GameMove(GLFWwindow* w, double x, double y)
 {
-    // Counter to count the number of seconds passed
-    static int nSecCtr = 0;
-
-    // Judge whether to release a new object
-    if ((int)dLastClock > nSecCtr)
-    {
-        // Update nSecCtr
-        nSecCtr = (int)dLastClock;
-
-        // Judge whether space is available
-        if (nObjectTot < 5)
-        {
-
-            if (nObjectTot == 4)
-            {
-                // Release a new object.
-                oppObjectList[nObjectTot] = new Object(3, 0.0, 0.0, 0.0);
-                *oppObjectList[nObjectTot]->mpFrame = glm::translate(glm::mat4(1.0), glm::vec3(0.5, 0.3, 0.0));
-                *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(0.2, 0.2, 0.0);
-            } else {
-            // Release a new object.
-            oppObjectList[nObjectTot] = new Object(2, 0.0, 0.0, 0.0);
-            *oppObjectList[nObjectTot]->mpFrame = glm::translate(glm::mat4(1.0), glm::vec3(0.2, 0.4, 0.0));
-            *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(0.2, 0.2, 0.0);
-            }
-        }
-    }
-
     return ;
+}
+
+void GameDrag(GLFWwindow* w, int c, const char** p)
+{
+    double x1, x2, y1, y2, z1, z2;
+    UnProjectNow(dLastMouseX, dLastMouseY, 0.6, &x1, &y1, &z1);
+    UnProjectNow(dLastMouseX, dLastMouseY, 0.9, &x2, &y2, &z2);
+    oppObjectList[nObjectTot] = new Object(3, 0.0, 0.0, 0.0);
+    *oppObjectList[nObjectTot]->mpFrame = glm::translate(glm::mat4(1.0), glm::vec3(x1, y1, z1));
+    *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
+    return;
 }

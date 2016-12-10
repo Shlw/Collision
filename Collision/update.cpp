@@ -24,6 +24,10 @@ void Object::Update()
         (*vpSpeed)[1] = fabs((*vpSpeed)[1]);
     if ((*mpFrame)[3][1] > 1.0)
         (*vpSpeed)[1] = -fabs((*vpSpeed)[1]);
+    if ((*mpFrame)[3][2] < -1.0)
+        (*vpSpeed)[2] = fabs((*vpSpeed)[2]);
+    if ((*mpFrame)[3][2] > 1.0)
+        (*vpSpeed)[2] = -fabs((*vpSpeed)[2]);
 
     // Move the mFrame
     *mpFrame = glm::translate(*mpFrame, glm::mat3(dLastClock - dLastLastClock)**vpSpeed);

@@ -100,6 +100,7 @@ void MouseMotionEvent(GLFWwindow* w, double x, double y)
     }
     dLastMouseX = x;
     dLastMouseY = y;
+    GameMove(w, x, y);
     return ;
 }
 
@@ -117,6 +118,6 @@ void MouseWheelEvent(GLFWwindow* w, double x, double y)
 
 void MouseDropEvent(GLFWwindow* w, int c, const char** p)
 {
-    std::cout << c << ' ' << p[0] << std::endl;
+    GameDrag(w, c, p);
     return ;
 }
