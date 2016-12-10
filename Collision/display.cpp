@@ -66,13 +66,21 @@ void Display(GLFWwindow* w)
     // Update each Object
     Update();
     
-    // Handle game logic
-    Game();
-    
     // Swap buffers to refresh
     glfwSwapBuffers(w);
     
     return ;
+}
+
+int UnProjectNow(double x, double y, double z, double* rx, double* ry, double* rz)
+{
+    int vp[4], ret;
+    double mv[16], pj[16];
+    glGetIntegerv(GL_VIEWPORT, vp);
+    glGetDoublev(GL_MODELVIEW_MATRIX, mv);
+    glGetDoublev(GL_PROJECTION_MATRIX, pj);
+    ret = gluUnProject(x, -y + (double)(vp[3] - 1), z, mv, pj, vp, rx, ry, rz);
+    return ret;
 }
 
 void WindowCleanUp()

@@ -150,6 +150,7 @@ void WindowInit();
 void WindowCleanUp();
 
 void Display(GLFWwindow* w);
+int UnProjectNow(double x, double y, double z, double* rx, double* ry, double* rz);
 
 void EventInit();
 void MouseMotionEvent(GLFWwindow* w, double x, double y);
@@ -161,7 +162,8 @@ void Draw();
 void Update();
 
 void GameInit();
-void Game();
+void GameMove(GLFWwindow* w, double x, double y);
+void GameDrag(GLFWwindow* w, int c, const char** p);
 
 void ModelCleanUp();
 
