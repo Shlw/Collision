@@ -1,8 +1,14 @@
+/*************************************************************************
+ * SphereGen.cpp for project Collision
+ * Author : Shlw
+ * Modifier : Shlw
+ * Description : Generate Sphere.
+ ************************************************************************/
 #include <bits/stdc++.h>
 
 using namespace std;
 
-const float R=0.3;
+const float R=0.2;
 const int N=1000;
 typedef long long LL;
 typedef float SEQ[N];
@@ -13,7 +19,7 @@ int n,m; //n row, m column
 FILE* os;
 
 void prt(int i,int j){
-    fprintf(os,"%.6f %.6f %.6f ",x[i][j],y[i][j],z[i][j]);
+    fprintf(os,"%.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j]);
 }
 
 int main(){
@@ -33,16 +39,21 @@ int main(){
     }
 
     os=fopen("sphere.txt","w");
-
     fprintf(os,"%d\n",m+m+(n-1)*m*2);
+
+//top
     for (int i=0;i<m;++i){
-        fprintf(os,"%.6f %.6f %.6f ",0.0,0.0,R);
+        fprintf(os,"%.10f %.10f %.10f ",0.0,0.0,R);
         prt(n-1,i+1); prt(n-1,i); fprintf(os,"\n");
     }
+
+//button
     for (int i=0;i<m;++i){
         prt(0,i); prt(0,i+1);
-        fprintf(os,"%.6f %.6f %.6f\n",0.0,0.0,-R);
+        fprintf(os,"%.10f %.10f %.10f\n",0.0,0.0,-R);
     }
+
+//middle
     for (int i=0;i<n-1;++i)
         for (int j=0;j<m;++j){
             prt(i+1,j); prt(i+1,j+1); prt(i,j+1); fprintf(os,"\n");
