@@ -22,41 +22,41 @@ int main(int argc, char *argv[])
     EventInit();
 
     GameInit();
-    
+
     if (!glfwInit())
         return -1;
-    
-    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+
+    glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
     glfwWindowHint(GLFW_SAMPLES, 6);
-    
+
     fwWindow = glfwCreateWindow(nInitWindowWidth, nInitWindowHeight, cpWindowTitle, NULL, NULL);
-    
+
     if (!fwWindow)
     {
         glfwTerminate();
         return -1;
     }
-    
+
     // Create a window and initialilze
     glfwMakeContextCurrent(fwWindow);
-    
+
     WindowInit();
-    
+
     glfwSetCursorPosCallback(fwWindow, MouseMotionEvent);
     glfwSetScrollCallback(fwWindow, MouseWheelEvent);
     glfwSetDropCallback(fwWindow, MouseDropEvent);
-    
+
     while (!glfwWindowShouldClose(fwWindow))
     {
         // Display here
         Display(fwWindow);
-        
+
         // Poll for and process events
         glfwPollEvents();
     }
-    
+
     glfwTerminate();
-    
+
     ModelCleanUp();
 
     return 0;

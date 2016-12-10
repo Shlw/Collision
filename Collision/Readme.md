@@ -7,6 +7,10 @@ Computing (A) (Honor Track) in the year of 2016. This project aims at 3-D
 modeling, rendering and collision detection.
 
 ## Changelog and Note
+* Shlw @ 2016.12.10.14.38
+  1. Add model-generator.
+  2. Add sphere.
+  3. Delete triangle-cone.
 
 * lzh @ 2016.12.10.12.46
   1. Add a drag and drop demo.
@@ -71,7 +75,7 @@ modeling, rendering and collision detection.
   2. Create global.cpp & function v4Cross.
   3. Add Linux makefile & Executable File-run.
   4. Rewrite Class Model&Object.
-  5. Add Function is_inside. 
+  5. Add Function is_inside.
 
 * lzh @ 2016.12.01.22.13
   1. Fix bug about CLOKS_PER_SEC.

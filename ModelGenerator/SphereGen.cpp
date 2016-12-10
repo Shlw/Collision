@@ -29,8 +29,8 @@ int main(){
 
     for (int i=0;i<n;++i){
         for (int j=0;j<m;++j)
-            x[i][j]=R*cos(thetam[j])*cos(thetan[i]),
-            y[i][j]=R*sin(thetam[j])*cos(thetan[i]),
+            x[i][j]=R*sin(thetam[j])*cos(thetan[i]),
+            y[i][j]=R*cos(thetam[j])*cos(thetan[i]),
             z[i][j]=R*sin(thetan[i]);
         x[i][m]=x[i][0];
         y[i][m]=y[i][0];
@@ -42,16 +42,16 @@ int main(){
     fprintf(os,"%d\n",m+m+(n-1)*m*2);
     for (int i=0;i<m;++i){
         fprintf(os,"%.6f %.6f %.6f ",0.0,0.0,R);
-        prt(0,i+1); prt(0,i); fprintf(os,"\n");
+        prt(n-1,i+1); prt(n-1,i); fprintf(os,"\n");
     }
     for (int i=0;i<m;++i){
-        prt(n-1,i); prt(n-1,i+1);
+        prt(0,i); prt(0,i+1);
         fprintf(os,"%.6f %.6f %.6f\n",0.0,0.0,-R);
     }
     for (int i=0;i<n-1;++i)
         for (int j=0;j<m;++j){
-            prt(i,j); prt(i,j+1); prt(i+1,j); fprintf(os,"\n");
-            prt(i,j); prt(i,j+1); prt(i+1,j+1); fprintf(os,"\n");
+            prt(i+1,j); prt(i+1,j+1); prt(i,j+1); fprintf(os,"\n");
+            prt(i+1,j); prt(i,j+1); prt(i,j); fprintf(os,"\n");
         }
 
     fclose(os);
