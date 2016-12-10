@@ -34,22 +34,6 @@ float fScrollSpeed = 0.10;
 
 float fpBoxLimit[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
 
-// glmvec4 cross product
-glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b){
-    glm::vec4 ret=glm::vec4(a[1]*b[2]-a[2]*b[1],
-                            -a[0]*b[2]+a[2]*b[0],
-                            a[0]*b[1]-a[1]*b[0],0);
-    return ret;
-}
-// glmvec4 dot product
-float v4Dots(glm::vec4 a,glm::vec4 b){
-    return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
-}
-// glmvec4 length
-float v4Length(glm::vec4 a){
-    return sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]);
-}
-
 // matrix multiplication left to a point
 PPoint MultPoint(PMat4 matrix,PPoint p){
     Point* ret=new Point(p);
@@ -107,8 +91,11 @@ Triangle::Triangle(PPoint a,PPoint b,PPoint c){
     pppVertex[1]=new Point(b);
     pppVertex[2]=new Point(c);
     vpNormalVector=new glm::vec4;
-    *vpNormalVector=v4Cross(*b->vpCoordinate - *a->vpCoordinate,
-                            *c->vpCoordinate - *b->vpCoordinate);
+    *vpNormalVector=glm::vec4(
+        glm::cross(glm::vec3(*b->vpCoordinate - *a->vpCoordinate),
+        glm::vec3(*c->vpCoordinate - *b->vpCoordinate)),
+        0.0
+    );
 }
 // initialize the triangle class with 3 given points(local coordinate system) and normal vector
 Triangle::Triangle(PPoint a,PPoint b,PPoint c,PVec4 v){
@@ -176,14 +163,14 @@ PTriangle Object::IsInside(PPoint tp){
         PTriangle now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
 
         // calculate the volume of the cone formed by given point and the Ith triangle
-        float vl=v4Dots(*now->vpNormalVector,
+        float vl=glm::dot(*now->vpNormalVector,
                           *tp->vpCoordinate - *now->pppVertex[0]->vpCoordinate);
 
         // not inside the left half space , return not_inside
         if (vl>0){delete now; delete ret; return NULL;}
 
         // calculate the distance between the given point and the plane where triangle lies
-        vl=-vl/v4Length(*now->vpNormalVector);
+        vl=-vl/glm::length(*now->vpNormalVector);
 
         // update the dist
         if (vl<dist) {dist=vl; delete ret; ret=now;}

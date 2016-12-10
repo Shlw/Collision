@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.10.21.00
+  1. Substitute cross, dot and length with the that in glm.
+  2. Update drawing strategy to hide the black border of the box's frame.
+
 * lziad @ 2016.12.10.16.44
   1. Update game logic.
   2. Add an exception flag.
