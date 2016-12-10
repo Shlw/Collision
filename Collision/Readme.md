@@ -7,6 +7,10 @@ Computing (A) (Honor Track) in the year of 2016. This project aims at 3-D
 modeling, rendering and collision detection.
 
 ## Changelog and Note
+
+* Shlw @ 2016.12.10.15.00
+  1. Re-write Readfile
+  
 * Shlw @ 2016.12.10.14.38
   1. Add model-generator.
   2. Add sphere.

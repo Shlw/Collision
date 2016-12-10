@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 
-#define st first
-#define nd second
 using namespace std;
 
 const float R=0.3;

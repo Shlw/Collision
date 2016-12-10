@@ -31,6 +31,7 @@
 
 // Exception Flags
 #define ERROR_UNKNOWN_MODEL 0x0001
+#define FILE_NOT_FOUND 0x0002
 
 // class declarations
 class Point;
@@ -144,7 +145,7 @@ extern float fScrollSpeed;
 
 // Declarations of functions
 
-void ReadFiles();
+int ReadFiles(const char* str);
 
 void WindowInit();
 void WindowCleanUp();

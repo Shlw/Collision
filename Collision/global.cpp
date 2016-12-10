@@ -187,46 +187,44 @@ PTriangle Object::IsInside(PPoint tp){
     return ret;
 }
 
-void ReadFiles(){
-    // 3 kinds of model--Cube, Cuboid, Regular-Triangular-Pyramid
-    FILE* modelin=fopen("model.txt","r");
+int ReadFiles(const char* str){
+    FILE* modelin=fopen(str,"r");
+    if (!modelin) throw FILE_NOT_FOUND;
+    ++nModelTot;
 
-    fscanf(modelin,"%d",&nModelTot);
-    for (int i=1;i<=nModelTot;++i){
-        int len;
-        float vol,dens,elas;
-        fscanf(modelin,"%d%f%f%f",&len,&vol,&dens,&elas);
-        mppModelList[i] = new Model;
-        mppModelList[i]->nLength=len;
-        mppModelList[i]->fVolume=vol;
-        mppModelList[i]->fMass=vol*dens;
-        mppModelList[i]->fElastic=elas;
-        mppModelList[i]->tppCone=new PTriangle[len];
+    int len;
+    float vol,dens,elas;
+    fscanf(modelin,"%d%f%f%f",&len,&vol,&dens,&elas);
+    mppModelList[nModelTot] = new Model;
+    mppModelList[nModelTot]->nLength=len;
+    mppModelList[nModelTot]->fVolume=vol;
+    mppModelList[nModelTot]->fMass=vol*dens;
+    mppModelList[nModelTot]->fElastic=elas;
+    mppModelList[nModelTot]->tppCone=new PTriangle[len];
 
-        for (int j=0;j<len;++j){
-            PPoint p[3];
-            for (int k=0;k<3;++k){ // 3 points form a triangle
-                float x,y,z;
-                fscanf(modelin,"%f%f%f",&x,&y,&z);
-
-                // generate random RGBcolor, no transparency
-                p[k]=new Point(x,y,z,
-                               (rand()%100)/100.0,
-                               (rand()%100)/100.0,
-                               (rand()%100)/100.0,1.0);
-            }
+    for (int j=0;j<len;++j){
+        PPoint p[3];
+        for (int k=0;k<3;++k){ // 3 points form a triangle
             float x,y,z;
             fscanf(modelin,"%f%f%f",&x,&y,&z);
 
-            glm::vec4 norm=glm::vec4(x,y,z,0);
-            // one triangle forms a triangular-cone
-            mppModelList[i]->tppCone[j]=new Triangle(p[0],p[1],p[2],&norm);
-            delete p[0]; delete p[1]; delete p[2];
+            // generate random RGBcolor, no transparency
+            p[k]=new Point(x,y,z,
+                           (rand()%100)/100.0,
+                           (rand()%100)/100.0,
+                           (rand()%100)/100.0,1.0);
         }
+        float x,y,z;
+        fscanf(modelin,"%f%f%f",&x,&y,&z);
+
+        glm::vec4 norm=glm::vec4(x,y,z,0);
+        // one triangle forms a triangular-cone
+        mppModelList[nModelTot]->tppCone[j]=new Triangle(p[0],p[1],p[2],&norm);
+        delete p[0]; delete p[1]; delete p[2];
     }
 
     fclose(modelin);
-    return ;
+    return nModelTot;
 }
 
 void ModelCleanUp()

@@ -12,7 +12,7 @@
 
 void GameInit()
 {
-    oppObjectList[nObjectTot] = new Object(1, 0.0, 0.0, 0.0);
+/*    oppObjectList[nObjectTot] = new Object(1, 0.0, 0.0, 0.0);
     *oppObjectList[nObjectTot]->mpFrame = glm::translate(glm::mat4(1.0), glm::vec3(0.2, 0.4, 0.0));
     *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(0.2, 0.2, 0.0);
     oppObjectList[nObjectTot] = new Object(1, 0.0, 0.0, 0.0);
@@ -21,7 +21,7 @@ void GameInit()
     oppObjectList[nObjectTot] = new Object(1, 0.0, 0.0, 0.0);
     *oppObjectList[nObjectTot]->mpFrame = glm::mat4(1.0);
     *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(0.3, 0.6, 0.0);
-    return ;
+ */   return ;
 }
 
 void GameMove(GLFWwindow* w, double x, double y)
@@ -31,11 +31,11 @@ void GameMove(GLFWwindow* w, double x, double y)
 
 void GameDrag(GLFWwindow* w, int c, const char** p)
 {
-    double x1, x2, y1, y2, z1, z2;
+/*    double x1, x2, y1, y2, z1, z2;
     UnProjectNow(dLastMouseX, dLastMouseY, 0.6, &x1, &y1, &z1);
     UnProjectNow(dLastMouseX, dLastMouseY, 0.9, &x2, &y2, &z2);
     oppObjectList[nObjectTot] = new Object(3, 0.0, 0.0, 0.0);
     *oppObjectList[nObjectTot]->mpFrame = glm::translate(glm::mat4(1.0), glm::vec3(x1, y1, z1));
     *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
-    return;
+ */   return;
 }
