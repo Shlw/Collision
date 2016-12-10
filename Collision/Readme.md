@@ -11,9 +11,13 @@ modeling, rendering and collision detection.
 * lzh @ 2016.12.10.15.34
   1. Add the show box to indicate the absolute position.
 
+* Shlw @ 2016.12.10.15.24
+  1. Add nFlag.
+  2. Modify models.
+
 * Shlw @ 2016.12.10.15.00
-  1. Re-write Readfile
-  
+  1. Re-write Readfile.
+
 * Shlw @ 2016.12.10.14.38
   1. Add model-generator.
   2. Add sphere.

@@ -73,19 +73,22 @@ PTriangle MultTriangle(PMat4 matrix,PTriangle cone){
 Point::Point(){
     vpCoordinate=NULL;
     vpColor=NULL;
+    nFlag=0;
 }
 // initialize the point class by duplicating an example
 Point::Point(PPoint example){
     vpColor=new glm::vec4(*example->vpColor);
     vpCoordinate=new glm::vec4(*example->vpCoordinate);
+    nFlag=example->nFlag;
 }
 // initialize the point class according to all the data needed
 Point::Point(
     float x,float y,float z,
-    float r,float g,float b,float alpha
-){
+    float r,float g,float b,float alpha){
+
     vpCoordinate=new glm::vec4(x,y,z,1.0);
     vpColor=new glm::vec4(r,g,b,alpha);
+    nFlag=0;
 }
 // destroy the point class
 Point::~Point(){
@@ -196,6 +199,7 @@ int ReadFiles(const char* str){
 
     int len;
     float vol,dens,elas;
+
     fscanf(modelin,"%d%f%f%f",&len,&vol,&dens,&elas);
     mppModelList[nModelTot] = new Model;
     mppModelList[nModelTot]->nLength=len;
@@ -208,13 +212,15 @@ int ReadFiles(const char* str){
         PPoint p[3];
         for (int k=0;k<3;++k){ // 3 points form a triangle
             float x,y,z;
-            fscanf(modelin,"%f%f%f",&x,&y,&z);
+            int isocur;
+            fscanf(modelin,"%f%f%f%d",&x,&y,&z,&isocur);
 
             // generate random RGBcolor, no transparency
             p[k]=new Point(x,y,z,
                            (rand()%100)/100.0,
                            (rand()%100)/100.0,
                            (rand()%100)/100.0,1.0);
+            p[k]->nFlag=isocur;
         }
         float x,y,z;
         fscanf(modelin,"%f%f%f",&x,&y,&z);

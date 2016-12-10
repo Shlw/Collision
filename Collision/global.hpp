@@ -60,6 +60,7 @@ PTriangle MultTriangle(PMat4 matrix,PTriangle cone);
 // point class represents the still point in local coordinate system
 class Point{
 public:
+    int nFlag;
     PVec4 vpCoordinate;
     PVec4 vpColor;
 
