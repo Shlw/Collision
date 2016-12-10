@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh
+ * Modifier : Shlw lzh Shlw lzh lziad
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -21,9 +21,15 @@
 #include <algorithm>
 #include <vector>
 
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#include <OpenGL/glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glu.h>
+#endif
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -32,6 +38,7 @@
 // Exception Flags
 #define ERROR_UNKNOWN_MODEL 0x0001
 #define FILE_NOT_FOUND 0x0002
+#define ERROR_TOO_MANY_OBJ 0x0003 
 
 // class declarations
 class Point;

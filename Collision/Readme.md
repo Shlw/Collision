@@ -8,6 +8,11 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lziad @ 2016.12.10.16.44
+  1. Update game logic.
+  2. Add an exception flag.
+  3. Add the header files on Apple OS X.
+
 * lzh @ 2016.12.10.15.34
   1. Add the show box to indicate the absolute position.
 
