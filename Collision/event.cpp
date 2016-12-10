@@ -20,7 +20,7 @@ void EventInit()
 }
 
 void MouseButtonEvent(int b, int s, int x, int y)
-{
+{/*
     int m = 0;
     switch (b)
     {
@@ -35,11 +35,11 @@ void MouseButtonEvent(int b, int s, int x, int y)
         npButtonState[m] = 1;
     else if (s == GLUT_UP)
         npButtonState[m] = 0;
-    return ;
+    return ;*/
 }
 
 void MouseMotionEvent(int x, int y)
-{
+{/*
     float d = sqrt(
         (float)((x-nLastMouseX) * (x-nLastMouseX))
         +(float)((y-nLastMouseY) * (y-nLastMouseY))
@@ -101,18 +101,18 @@ void MouseMotionEvent(int x, int y)
     }
     nLastMouseX = x;
     nLastMouseY = y;
-    return ;
+    return ;*/
 }
 
 void MousePassiveMoveEvent(int x, int y)
-{
+{/*
     nLastMouseX = x;
     nLastMouseY = y;
-    return ;
+    return ;*/
 }
 
 void MouseWheelEvent(int b, int d, int x, int y)
-{
+{/*
     mModelTransformMat = glm::translate(glm::mat4(1.0),
         glm::vec3(0.0, 0.0, (float)d*fScrollSpeed)
     ) * mModelTransformMat;
@@ -122,5 +122,5 @@ void MouseWheelEvent(int b, int d, int x, int y)
     glMultMatrixf(glm::value_ptr(mModelTransformMat));
     nLastMouseX = x;
     nLastMouseY = y;
-    return ;
+    return ;*/
 }
