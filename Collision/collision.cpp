@@ -13,6 +13,8 @@
 // The main function
 int main(int argc, char *argv[])
 {
+    GLFWwindow* fwWindow;
+
     srand(time(NULL));
 
     ReadFiles();
@@ -20,31 +22,35 @@ int main(int argc, char *argv[])
     EventInit();
 
     GameInit();
-
+    
+    if (!glfwInit())
+        return -1;
+    
     // Initialize function of glut
-    glutInit(&argc, argv);
-    glutInitDisplayMode(nWindowFlags);
-    glutInitWindowSize(nInitWindowWidth, nInitWindowHeight);
-
+    
+    fwWindow = glfwCreateWindow(nInitWindowWidth, nInitWindowHeight, cpWindowTitle, NULL, NULL);
+    
+    if (!fwWindow)
+    {
+        glfwTerminate();
+        return -1;
+    }
+    
     // Create a window and initialilze
-    glutCreateWindow(cpWindowTitle);
+    glfwMakeContextCurrent(fwWindow);
     WindowInit();
-
-    // Register display function
-    glutDisplayFunc(Display);
-
-    // Register mouse event process function
-    glutMouseFunc(MouseButtonEvent);
-    glutMotionFunc(MouseMotionEvent);
-    glutPassiveMotionFunc(MousePassiveMoveEvent);
-    glutMouseWheelFunc(MouseWheelEvent);
-
-    // Setup a timer to refresh
-    glutTimerFunc(nTimerSpeed, OnTimer, 1);
-
-    // Go on main loop until Quit is called
-    glutMainLoop();
-
+    
+    while (!glfwWindowShouldClose(fwWindow))
+    {
+        // Display here
+        Display(fwWindow);
+        
+        // Poll for and process events
+        glfwPollEvents();
+    }
+    
+    glfwTerminate();
+    
     ModelCleanUp();
 
     return 0;

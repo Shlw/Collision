@@ -24,7 +24,7 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glu.h>
-#include <GL/freeglut.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -128,14 +128,14 @@ extern PObject oppObjectList[100];
 
 // Declarations of global variables defined in .cpp files
 
-extern int nWindowFlags;
+// extern int nWindowFlags;
 extern int nInitWindowWidth;
 extern int nInitWindowHeight;
 extern int nTimerSpeed;
 extern const char* cpWindowTitle;
 
-extern int nLastClock;
-extern int nLastMouseX, nLastMouseY;
+extern double nLastClock, nLastLastClock;
+extern double nLastMouseX, nLastMouseY;
 extern int npButtonState[3];
 extern glm::mat4 mModelTransformMat;
 
@@ -150,8 +150,7 @@ void ReadFiles();
 void WindowInit();
 void WindowCleanUp();
 
-void OnTimer(int nValue);
-void Display();
+void Display(GLFWwindow* w);
 
 void EventInit();
 void MouseButtonEvent(int b, int s, int x, int y);

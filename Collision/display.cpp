@@ -47,25 +47,16 @@ void WindowInit()
     glPointSize(2.0);
     glLineWidth(1.5);
     
+    glfwSwapInterval(1);
+    
     return;
 }
 
-// Call for display when timer is on, as well as updating some variables
-void OnTimer(int nValue)
+void Display(GLFWwindow* w)
 {
-    // Update nLastClock to supply a stable time counter
-    nLastClock = glutGet(GLUT_ELAPSED_TIME);
+    nLastLastClock = nLastClock;
+    nLastClock = glfwGetTime();
     
-    // Call for display
-    glutPostRedisplay();
-    
-    // Set up another timer
-    glutTimerFunc(nTimerSpeed, OnTimer, 1);
-    
-    return ;
-}
-void Display()
-{
     // Clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -79,7 +70,7 @@ void Display()
     Game();
     
     // Swap buffers to refresh
-    glutSwapBuffers();
+    glfwSwapBuffers(w);
     
     return ;
 }
