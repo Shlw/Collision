@@ -32,6 +32,8 @@ float fRotateSpeed = 0.005;
 float fTranslateSpeed = 0.005;
 float fScrollSpeed = 0.10;
 
+float fpBoxLimit[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
+
 // glmvec4 cross product
 glm::vec4 v4Cross(glm::vec4 a,glm::vec4 b){
     glm::vec4 ret=glm::vec4(a[1]*b[2]-a[2]*b[1],
