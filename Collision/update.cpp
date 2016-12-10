@@ -26,7 +26,7 @@ void Object::Update()
         (*vpSpeed)[1] = -fabs((*vpSpeed)[1]);
 
     // Move the mFrame
-    *mpFrame = glm::translate(*mpFrame, glm::mat3(nLastClock - nLastLastClock)**vpSpeed);
+    *mpFrame = glm::translate(*mpFrame, glm::mat3(dLastClock - dLastLastClock)**vpSpeed);
 
     return ;
 }
