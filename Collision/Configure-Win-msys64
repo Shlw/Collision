@@ -1,0 +1,14 @@
+##########################################################################
+# Configure-Win-msys64 of project Collision
+# Author : lzh
+# Modifier : lzh
+# Description : Configure file for Windows system with msys64.
+##########################################################################
+
+set echo off
+cp build/CMakeLists-Win-msys64.txt CMakeLists.txt
+echo "Configuration done."
+echo "You are using configurations for Windows with msys64."
+echo "You can use the following commands to compile."
+echo "    $ cmake -G\"MSYS Makefiles\" ./ ./"
+echo "    $ make"

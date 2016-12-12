@@ -1,95 +1,180 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Rev : 2016.12.01.14.44
+ * Modifier : Shlw lzh Shlw lzh lziad Shlw
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
 
 // Check whether included
-
 #ifndef CL_GLOBAL_HPP
 
 #define CL_GLOBAL_HPP
 
 // Include public headers
-
 #include <cstdlib>
 #include <cmath>
-#include <ctime>
+#include <climits>
 #include <iostream>
+#include <cstdio>
+#include <ctime>
+#include <algorithm>
+#include <vector>
 
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#include <OpenGL/glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glu.h>
-#include <GL/glut.h>
+#endif
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-// Class declarations of Model and Object
-// **ATTENTION** Public here is convenient but ugly, these classes are
-// suggested to be overridden.
-// **ATTENTION** Here used glm::vec* and glm::mat* to represent vectors
-// and matrices, but frequent construction and destruction which is
-// automatically called by the classes may result in low efficiency. Using
-// pointers to create instance of these object may be better.
+// Exception Flags
+#define ERROR_UNKNOWN_MODEL 0x0001
+#define FILE_NOT_FOUND 0x0002
+#define ERROR_TOO_MANY_OBJ 0x0003
 
-// The class to store models which can be used repeatedly, only storing
-// vertices coordinates and colors. The vertices coordinates will be drawn
-// with respect to the coordinates of each Object individually.
-class Model
-{
+// class declarations
+class Point;
+class Triangle;
+class Model;
+class Object;
+
+// typedef definitions
+typedef glm::vec3* PVec3;
+typedef glm::vec4* PVec4;
+typedef glm::mat4* PMat4;
+typedef Point* PPoint;
+typedef Triangle* PTriangle;
+typedef Model* PModel;
+typedef Object* PObject;
+
+// matrix operations
+PPoint MultPoint(PMat4 matrix,PPoint p);
+PTriangle MultTriangle(PMat4 matrix,PTriangle cone);
+
+// point class represents the still point in local coordinate system
+class Point{
 public:
-    int nLength;
-    glm::vec4 vpVertex[30];
-    glm::vec4 vpColor[30];
+    int nFlag;
+    PVec4 vpCoordinate;
+    PVec4 vpColor;
+
+    Point();
+    Point(PPoint example);
+    Point(
+        float x,float y,float z,
+        float r,float g,float b,float alpha
+    );
+    ~Point();
+
+    void DrawVertex();
 };
 
-// The class to store objects, only storing the index of model in the
-// mpModelList and the center, the vector of x, y, z-axes and the speed.
-// To be exactly, the entries [0][0:2], [1][0:2], [2][0:2] represent the
-// vector of x, y, z-axes respectively, and [3][0:2] represent the center
-// of the Object, where [i][j] represent the ith row and jth column of the
-// matrix and all the coordinates are that in OpenGL global coordinates.
-// Each Object use mFrame to establish a new coordinates, and the Model is
-// drawn with respect to the new coordinates. Note that the entry [0:2][3]
-// must be 0 and the entry [3][3] 1.
-// **ATTENTION** glm::mat4 stores in column-major, see glm Manual.
-class Object
-{
+// triangle class represents the still triangle(cone) in local coordinate system
+class Triangle{
 public:
-    glm::mat4 mFrame;
-    glm::vec3 vSpeed;
-    int nModelIndex;
-    
-    void Draw(void);
-    void Update(void);
+    PPoint pppVertex[3];
+    PVec4 vpNormalVector;
+
+    Triangle();
+    Triangle(PPoint a,PPoint b,PPoint c);
+    Triangle(PPoint a,PPoint b,PPoint c,PVec4 v);
+    ~Triangle();
+
+    void Draw();
 };
+
+// model class represents the still model in local coordinate system
+class Model{
+public:
+    int nLength; // the number of triangular cones
+    PTriangle* tppCone; // the point array of triangle pointers
+    float fVolume,fElastic,fMass,fMaxRadius;
+    glm::mat3* mMomentOfInertia;
+
+    Model();
+    ~Model();
+
+    void Draw();
+};
+
+// object class contains
+// the matrix(mFrame) to transform between local and global coordinate system
+// and several indispensable descriptive aspect of the object
+class Object{
+public:
+    int nModelType;
+    PMat4 mpFrame;
+    PVec3 vpSpeed;
+    PVec3 vpAngularMomentum;
+    float fMomentInertia;
+
+    Object();
+    Object(int model,float vx=0,float vy=0,float vz=0,float mx=0,float my=0,float mz=0);
+    ~Object();
+
+    PTriangle IsInside(PPoint tp);
+
+    void Draw();
+    void Update();
+};
+
+extern int nModelTot;
+extern int nObjectTot;
+extern PModel mppModelList[100];
+extern PObject oppObjectList[100];
 
 // Declarations of global variables defined in .cpp files
 
-extern int nWindowFlags;
-extern int nInitWindowWidth, nInitWindowHeight;
+// extern int nWindowFlags;
+extern int nInitWindowWidth;
+extern int nInitWindowHeight;
 extern int nTimerSpeed;
 extern const char* cpWindowTitle;
-extern int nLastClock;
 
-// Declarations of Model list and Object lists
+extern double dLastClock, dLastLastClock;
+extern double dLastMouseX, dLastMouseY;
+extern int npButtonState[3];
+extern glm::mat4 mModelTransformMat;
 
-extern int nModelCtr;
-extern Model mpModelList[30];
-extern int nObjectCtr;
-extern Object opObjectList[30];
+extern float fRotateSpeed;
+extern float fTranslateSpeed;
+extern float fScrollSpeed;
+
+extern float fpBoxLimit[6];
 
 // Declarations of functions
 
-void WindowInit(void);
+int ReadFiles(const char* str);
 
-void OnTimer(int nValue);
-void Display(void);
+void WindowInit();
+void WindowCleanUp();
 
-void Game(void);
+void Display(GLFWwindow* w);
+int UnProjectNow(double x, double y, double z, double* rx, double* ry, double* rz);
+
+void EventInit();
+void MouseMotionEvent(GLFWwindow* w, double x, double y);
+void MouseWheelEvent(GLFWwindow* w, double x, double y);
+void MouseDropEvent(GLFWwindow* w, int c, const char** p);
+
+void Draw();
+void DrawBox();
+
+void Update();
+
+void GameInit();
+void GameMove(GLFWwindow* w, double x, double y);
+void GameDrag(GLFWwindow* w, int c, const char** p);
+
+void ModelCleanUp();
 
 int main(int argc, char *argv[]);
 

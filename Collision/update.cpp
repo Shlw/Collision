@@ -1,34 +1,43 @@
 /*************************************************************************
  * update.cpp for project Collision
  * Author : lzh
- * Rev : 2016.12.01.14.44
- * Description : Source file to implement Object::Update, which updates
- * mFrame of each Object in order to achieve movement of Objects and
+ * Modifier : lzh
+ * Description : Source file to implement functions about update and
  * collision detection.
- * Note : This source file is a naive example and should be rewritten.
  ************************************************************************/
 
 // Inclusion of global header
 #include "global.hpp"
 
 // Implementation of Object::Update
-void Object::Update(void)
+void Object::Update()
 {
     // **ATTENTION** glm::mat4 stores in column-major, see glm Manual.
-    
+
     // Check weather reached the left border
-    if (glm::value_ptr(mFrame)[12] < -1.0f)
+    if ((*mpFrame)[3][0] < fpBoxLimit[0])
         // Reverse the X-component of vSpeed
-        glm::value_ptr(vSpeed)[0] = fabs(glm::value_ptr(vSpeed)[0]);
-    if (glm::value_ptr(mFrame)[12] > 1.0f)
-        glm::value_ptr(vSpeed)[0] = -fabs(glm::value_ptr(vSpeed)[0]);
-    if (glm::value_ptr(mFrame)[13] < -1.0f)
-        glm::value_ptr(vSpeed)[1] = fabs(glm::value_ptr(vSpeed)[1]);
-    if (glm::value_ptr(mFrame)[13] > 1.0f)
-        glm::value_ptr(vSpeed)[1] = -fabs(glm::value_ptr(vSpeed)[1]);
-    
+        (*vpSpeed)[0] = fabs((*vpSpeed)[0]);
+    if ((*mpFrame)[3][0] > fpBoxLimit[1])
+        (*vpSpeed)[0] = -fabs((*vpSpeed)[0]);
+    if ((*mpFrame)[3][1] < fpBoxLimit[2])
+        (*vpSpeed)[1] = fabs((*vpSpeed)[1]);
+    if ((*mpFrame)[3][1] > fpBoxLimit[3])
+        (*vpSpeed)[1] = -fabs((*vpSpeed)[1]);
+    if ((*mpFrame)[3][2] < fpBoxLimit[4])
+        (*vpSpeed)[2] = fabs((*vpSpeed)[2]);
+    if ((*mpFrame)[3][2] > fpBoxLimit[5])
+        (*vpSpeed)[2] = -fabs((*vpSpeed)[2]);
+
     // Move the mFrame
-    mFrame = glm::translate(mFrame, vSpeed);
-    
+    *mpFrame = glm::translate(*mpFrame, glm::mat3(dLastClock - dLastLastClock)**vpSpeed);
+
+    return ;
+}
+
+void Update()
+{
+    for (int i = 0; i < nObjectTot; i++)
+        oppObjectList[i]->Update();
     return ;
 }

@@ -1,7 +1,8 @@
 /*************************************************************************
  * main.cpp for project Collision
  * Author : lzh
- * Rev : 2016.12.01.14.44
+ * Modifier : Shlw lzh Shlw lzh
+ * Rev : 2016.12.05.18.43
  * Description : Source file to implement main, which calls functions and
  * enters glutMainLoop.
  ************************************************************************/
@@ -12,23 +13,49 @@
 // The main function
 int main(int argc, char *argv[])
 {
-    // Initialize function of glut
-    glutInit(&argc, argv);
-    glutInitDisplayMode(nWindowFlags);
-    glutInitWindowSize(nInitWindowWidth, nInitWindowHeight);
-    
+    GLFWwindow* fwWindow;
+
+    srand(time(NULL));
+
+    EventInit();
+
+    GameInit();
+
+    if (!glfwInit())
+        return -1;
+
+    glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
+    glfwWindowHint(GLFW_SAMPLES, 8);
+
+    fwWindow = glfwCreateWindow(nInitWindowWidth, nInitWindowHeight, cpWindowTitle, NULL, NULL);
+
+    if (!fwWindow)
+    {
+        glfwTerminate();
+        return -1;
+    }
+
     // Create a window and initialilze
-    glutCreateWindow(cpWindowTitle);
+    glfwMakeContextCurrent(fwWindow);
+
     WindowInit();
-    
-    // Register display function
-    glutDisplayFunc(Display);
-    
-    // Setup a timer to refresh
-    glutTimerFunc(nTimerSpeed, OnTimer, 1);
-    
-    // Go on main loop until Quit is called
-    glutMainLoop();
-    
+
+    glfwSetCursorPosCallback(fwWindow, MouseMotionEvent);
+    glfwSetScrollCallback(fwWindow, MouseWheelEvent);
+    glfwSetDropCallback(fwWindow, MouseDropEvent);
+
+    while (!glfwWindowShouldClose(fwWindow))
+    {
+        // Display here
+        Display(fwWindow);
+
+        // Poll for and process events
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+
+    ModelCleanUp();
+
     return 0;
 }
