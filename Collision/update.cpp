@@ -30,8 +30,7 @@ void Object::Update()
         (*vpSpeed)[2] = -fabs((*vpSpeed)[2]);
     
     // Move the mFrame using the global coordinates
-    *mpFrame = glm::translate(*mpFrame, glm::mat3(dLastClock - dLastLastClock)*
-                              (glm::mat3(mModelTransformMat) * *vpSpeed));
+    *mpFrame = glm::translate(glm::mat4(1.0), (*vpSpeed) * (float)(dLastClock - dLastLastClock)) * (*mpFrame);
     
     return ;
 }

@@ -8,6 +8,11 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.12.21.51
+  1. Change vpSpeed to global coordinates from local coordinates.
+  2. Update GameDrag to ensure the objects dragged are released in correct
+  position.
+
 * lziad @ 2016.12.12.16.55
   1. Rewrite the function GameDrag.
   2. Using global coordinates when updating positions.
