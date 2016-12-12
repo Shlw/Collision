@@ -56,12 +56,12 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
         nType = npTypeList[i] = ReadFiles(p[0]);
     }
     oppObjectList[nObjectTot] = new Object(nType, 0.0, 0.0, 0.0);
-    UnProjectNow(dLastMouseX, dLastMouseY, 0.6, &x2, &y2, &z2);
+    UnProjectNow(dLastMouseX, dLastMouseY, 0.95, &x2, &y2, &z2);
     UnProjectNow(dLastMouseX, dLastMouseY, 0.9, &x1, &y1, &z1);
     
     *oppObjectList[nObjectTot]->mpFrame = glm::inverse(mModelTransformMat);
     (*oppObjectList[nObjectTot]->mpFrame)[3] = glm::vec4(x1, y1, z1, 1);
     
-    *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);;
+    *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
     return;
 }
