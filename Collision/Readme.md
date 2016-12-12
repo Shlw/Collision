@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lziad @ 2016.12.12.16.55
+  1. Rewrite the function GameDrag.
+  2. Using global coordinates when updating positions.
+
 * Shlw @ 2016.12.12.12.28
   1. Add Angular Momentum to Class Object.
 
