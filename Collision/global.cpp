@@ -130,19 +130,22 @@ Object::Object(){
     fMomentInertia=0.0;
     mpFrame=NULL;
     vpSpeed=NULL;
+    vpAngularMomentum=NULL;
 }
 // destroy the object class
 Object::~Object(){
     delete mpFrame;
     delete vpSpeed;
+    delete vpAngularMomentum;
 }
 // use specific model and material type to initialize the object
 // also need to input the velocity
-Object::Object(int model,float vx,float vy,float vz){
+Object::Object(int model,float vx,float vy,float vz,float mx,float my,float mz){
     // lzh : use throw to handle exceptions
     if (model>nModelTot || model<1)
         throw ERROR_UNKNOWN_MODEL;
     vpSpeed=new glm::vec3(vx,vy,vz);
+    vpAngularMomentum=new glm::vec3(mx,my,mz);
     mpFrame=new glm::mat4(1.0); // load the identity matrix into mFrame
 
     nModelType=model;

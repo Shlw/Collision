@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.12.12.28
+  1. Add Angular Momentum to Class Object.
+
 * Shlw @ 2016.12.10.23.24
   1. Add Moment of Inertia(mat3).
   2. Update models.

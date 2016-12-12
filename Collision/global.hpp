@@ -113,10 +113,11 @@ public:
     int nModelType;
     PMat4 mpFrame;
     PVec3 vpSpeed;
+    PVec3 vpAngularMomentum;
     float fMomentInertia;
 
     Object();
-    Object(int model,float vx,float vy,float vz);
+    Object(int model,float vx=0,float vy=0,float vz=0,float mx=0,float my=0,float mz=0);
     ~Object();
 
     PTriangle IsInside(PPoint tp);
