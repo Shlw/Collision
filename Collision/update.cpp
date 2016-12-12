@@ -13,8 +13,8 @@
 void Object::Update()
 {
     // **ATTENTION** glm::mat4 stores in column-major, see glm Manual.
-
     // Check weather reached the left border
+    
     if ((*mpFrame)[3][0] < fpBoxLimit[0])
         // Reverse the X-component of vSpeed
         (*vpSpeed)[0] = fabs((*vpSpeed)[0]);
@@ -28,10 +28,11 @@ void Object::Update()
         (*vpSpeed)[2] = fabs((*vpSpeed)[2]);
     if ((*mpFrame)[3][2] > fpBoxLimit[5])
         (*vpSpeed)[2] = -fabs((*vpSpeed)[2]);
-
-    // Move the mFrame
-    *mpFrame = glm::translate(*mpFrame, glm::mat3(dLastClock - dLastLastClock)**vpSpeed);
-
+    
+    // Move the mFrame using the global coordinates
+    *mpFrame = glm::translate(*mpFrame, glm::mat3(dLastClock - dLastLastClock)*
+                              (glm::mat3(mModelTransformMat) * *vpSpeed));
+    
     return ;
 }
 
