@@ -1,7 +1,7 @@
 /*************************************************************************
  * update.cpp for project Collision
  * Author : ymw
- * Modifier : ymw
+ * Modifier : ymw lzh
  * Description : Source file to implement functions about update and
  * collision detection.
  ************************************************************************/
@@ -22,9 +22,8 @@ bool OoO(PObject obj1, PModel mod1, PObject obj2, PModel mod2,
     glm::vec3 L1 = *obj1 -> vpAngularMomentum;
     glm::vec3 L2 = *obj2 -> vpAngularMomentum;
     glm::mat3 frame1, frame2;
-    for (int i = 0; i < 9; i++)
-        frame1[i/3][i%3] = (*obj1 -> mpFrame)[i/3][i%3],
-        frame2[i/3][i%3] = (*obj2 -> mpFrame)[i/3][i%3];
+    frame1 = glm::mat3(*obj1 -> mpFrame);
+    frame2 = glm::mat3(*obj2 -> mpFrame);
     glm::mat3 I1 =(frame1)*(*mod1 -> mMomentOfInertia)*(glm::inverse(frame1));      //I(global) = A * I(model) * A'
     glm::mat3 I2 =(frame2)*(*mod2 -> mMomentOfInertia)*(glm::inverse(frame2));
     glm::vec3 w1 = L1 * glm::inverse(I1);
@@ -79,6 +78,7 @@ bool ooxx(PObject obj1, PObject obj2)
     ctemp = *(obj2 -> mpFrame) * zero4;
     glm::vec3 c2 = glm::vec3(ctemp);
     float l = length(c1 - c2);
+    PTriangle pside;
     if (l > maxRad1 + maxRad2) return 0;
     
     glm::vec3 ic = (c2 - c1) / l;
@@ -102,7 +102,7 @@ bool ooxx(PObject obj1, PObject obj2)
         glm::vec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c1, ic) >= l)
         {
-            PTriangle pside =             //collision: triangle
+            pside =             //collision: triangle
                 obj2 -> IsInside(&ctemp);
             if (pside != NULL)            //IsInside: true
             {
@@ -110,7 +110,13 @@ bool ooxx(PObject obj1, PObject obj2)
                             glm::vec3(*pside -> vpNormalVector)
                         )       //moving closer: true
                    )
-                return true;
+                // lzh : IsInside allocates memory, and you're supposed
+                // to release it by hand.
+                {
+                    delete pside;
+                    return true;
+                }
+                delete pside;
             }
         }
     }
@@ -135,7 +141,7 @@ bool ooxx(PObject obj1, PObject obj2)
         glm::vec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c2, ic) <= -l)
         {
-            PTriangle pside =             //collision: triangle
+            pside =             //collision: triangle
                 obj1 -> IsInside(&ctemp);
             if (pside != NULL)            //IsInside: true
             {
@@ -143,7 +149,13 @@ bool ooxx(PObject obj1, PObject obj2)
                             glm::vec3(*pside -> vpNormalVector)
                         )       //moving closer: true
                    )
-                return true;
+                // lzh : IsInside allocates memory, and you're supposed
+                // to release it by hand.
+                {
+                    delete pside;
+                    return true;
+                }
+                delete pside;
             }
         }
     }

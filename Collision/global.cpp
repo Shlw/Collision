@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw lzh Shlw lzh Shlw
+ * Modifier : Shlw lzh Shlw lzh Shlw lzh
  * Description : Implementation of fundamental things.
  ************************************************************************/
 
@@ -36,8 +36,9 @@ float fpBoxLimit[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
 
 // matrix multiplication left to a point
 PPoint MultPoint(PMat4 matrix,PPoint p){
-    Point* ret=new Point(p);
+    PPoint ret=new Point(p);
     *ret->vpCoordinate=(*matrix) * (*ret->vpCoordinate);
+    ret->nFlag = p->nFlag;
     return ret;
 }
 // matrix multiplication left to a triangle
@@ -50,6 +51,7 @@ PTriangle MultTriangle(PMat4 matrix,PTriangle cone){
 
     // rotate the normal vector
     ret->vpNormalVector=new glm::vec4((*matrix) * (*cone->vpNormalVector));
+    
     return ret;
 }
 
@@ -90,8 +92,7 @@ Triangle::Triangle(PPoint a,PPoint b,PPoint c){
     pppVertex[0]=new Point(a);
     pppVertex[1]=new Point(b);
     pppVertex[2]=new Point(c);
-    vpNormalVector=new glm::vec4;
-    *vpNormalVector=glm::vec4(
+    vpNormalVector=new glm::vec4(
         glm::cross(glm::vec3(*b->vpCoordinate - *a->vpCoordinate),
         glm::vec3(*c->vpCoordinate - *b->vpCoordinate)),
         0.0
@@ -142,7 +143,7 @@ Object::~Object(){
 // also need to input the velocity
 Object::Object(int model,float vx,float vy,float vz,float mx,float my,float mz){
     // lzh : use throw to handle exceptions
-    if (model>nModelTot || model<1)
+    if (model>=nModelTot || model<0)
         throw ERROR_UNKNOWN_MODEL;
     vpSpeed=new glm::vec3(vx,vy,vz);
     vpAngularMomentum=new glm::vec3(mx,my,mz);
@@ -161,14 +162,16 @@ PTriangle Object::IsInside(PVec4 tp){
     // lzh : I changed INT_MAX into FLT_MAX
     float dist=FLT_MAX;
     PTriangle ret=NULL;
+    PTriangle now;
+    float vl;
 
     for (int i=0;i<len;++i){
         // get the Ith triangle's coordinates in global coordinate system
         // also rotate the normal vector
-        PTriangle now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
+        now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
 
         // calculate the volume of the cone formed by given point and the Ith triangle
-        float vl=glm::dot(*now->vpNormalVector,
+        vl=glm::dot(*now->vpNormalVector,
                           *tp - *now->pppVertex[0]->vpCoordinate);
 
         // not inside the left half space , return not_inside
@@ -179,6 +182,8 @@ PTriangle Object::IsInside(PVec4 tp){
 
         // update the dist
         if (vl<dist) {dist=vl; delete ret; ret=now;}
+        else
+            delete now;
     }
 
     return ret;
@@ -187,7 +192,6 @@ PTriangle Object::IsInside(PVec4 tp){
 int ReadFiles(const char* str){
     FILE* modelin=fopen(str,"r");
     if (!modelin) throw FILE_NOT_FOUND;
-    ++nModelTot;
 
     int len;
     float vol,dens,elas,radi;
@@ -233,12 +237,12 @@ int ReadFiles(const char* str){
                     col+2,col+5,col+8);
 
     fclose(modelin);
-    return nModelTot;
+    return nModelTot++;
 }
 
 void ModelCleanUp()
 {
-    for (int i = 1; i <= nModelTot; i++)
+    for (int i = 0; i < nModelTot; i++)
         delete mppModelList[i];
     for (int i = 0; i < nObjectTot; i++)
         delete oppObjectList[i];
