@@ -22,12 +22,12 @@ Sphere, Cylinder, Ellipsoid, Donut
   3. Calculate the radius of smallest circumcircle.
 
 * Shlw @ 2016.12.10.14.37
-  1. Greate Ellipsoid.
+  1. Add Ellipsoid.
   2. Rewrite regenerator.
 
 * Shlw @ 2016.12.10.14.37
-  1. Greate Sphere.
-  2. Greate regenerator.
+  1. Add Sphere.
+  2. Add regenerator.
 
 * Shlw @ 2016.12.10.10.54
   1. Greate the directory.
