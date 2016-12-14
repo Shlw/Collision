@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.14.20.15
+  1. Fix memory leaks.
+  2. Let *nModelList* begin from 0.
+
 * Shlw @ 2016.12.14.17.40
   1. Adjust the density.
 

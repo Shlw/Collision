@@ -1,7 +1,7 @@
 /*************************************************************************
  * game.cpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh lziad
+ * Modifier : Shlw lzh Shlw lzh lziad lzh
  * Description : Source file to implement Game, which handles the game
  * logic, that is, to determine when to release a new object and something
  * like that.
@@ -16,7 +16,7 @@ int  npTypeList[100];
 // stack of past mouse positions
 double dpPos[10][2];
 // pointer of the stack
-int    nPtr;
+int nPtr;
 int test=0;
 
 void GameInit()
@@ -69,6 +69,6 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
 
 void GameSecond()
 {
-    std::cout << nLastSecond << std::endl;
+    std::cout << nLastSecond << ' ' << nModelTot << ' ' << nObjectTot << std::endl;
     return ;
 }
