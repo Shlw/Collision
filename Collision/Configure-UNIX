@@ -1,0 +1,13 @@
+##########################################################################
+# Configure-UNIX of project Collision
+# Author : lzh
+# Modifier : lzh
+# Description : Configure file for UNIX systems, mainly for Ubuntu.
+##########################################################################
+
+set echo off
+cp build/Makefile-UNIX Makefile
+echo "Configuration done."
+echo "You are using configurations for UNIX."
+echo "You can use the following commands to compile."
+echo "    $ make"
