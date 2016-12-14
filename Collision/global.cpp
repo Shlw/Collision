@@ -18,10 +18,10 @@ float fppMaterialList[100][2];
 // Declarations of global variables
 // int nWindowFlags = GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_MULTISAMPLE;
 int nInitWindowWidth = 1024, nInitWindowHeight = 768;
-int nTimerSpeed = 20;
 const char* cpWindowTitle = "Collision Demo";
 
 double dLastClock, dLastLastClock;
+int nLastSecond;
 double dLastMouseX, dLastMouseY;
 // Array to store the state of mouse buttons, where [0], [1], [2]
 // represent left, middle and right button resepectively.

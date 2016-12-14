@@ -137,13 +137,13 @@ extern PObject oppObjectList[100];
 // extern int nWindowFlags;
 extern int nInitWindowWidth;
 extern int nInitWindowHeight;
-extern int nTimerSpeed;
 extern const char* cpWindowTitle;
 
 extern double dLastClock, dLastLastClock;
 extern double dLastMouseX, dLastMouseY;
 extern int npButtonState[3];
 extern glm::mat4 mModelTransformMat;
+extern int nLastSecond;
 
 extern float fRotateSpeed;
 extern float fTranslateSpeed;
@@ -174,6 +174,7 @@ void Update();
 void GameInit();
 void GameMove(GLFWwindow* w, double x, double y);
 void GameDrag(GLFWwindow* w, int c, const char** p);
+void GameSecond();
 
 void ModelCleanUp();
 
