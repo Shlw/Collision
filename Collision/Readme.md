@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.14.16.53
+  1. Fix a lot of things including things about matrix transformations.
+
 * lzh @ 2016.12.12.21.51
   1. Change vpSpeed to global coordinates from local coordinates.
   2. Update GameDrag to ensure the objects dragged are released in correct
