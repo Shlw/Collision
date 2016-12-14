@@ -155,8 +155,8 @@ Object::Object(int model,float vx,float vy,float vz,float mx,float my,float mz){
 
 // check whether the point is in the object,
 // return NULL or the closest plane(in global coordinate system)
-PTriangle Object::IsInside(PPoint tp){
-    glm::vec4* plocat=tp->vpCoordinate;
+PTriangle Object::IsInside(PVec4 tp){
+    // ymw changed tp from PPoint to PVec4, pointing to the global coordinate
     int len=mppModelList[nModelType]->nLength;
     // lzh : I changed INT_MAX into FLT_MAX
     float dist=FLT_MAX;
@@ -169,7 +169,7 @@ PTriangle Object::IsInside(PPoint tp){
 
         // calculate the volume of the cone formed by given point and the Ith triangle
         float vl=glm::dot(*now->vpNormalVector,
-                          *tp->vpCoordinate - *now->pppVertex[0]->vpCoordinate);
+                          *tp - *now->pppVertex[0]->vpCoordinate);
 
         // not inside the left half space , return not_inside
         if (vl>0){delete now; delete ret; return NULL;}

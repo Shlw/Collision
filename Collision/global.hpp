@@ -120,7 +120,8 @@ public:
     Object(int model,float vx=0,float vy=0,float vz=0,float mx=0,float my=0,float mz=0);
     ~Object();
 
-    PTriangle IsInside(PPoint tp);
+    PTriangle IsInside(PVec4 tp);
+    //ymw changed tp from PPoint to PVec4
 
     void Draw();
     void Update();
