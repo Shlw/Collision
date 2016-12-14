@@ -62,6 +62,13 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
     *oppObjectList[nObjectTot]->mpFrame = glm::inverse(mModelTransformMat);
     (*oppObjectList[nObjectTot]->mpFrame)[3] = glm::vec4(x1, y1, z1, 1);
     
-    *oppObjectList[nObjectTot++]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
+    *oppObjectList[nObjectTot]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
+    *oppObjectList[nObjectTot++]->vpAngularMomentum = glm::vec3((x2-x1)*0.05, (y2-y1)*0.05, (z2-z1)*0.05);
     return;
+}
+
+void GameSecond()
+{
+    std::cout << nLastSecond << std::endl;
+    return ;
 }

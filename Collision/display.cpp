@@ -14,6 +14,10 @@
 void WindowInit()
 {
     
+    dLastClock = 0.0;
+    dLastLastClock = 0.0;
+    nLastSecond = -1;
+    
     // Enable OpenGL features
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
@@ -70,6 +74,12 @@ void Display(GLFWwindow* w)
     
     // Swap buffers to refresh
     glfwSwapBuffers(w);
+    
+    if (nLastSecond != (int)dLastClock)
+    {
+        nLastSecond = (int)dLastClock;
+        GameSecond();
+    }
     
     return ;
 }

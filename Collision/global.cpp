@@ -18,10 +18,10 @@ float fppMaterialList[100][2];
 // Declarations of global variables
 // int nWindowFlags = GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_MULTISAMPLE;
 int nInitWindowWidth = 1024, nInitWindowHeight = 768;
-int nTimerSpeed = 20;
 const char* cpWindowTitle = "Collision Demo";
 
 double dLastClock, dLastLastClock;
+int nLastSecond;
 double dLastMouseX, dLastMouseY;
 // Array to store the state of mouse buttons, where [0], [1], [2]
 // represent left, middle and right button resepectively.
@@ -155,8 +155,8 @@ Object::Object(int model,float vx,float vy,float vz,float mx,float my,float mz){
 
 // check whether the point is in the object,
 // return NULL or the closest plane(in global coordinate system)
-PTriangle Object::IsInside(PPoint tp){
-    glm::vec4* plocat=tp->vpCoordinate;
+PTriangle Object::IsInside(PVec4 tp){
+    // ymw changed tp from PPoint to PVec4, pointing to the global coordinate
     int len=mppModelList[nModelType]->nLength;
     // lzh : I changed INT_MAX into FLT_MAX
     float dist=FLT_MAX;
@@ -169,7 +169,7 @@ PTriangle Object::IsInside(PPoint tp){
 
         // calculate the volume of the cone formed by given point and the Ith triangle
         float vl=glm::dot(*now->vpNormalVector,
-                          *tp->vpCoordinate - *now->pppVertex[0]->vpCoordinate);
+                          *tp - *now->pppVertex[0]->vpCoordinate);
 
         // not inside the left half space , return not_inside
         if (vl>0){delete now; delete ret; return NULL;}

@@ -120,7 +120,8 @@ public:
     Object(int model,float vx=0,float vy=0,float vz=0,float mx=0,float my=0,float mz=0);
     ~Object();
 
-    PTriangle IsInside(PPoint tp);
+    PTriangle IsInside(PVec4 tp);
+    //ymw changed tp from PPoint to PVec4
 
     void Draw();
     void Update();
@@ -136,13 +137,13 @@ extern PObject oppObjectList[100];
 // extern int nWindowFlags;
 extern int nInitWindowWidth;
 extern int nInitWindowHeight;
-extern int nTimerSpeed;
 extern const char* cpWindowTitle;
 
 extern double dLastClock, dLastLastClock;
 extern double dLastMouseX, dLastMouseY;
 extern int npButtonState[3];
 extern glm::mat4 mModelTransformMat;
+extern int nLastSecond;
 
 extern float fRotateSpeed;
 extern float fTranslateSpeed;
@@ -173,6 +174,7 @@ void Update();
 void GameInit();
 void GameMove(GLFWwindow* w, double x, double y);
 void GameDrag(GLFWwindow* w, int c, const char** p);
+void GameSecond();
 
 void ModelCleanUp();
 
