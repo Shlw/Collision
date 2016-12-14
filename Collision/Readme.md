@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.14.17.40
+  1. Adjust the density.
+
 * ymw @ 2016.12.14.17.00
   1. Finished the collision update algorithm, not perfect, though.
   2. Adjusted the function *IsInside()*.
