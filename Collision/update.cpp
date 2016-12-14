@@ -7,12 +7,7 @@
  ************************************************************************/
 
 // Inclusion of global header
-#ifndef GLM_SWIZZLE
-#define GLM_SWIZZLE
-#endif
-//#ifndef GLM_FUNC_DECL
-//#define GLM_FUNC_DECL
-//#endif
+
 #include "global.hpp"
 
 bool OoO(PObject obj1, PModel mod1, PObject obj2, PModel mod2, 
@@ -80,9 +75,9 @@ bool ooxx(PObject obj1, PObject obj2)
     glm::vec4 zero4 = glm::vec4(glm::vec3(0.0), 1.0);
     glm::vec4 ctemp;
     ctemp = *(obj1 -> mpFrame) * zero4;
-    glm::vec3 c1 = ctemp.xyz();
+    glm::vec3 c1 = glm::vec3(ctemp);
     ctemp = *(obj2 -> mpFrame) * zero4;
-    glm::vec3 c2 = ctemp.xyz();
+    glm::vec3 c2 = glm::vec3(ctemp);
     float l = length(c1 - c2);
     if (l > maxRad1 + maxRad2) return 0;
     
@@ -93,7 +88,7 @@ bool ooxx(PObject obj1, PObject obj2)
     {
         ctemp = *(obj2 -> mpFrame) *
             *(mod2 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
-        glm::vec3 temp = ctemp.xyz();
+        glm::vec3 temp(ctemp);
         if (glm::dot(temp - c2, ic) < nearest) 
             nearest = glm::dot(temp - c2, ic);
     }
@@ -104,7 +99,7 @@ bool ooxx(PObject obj1, PObject obj2)
     {
         ctemp = *(obj1 -> mpFrame) *
             *(mod1 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
-        glm::vec3 temp = ctemp.xyz();     //collision: point
+        glm::vec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c1, ic) >= l)
         {
             PTriangle pside =             //collision: triangle
@@ -112,7 +107,7 @@ bool ooxx(PObject obj1, PObject obj2)
             if (pside != NULL)            //IsInside: true
             {
                 if ( OoO(obj1, mod1, obj2, mod2, temp, c1, c2,
-                            (*pside -> vpNormalVector).xyz()
+                            glm::vec3(*pside -> vpNormalVector)
                         )       //moving closer: true
                    )
                 return true;
@@ -126,7 +121,7 @@ bool ooxx(PObject obj1, PObject obj2)
     {
         ctemp = *(obj1 -> mpFrame) *
             *(mod1 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
-        glm::vec3 temp = ctemp.xyz();
+        glm::vec3 temp(ctemp);
         if (glm::dot(temp - c1, ic) > nearest) 
             nearest = glm::dot(temp - c1, ic);
     }
@@ -137,7 +132,7 @@ bool ooxx(PObject obj1, PObject obj2)
     {
         ctemp = *(obj2 -> mpFrame) *
             *(mod2 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
-        glm::vec3 temp = ctemp.xyz();     //collision: point
+        glm::vec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c2, ic) <= -l)
         {
             PTriangle pside =             //collision: triangle
@@ -145,7 +140,7 @@ bool ooxx(PObject obj1, PObject obj2)
             if (pside != NULL)            //IsInside: true
             {
                 if ( OoO(obj2, mod2, obj1, mod1, temp, c2, c1,
-                            (*pside -> vpNormalVector).xyz()
+                            glm::vec3(*pside -> vpNormalVector)
                         )       //moving closer: true
                    )
                 return true;
@@ -159,6 +154,7 @@ void Update()
 {
     float dt = dLastClock - dLastLastClock;
     bool judged[nObjectTot];
+    const float fEpsilon = 1.0E-5;
     memset(judged, false, sizeof(nObjectTot));
     for (int i = 0; i < nObjectTot; i++)
     {
@@ -175,15 +171,13 @@ void Update()
         PMat4 pframe = oppObjectList[i]->mpFrame;
         PVec3 pspeed = oppObjectList[i]->vpSpeed;
         *pframe = glm::translate
-            (*pframe, glm::mat3(dt)**pspeed);
-        glm::mat3 frame;
-        for (int j = 0; j < 9; j++)
-            frame[j/3][j%3] = (*pframe)[j/3][j%3];
+            (glm::mat4(1.0), (*pspeed)*dt) * (*pframe);
+        glm::mat3 frame(*pframe);
         glm::mat3 I = (frame)*
                 (*mppModelList[oppObjectList[i]->nModelType]->mMomentOfInertia)
                 *(glm::inverse(frame));
         glm::vec3 omega = glm::inverse(I) * *oppObjectList[i]->vpAngularMomentum;
-        /*if (length(omega) != 0.00)
+        if (glm::length(omega) > fEpsilon)
         {
             float x = (*pframe)[3][0]; (*pframe)[3][0] = .0;
             float y = (*pframe)[3][1]; (*pframe)[3][1] = .0;
@@ -194,7 +188,7 @@ void Update()
             (*pframe)[3][1] = y;
             (*pframe)[3][2] = z;
             (*pframe)[3][3] = 1.0;
-        }*/
+        }
     if ((*pframe)[3][0] < fpBoxLimit[0])
         (*pspeed)[0] = fabs((*pspeed)[0]);
     if ((*pframe)[3][0] > fpBoxLimit[1])
