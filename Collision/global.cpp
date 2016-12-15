@@ -51,7 +51,7 @@ PTriangle MultTriangle(PMat4 matrix,PTriangle cone){
 
     // rotate the normal vector
     ret->vpNormalVector=new glm::vec4((*matrix) * (*cone->vpNormalVector));
-    
+
     return ret;
 }
 
@@ -154,36 +154,75 @@ Object::Object(int model,float vx,float vy,float vz,float mx,float my,float mz){
     fMomentInertia=0;
 }
 
+// check if the point is in the triangle
+bool IsInArea(PTriangle a,PVec4 tp){
+    float tots=0;
+    glm::vec3 now1(*a->pppVertex[1]->vpCoordinate - *a->pppVertex[0]->vpCoordinate);
+    glm::vec3 now2(*tp- *a->pppVertex[0]->vpCoordinate);
+    tots=glm::length(glm::cross(now1,now2));
+
+    now1=glm::vec3(*a->pppVertex[2]->vpCoordinate - *a->pppVertex[1]->vpCoordinate);
+    now2=glm::vec3(*tp- *a->pppVertex[1]->vpCoordinate);
+    tots+=glm::length(glm::cross(now1,now2));
+
+    now1=glm::vec3(*a->pppVertex[0]->vpCoordinate - *a->pppVertex[2]->vpCoordinate);
+    now2=glm::vec3(*tp- *a->pppVertex[2]->vpCoordinate);
+    tots+=glm::length(glm::cross(now1,now2));
+
+    if (abs(tots-glm::length(*a->vpNormalVector))<1E-5) return 1;
+        else return 0;
+}
+
+// check if the vector intersects with the triangle plane
+bool IsIntersect(PTriangle a,PVec4 tp,PVec3 vdir){
+    glm::mat3 trans;
+    float* hd=glm::value_ptr(trans);
+    for (int i=0;i<3;++i){
+        hd[3*i]=(*a->pppVertex[0]->vpCoordinate)[0]-(*tp)[0];
+        hd[3*i+1]=(*a->pppVertex[1]->vpCoordinate)[1]-(*tp)[1];
+        hd[3*i+2]=(*a->pppVertex[2]->vpCoordinate)[2]-(*tp)[2];
+    }
+
+    if (abs(glm::determinant(trans))<1E-5) return IsInArea(a,tp);
+
+    glm::vec3 v=glm::inverse(trans)*(*vdir);
+    if (v[0]<0 || v[1]<0 || v[2]<0) return 0;
+        else return 1;
+}
+
 // check whether the point is in the object,
 // return NULL or the closest plane(in global coordinate system)
-PTriangle Object::IsInside(PVec4 tp){
+PTriangle Object::IsInside(PVec4 tp,PVec3 vdir){
+    if (!vdir) return NULL;
+
+    // duplicate the vector
+    glm::vec3 tvdir=-(*vdir);
+
     // ymw changed tp from PPoint to PVec4, pointing to the global coordinate
     int len=mppModelList[nModelType]->nLength;
+
     // lzh : I changed INT_MAX into FLT_MAX
     float dist=FLT_MAX;
     PTriangle ret=NULL;
     PTriangle now;
     float vl;
+    int cnt=0;
 
     for (int i=0;i<len;++i){
         // get the Ith triangle's coordinates in global coordinate system
         // also rotate the normal vector
         now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
 
-        // calculate the volume of the cone formed by given point and the Ith triangle
-        vl=glm::dot(*now->vpNormalVector,
-                          *tp - *now->pppVertex[0]->vpCoordinate);
-
-        // not inside the left half space , return not_inside
-        if (vl>0){delete now; delete ret; return NULL;}
+        if (IsIntersect(now,tp,&tvdir)) ++cnt;
 
         // calculate the distance between the given point and the plane where triangle lies
-        vl=-vl/glm::length(*now->vpNormalVector);
+        vl=glm::dot(*now->vpNormalVector,
+                    *tp - *now->pppVertex[0]->vpCoordinate)
+           /glm::length(*now->vpNormalVector);
 
         // update the dist
-        if (vl<dist) {dist=vl; delete ret; ret=now;}
-        else
-            delete now;
+        if (abs(vl)<dist){dist=abs(vl); delete ret; ret=now;}
+            else delete now;
     }
 
     return ret;
@@ -240,8 +279,7 @@ int ReadFiles(const char* str){
     return nModelTot++;
 }
 
-void ModelCleanUp()
-{
+void ModelCleanUp(){
     for (int i = 0; i < nModelTot; i++)
         delete mppModelList[i];
     for (int i = 0; i < nObjectTot; i++)

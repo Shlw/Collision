@@ -55,9 +55,11 @@ typedef Triangle* PTriangle;
 typedef Model* PModel;
 typedef Object* PObject;
 
-// matrix operations
+// complementary functions
 PPoint MultPoint(PMat4 matrix,PPoint p);
 PTriangle MultTriangle(PMat4 matrix,PTriangle cone);
+bool IsIntersect(PTriangle a,PVec4 tp,PVec3 vdir);
+bool IsInArea(PTriangle a,PVec4 tp);
 
 // point class represents the still point in local coordinate system
 class Point{
@@ -120,7 +122,7 @@ public:
     Object(int model,float vx=0,float vy=0,float vz=0,float mx=0,float my=0,float mz=0);
     ~Object();
 
-    PTriangle IsInside(PVec4 tp);
+    PTriangle IsInside(PVec4 tp,PVec3 vdir=NULL);
     //ymw changed tp from PPoint to PVec4
 
     void Draw();
