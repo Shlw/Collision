@@ -19,7 +19,7 @@ const float po[2][4][3]={
 
 FILE* os=fopen("cube.txt","w");
 void prt(int i,int j,float x,float y){
-    fprintf(os,"%.10f %.10f %.10f %.10f %.10f",po[i][j][0],po[i][j][1],po[i][j][2],x,y);
+    fprintf(os,"%.10f %.10f %.10f %.10f %.10f ",po[i][j][0],po[i][j][1],po[i][j][2],x,y);
 }
 
 int main(){

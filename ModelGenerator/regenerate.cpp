@@ -53,7 +53,7 @@ float calc(float ax,float ay,float bx,float by,float cx,float cy){
 }
 
 void prt(int i,int j){
-    fprintf(output,"%.10f %.10f %.10f %.10f %.10f",x[i][j],y[i][j],z[i][j],texx[i][j],texy[i][j]);
+    fprintf(output,"%.10f %.10f %.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j],texx[i][j],texy[i][j]);
 }
 
 void trans(){

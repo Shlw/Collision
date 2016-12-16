@@ -252,6 +252,7 @@ int ReadFiles(const char* str){
         for (int k=0;k<3;++k){ // 3 points form a triangle
             float x,y,z,texx,texy;
             int isocur;
+            
             fscanf(modelin,"%f%f%f%f%f%d",&x,&y,&z,&texx,&texy,&isocur);
 
             // generate random RGBcolor, no transparency
