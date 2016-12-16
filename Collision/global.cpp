@@ -34,9 +34,11 @@ float fScrollSpeed = 0.10;
 
 float fpBoxLimit[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
 
-int nTextureLength = 6;
-const char* cpTextureName = "texture.txt";
-extern struct jpeg_compress_struct* jpPics;
+int nTextureLength = 5;
+const char* cpTextureName = "Texture.txt";
+int* npPicWidth, * npPicHeight;
+unsigned char** ucppPicContent;
+int* npTextureIndex;
 
 // matrix multiplication left to a point
 PPoint MultPoint(PMat4 matrix,PPoint p){

@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.16.19.55
+  1. Add true textures with *Baidu emojis*.
+
 * lzh @ 2016.12.16.14.47
   1. Add pictures.
   2. Add *GameInit* and a lot of functions about textures.

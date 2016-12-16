@@ -160,7 +160,9 @@ extern float fpBoxLimit[6];
 
 extern int nTextureLength;
 extern const char* cpTextureName;
-extern struct jpeg_compress_struct* jpPics;
+extern int* npPicWidth, * npPicHeight;
+extern unsigned char** ucppPicContent;
+extern int* npTextureIndex;
 
 // Declarations of functions
 
@@ -179,7 +181,8 @@ void MouseDropEvent(GLFWwindow* w, int c, const char** p);
 
 void Draw();
 void DrawBox();
-void DrawInit(int argc, char* argv[]);
+void DrawReadFiles(int argc, char* argv[]);
+void DrawCreateTexture();
 void DrawCleanUp();
 
 void Update();
