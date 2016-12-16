@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh lziad Shlw
+ * Modifier : Shlw lzh Shlw lzh lziad Shlw lzh
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -163,6 +163,14 @@ extern const char* cpTextureName;
 extern int* npPicWidth, * npPicHeight;
 extern unsigned char** ucppPicContent;
 extern int* npTextureIndex;
+
+extern float fppLightPosition[4];
+extern float fppLightAmbient[4];
+extern float fppLightDiffuse[4];
+extern float fppLightSpecular[4];
+extern float fpMaterialShininess[1];
+extern float fpMaterialSpecular[4];
+extern float fpMaterialAmbientDiffuse[4];
 
 // Declarations of functions
 

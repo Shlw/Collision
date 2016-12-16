@@ -18,9 +18,10 @@ void Point::DrawVertex()
 
 void Triangle::Draw()
 {
-        pppVertex[0]->DrawVertex();
-        pppVertex[1]->DrawVertex();
-        pppVertex[2]->DrawVertex();
+    glNormal3fv(glm::value_ptr(*vpNormalVector));
+    pppVertex[0]->DrawVertex();
+    pppVertex[1]->DrawVertex();
+    pppVertex[2]->DrawVertex();
     return ;
 }
 
@@ -48,14 +49,18 @@ void Object::Draw()
     glMultMatrixf(glm::value_ptr(*mpFrame));
     
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_NORMALIZE);
     
     glBindTexture(GL_TEXTURE_2D, npTextureIndex[0]);
     
-    glColor4f(1.0, 1.0, 1.0, 1.0);
+    glMaterialfv(GL_FRONT, GL_SHININESS, fpMaterialShininess);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, fpMaterialSpecular);
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, fpMaterialAmbientDiffuse);
     
     // Draw Model
     mppModelList[nModelType]->Draw();
     
+    glDisable(GL_NORMALIZE);
     glDisable(GL_TEXTURE_2D);
     
     // Restore matrix
@@ -66,8 +71,18 @@ void Object::Draw()
 
 void Draw()
 {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    
+    glLightfv(GL_LIGHT0, GL_POSITION, fppLightPosition);
+    
     for (int i = 0; i < nObjectTot; i++)
         oppObjectList[i]->Draw();
+    
+    glDisable(GL_LIGHT0);
+    
+    glDisable(GL_LIGHTING);
+    
     return ;
 }
 
