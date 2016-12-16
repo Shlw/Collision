@@ -8,6 +8,11 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.16.16.16
+  1. Reverse global.cpp.
+  2. It turns out the new method is more time-consuming and less precise. QAQ
+  3. Stupid Geometry...
+
 * Shlw @ 2016.12.16.16.00
   1. Update Models and Textures.
 
