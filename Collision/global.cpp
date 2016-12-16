@@ -76,6 +76,7 @@ Point::Point(
 
     vpCoordinate=new glm::vec4(x,y,z,1.0);
     vpColor=new glm::vec4(r,g,b,alpha);
+    vpTexture=new glm::vec2(0,0);
     nFlag=0;
 }
 // destroy the point class
@@ -239,7 +240,7 @@ int ReadFiles(const char* str){
     float vol,dens,elas,radi;
 
     fscanf(modelin,"%d%f%f%f%f",&len,&vol,&dens,&elas,&radi);
-    mppModelList[nModelTot] = new Model;
+    mppModelList[nModelTot]=new Model;
     mppModelList[nModelTot]->nLength=len;
     mppModelList[nModelTot]->fVolume=vol;
     mppModelList[nModelTot]->fMass=vol*dens;
@@ -252,7 +253,7 @@ int ReadFiles(const char* str){
         for (int k=0;k<3;++k){ // 3 points form a triangle
             float x,y,z,texx,texy;
             int isocur;
-            
+
             fscanf(modelin,"%f%f%f%f%f%d",&x,&y,&z,&texx,&texy,&isocur);
 
             // generate random RGBcolor, no transparency
@@ -280,7 +281,6 @@ int ReadFiles(const char* str){
                     col,col+3,col+6,
                     col+1,col+4,col+7,
                     col+2,col+5,col+8);
-
     fclose(modelin);
     return nModelTot++;
 }
