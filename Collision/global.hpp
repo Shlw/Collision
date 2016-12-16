@@ -21,6 +21,8 @@
 #include <algorithm>
 #include <vector>
 
+#include <jpeglib.h>
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
@@ -30,6 +32,7 @@
 #include <GL/glext.h>
 #include <GL/glu.h>
 #endif
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -155,6 +158,10 @@ extern float fScrollSpeed;
 
 extern float fpBoxLimit[6];
 
+extern int nTextureLength;
+extern const char* cpTextureName;
+extern struct jpeg_compress_struct* jpPics;
+
 // Declarations of functions
 
 int ReadFiles(const char* str);
@@ -172,6 +179,8 @@ void MouseDropEvent(GLFWwindow* w, int c, const char** p);
 
 void Draw();
 void DrawBox();
+void DrawInit(int argc, char* argv[]);
+void DrawCleanUp();
 
 void Update();
 
@@ -179,6 +188,7 @@ void GameInit();
 void GameMove(GLFWwindow* w, double x, double y);
 void GameDrag(GLFWwindow* w, int c, const char** p);
 void GameSecond();
+void GameCleanUp();
 
 void ModelCleanUp();
 
