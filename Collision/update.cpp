@@ -1,7 +1,7 @@
 /*************************************************************************
  * update.cpp for project Collision
  * Author : ymw
- * Modifier : ymw
+ * Modifier : ymw lzh
  * Description : Source file to implement functions about update and
  * collision detection.
  ************************************************************************/
@@ -10,7 +10,7 @@
 
 #include "global.hpp"
 
-bool OoO(PObject obj1, PModel mod1, PObject obj2, PModel mod2, 
+bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2, 
             glm::vec3 duang, glm::vec3 c1, glm::vec3 c2, glm::vec3 n)
 {
     n = n / glm::length(n); //I'm speechless.
@@ -21,10 +21,9 @@ bool OoO(PObject obj1, PModel mod1, PObject obj2, PModel mod2,
     glm::vec3 vc2 = *obj2 -> vpSpeed;
     glm::vec3 L1 = *obj1 -> vpAngularMomentum;
     glm::vec3 L2 = *obj2 -> vpAngularMomentum;
-    glm::mat3 frame1, frame2;
-    for (int i = 0; i < 9; i++)
-        frame1[i/3][i%3] = (*obj1 -> mpFrame)[i/3][i%3],
-        frame2[i/3][i%3] = (*obj2 -> mpFrame)[i/3][i%3];
+    glm::mat3
+        frame1 = glm::mat3(*obj1 -> mpFrame),
+        frame2 = glm::mat3(*obj2 -> mpFrame);
     glm::mat3 I1 =(frame1)*(*mod1 -> mMomentOfInertia)*(glm::inverse(frame1));      //I(global) = A * I(model) * A'
     glm::mat3 I2 =(frame2)*(*mod2 -> mMomentOfInertia)*(glm::inverse(frame2));
     glm::vec3 w1 = L1 * glm::inverse(I1);
@@ -65,7 +64,7 @@ bool OoO(PObject obj1, PModel mod1, PObject obj2, PModel mod2,
     return true;
 }
 
-bool ooxx(PObject obj1, PObject obj2)
+bool collision_judge(PObject obj1, PObject obj2)
 {
     bool flag = 0;
     PModel mod1 = mppModelList[obj1 -> nModelType];
@@ -79,6 +78,7 @@ bool ooxx(PObject obj1, PObject obj2)
     ctemp = *(obj2 -> mpFrame) * zero4;
     glm::vec3 c2 = glm::vec3(ctemp);
     float l = length(c1 - c2);
+    PTriangle pside;
     if (l > maxRad1 + maxRad2) return 0;
     
     glm::vec3 ic = (c2 - c1) / l;
@@ -102,15 +102,27 @@ bool ooxx(PObject obj1, PObject obj2)
         glm::vec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c1, ic) >= l)
         {
-            PTriangle pside =             //collision: triangle
-                obj2 -> IsInside(&ctemp);
+            glm::vec3 wspeed = 
+                glm::mat3(*obj1 -> mpFrame) * 
+                *mod1 -> mMomentOfInertia *
+                glm::inverse(glm::mat3(*obj1 -> mpFrame)) *
+                *obj1 -> vpAngularMomentum;
+            glm::vec3 vpoint = glm::cross(wspeed, temp - c1) + *obj1 -> vpSpeed;
+            pside =             //collision: triangle
+                obj2 -> IsInside(&ctemp, &vpoint);
             if (pside != NULL)            //IsInside: true
             {
-                if ( OoO(obj1, mod1, obj2, mod2, temp, c1, c2,
+                if ( collision_calc(obj1, mod1, obj2, mod2, temp, c1, c2,
                             glm::vec3(*pside -> vpNormalVector)
                         )       //moving closer: true
                    )
-                return true;
+                // lzh : IsInside allocates memory, and you're supposed
+                // to release it by hand.
+                {
+                    delete pside;
+                    return true;
+                }
+                delete pside;
             }
         }
     }
@@ -135,15 +147,27 @@ bool ooxx(PObject obj1, PObject obj2)
         glm::vec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c2, ic) <= -l)
         {
-            PTriangle pside =             //collision: triangle
-                obj1 -> IsInside(&ctemp);
+            glm::vec3 wspeed = 
+                glm::mat3(*obj2 -> mpFrame) * 
+                *mod2 -> mMomentOfInertia *
+                glm::inverse(glm::mat3(*obj2 -> mpFrame)) *
+                *obj2 -> vpAngularMomentum;
+            glm::vec3 vpoint = glm::cross(wspeed, temp - c1) + *obj2 -> vpSpeed;
+            pside =             //collision: triangle
+                obj1 -> IsInside(&ctemp, &vpoint);
             if (pside != NULL)            //IsInside: true
             {
-                if ( OoO(obj2, mod2, obj1, mod1, temp, c2, c1,
+                if ( collision_calc(obj2, mod2, obj1, mod1, temp, c2, c1,
                             glm::vec3(*pside -> vpNormalVector)
                         )       //moving closer: true
                    )
-                return true;
+                // lzh : IsInside allocates memory, and you're supposed
+                // to release it by hand.
+                {
+                    delete pside;
+                    return true;
+                }
+                delete pside;
             }
         }
     }
@@ -161,22 +185,22 @@ void Update()
         if (judged[i]) continue;
         for (int j = i + 1; j < nObjectTot; j++)
             if (judged[j]) continue;
-            else if (ooxx(oppObjectList[i], oppObjectList[j]))
+            else if (collision_judge(oppObjectList[i], oppObjectList[j]))
             {
                 judged[i] = judged[j] = true;
             }
     }
     for (int i = 0; i < nObjectTot; i++)
     {
-        PMat4 pframe = oppObjectList[i]->mpFrame;
-        PVec3 pspeed = oppObjectList[i]->vpSpeed;
+        PObject pobji = oppObjectList[i];
+        PModel  pmodi = mppModelList[pobji -> nModelType];
+        PMat4 pframe = pobji -> mpFrame;
+        PVec3 pspeed = pobji -> vpSpeed;
         *pframe = glm::translate
             (glm::mat4(1.0), (*pspeed)*dt) * (*pframe);
         glm::mat3 frame(*pframe);
-        glm::mat3 I = (frame)*
-                (*mppModelList[oppObjectList[i]->nModelType]->mMomentOfInertia)
-                *(glm::inverse(frame));
-        glm::vec3 omega = glm::inverse(I) * *oppObjectList[i]->vpAngularMomentum;
+        glm::mat3 I = (frame)*(*pmodi -> mMomentOfInertia)*(glm::inverse(frame));
+        glm::vec3 omega = glm::inverse(I) * *pobji -> vpAngularMomentum;
         if (glm::length(omega) > fEpsilon)
         {
             float x = (*pframe)[3][0]; (*pframe)[3][0] = .0;
