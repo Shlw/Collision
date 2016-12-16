@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.16.21.56
+  1. Add lighting.
+
 * lzh @ 2016.12.16.19.55
   1. Add true textures with *Baidu emojis*.
 
