@@ -198,6 +198,7 @@ bool IsIntersect(PTriangle a,PVec4 tp,PVec3 vdir){
         else return 1;
 }
 
+/*
 // check whether the point is in the object,
 // return NULL or the closest plane(in global coordinate system)
 PTriangle Object::IsInside(PVec4 tp,PVec3 vdir){
@@ -231,6 +232,42 @@ PTriangle Object::IsInside(PVec4 tp,PVec3 vdir){
         // update the dist
         if (abs(vl)<dist){dist=abs(vl); delete ret; ret=now;}
             else delete now;
+    }
+
+    return ret;
+}
+*/
+
+// check whether the point is in the object,
+// return NULL or the closest plane(in global coordinate system)
+PTriangle Object::IsInside(PVec4 tp,PVec3 vdir){
+    // ymw changed tp from PPoint to PVec4, pointing to the global coordinate
+    int len=mppModelList[nModelType]->nLength;
+    // lzh : I changed INT_MAX into FLT_MAX
+    float dist=FLT_MAX;
+    PTriangle ret=NULL;
+    PTriangle now;
+    float vl;
+
+    for (int i=0;i<len;++i){
+        // get the Ith triangle's coordinates in global coordinate system
+        // also rotate the normal vector
+        now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
+
+        // calculate the volume of the cone formed by given point and the Ith triangle
+        vl=glm::dot(*now->vpNormalVector,
+                          *tp - *now->pppVertex[0]->vpCoordinate);
+
+        // not inside the left half space , return not_inside
+        if (vl>0){delete now; delete ret; return NULL;}
+
+        // calculate the distance between the given point and the plane where triangle lies
+        vl=-vl/glm::length(*now->vpNormalVector);
+
+        // update the dist
+        if (vl<dist) {dist=vl; delete ret; ret=now;}
+        else
+            delete now;
     }
 
     return ret;
