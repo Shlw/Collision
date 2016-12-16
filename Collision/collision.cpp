@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     
     srand(time(NULL));
     
-    DrawInit(argc, argv);
+    DrawReadFiles(argc, argv);
     
     EventInit();
     
@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
     glfwMakeContextCurrent(fwWindow);
     
     WindowInit();
+    
+    DrawCreateTexture();
     
     glfwSetCursorPosCallback(fwWindow, MouseMotionEvent);
     glfwSetScrollCallback(fwWindow, MouseWheelEvent);

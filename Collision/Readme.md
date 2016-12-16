@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.16.19.55
+  1. Add true textures with *Baidu emojis*.
+
 * Shlw @ 2016.12.16.16.16
   1. Reverse global.cpp.
   2. It turns out the new method is more time-consuming and less precise. QAQ
