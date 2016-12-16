@@ -11,6 +11,14 @@ modeling, rendering and collision detection.
 * lzh @ 2016.12.16.19.55
   1. Add true textures with *Baidu emojis*.
 
+* Shlw @ 2016.12.16.16.16
+  1. Reverse global.cpp.
+  2. It turns out the new method is more time-consuming and less precise. QAQ
+  3. Stupid Geometry...
+
+* Shlw @ 2016.12.16.16.00
+  1. Update Models and Textures.
+
 * lzh @ 2016.12.16.14.47
   1. Add pictures.
   2. Add *GameInit* and a lot of functions about textures.

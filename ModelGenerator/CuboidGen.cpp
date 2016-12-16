@@ -11,37 +11,39 @@ using namespace std;
 const float L=0.2;
 const float R=0.3;
 const float H=0.25;
-
-const float po[2][4][3]={
-    {{R,L,-H},{R,-L,-H},{-R,-L,-H},{-R,L,-H}},
-    {{R,L,H},{R,-L,H},{-R,-L,H},{-R,L,H}}
-};
-
+const int N=100;
+int n;
+float x[N][N],y[N][N],z[N][N];
 FILE* os=fopen("cuboid.txt","w");
-void prt(int i,int j,float x,float y){
-    fprintf(os,"%.10f %.10f %.10f %.10f %.10f ",po[i][j][0],po[i][j][1],po[i][j][2],x,y);
+
+void prt(int i,int j){
+    fprintf(os,"%.10f %.10f %.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j],float(j)/n,float(i)/n);
+}
+
+void prtsquare(float tx,float ty,float tz,float xx,float xy,float xz,float yx,float yy,float yz){
+    xx/=n; xy/=n; xz/=n; yx/=n; yy/=n; yz/=n;
+    for (int i=0;i<=n;++i)
+        for (int j=0;j<=n;++j)
+            x[i][j]=tx+yx*i+xx*j,
+            y[i][j]=ty+yy*i+xy*j,
+            z[i][j]=tz+yz*i+xz*j;
+    for (int i=0;i<n;++i)
+        for (int j=0;j<n;++j){
+            prt(i,j); prt(i+1,j); prt(i+1,j+1); fprintf(os,"\n");
+            prt(i,j); prt(i+1,j+1); prt(i,j+1); fprintf(os,"\n");
+        }
 }
 
 int main(){
-    fprintf(os,"12\n");
+    scanf("%d",&n);
+    fprintf(os,"%d\n",6*n*n*2);
 
-    prt(1,0,1,0); prt(1,1,0,0); prt(0,1,0,1); fprintf(os,"\n");
-    prt(1,0,1,0); prt(0,1,0,1); prt(0,0,1,1); fprintf(os,"\n");
-
-    prt(1,1,1,0); prt(1,2,0,0); prt(0,2,0,1); fprintf(os,"\n");
-    prt(1,1,1,0); prt(0,2,0,1); prt(0,1,1,1); fprintf(os,"\n");
-
-    prt(1,2,1,0); prt(1,3,0,0); prt(0,3,0,1); fprintf(os,"\n");
-    prt(1,2,1,0); prt(0,3,0,1); prt(0,2,1,1); fprintf(os,"\n");
-
-    prt(1,3,1,0); prt(1,0,0,0); prt(0,0,0,1); fprintf(os,"\n");
-    prt(1,3,1,0); prt(0,0,0,1); prt(0,3,1,1); fprintf(os,"\n");
-//top
-    prt(1,2,1,0); prt(1,1,0,0); prt(1,0,0,1); fprintf(os,"\n");
-    prt(1,2,1,0); prt(1,0,0,1); prt(1,3,1,1); fprintf(os,"\n");
-//button
-    prt(0,2,1,0); prt(0,0,0,0); prt(0,1,0,1); fprintf(os,"\n");
-    prt(0,2,1,0); prt(0,3,0,1); prt(0,0,1,1); fprintf(os,"\n");
+    prtsquare(R,-L,H,0,2*L,0,0,0,-2*H);
+    prtsquare(-R,-L,H,2*R,0,0,0,0,-2*H);
+    prtsquare(-R,L,H,0,-2*L,0,0,0,-2*H);
+    prtsquare(R,L,H,-2*R,0,0,0,0,-2*H);
+    prtsquare(-R,-L,H,0,2*L,0,2*R,0,0);
+    prtsquare(R,-L,-H,0,2*L,0,-2*R,0,0);
 
     fclose(os);
 }

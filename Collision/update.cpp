@@ -10,7 +10,7 @@
 
 #include "global.hpp"
 
-bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2,
+bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2, 
             glm::vec3 duang, glm::vec3 c1, glm::vec3 c2, glm::vec3 n)
 {
     n = n / glm::length(n); //I'm speechless.
@@ -102,8 +102,8 @@ bool collision_judge(PObject obj1, PObject obj2)
         glm::vec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c1, ic) >= l)
         {
-            glm::vec3 wspeed =
-                glm::mat3(*obj1 -> mpFrame) *
+            glm::vec3 wspeed = 
+                glm::mat3(*obj1 -> mpFrame) * 
                 *mod1 -> mMomentOfInertia *
                 glm::inverse(glm::mat3(*obj1 -> mpFrame)) *
                 *obj1 -> vpAngularMomentum;
@@ -147,8 +147,8 @@ bool collision_judge(PObject obj1, PObject obj2)
         glm::vec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c2, ic) <= -l)
         {
-            glm::vec3 wspeed =
-                glm::mat3(*obj2 -> mpFrame) *
+            glm::vec3 wspeed = 
+                glm::mat3(*obj2 -> mpFrame) * 
                 *mod2 -> mMomentOfInertia *
                 glm::inverse(glm::mat3(*obj2 -> mpFrame)) *
                 *obj2 -> vpAngularMomentum;
