@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.16.16.00
+  1. Update Models and Textures.
+
 * lzh @ 2016.12.16.14.47
   1. Add pictures.
   2. Add *GameInit* and a lot of functions about textures.
