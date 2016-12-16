@@ -1,0 +1,12 @@
+Sounds/duang.wav
+Sounds/jinkela.wav
+Sounds/bluecat.wav
+Sounds/icome.wav
+Sounds/lanlanlu.wav
+Sounds/zhazha_ex.wav
+Sounds/zhazha.wav
+Sounds/curator_laugh.wav
+Sounds/wa.wav
+Sounds/barehead.wav
+Sounds/proud.wav
+Sounds/helloeveryone.wav

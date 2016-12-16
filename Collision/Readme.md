@@ -8,6 +8,56 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lziad @ 2016.12.17.02.16
+  1. Add class *Audio* to load *.wav files.
+  2. Add background music.
+  3. Add sound effects when collision happens.
+     (using *guichu* or *remix* materials)
+  4. Finally main function has try-catch!
+
+* lzh @ 2016.12.16.21.56
+  1. Add lighting.
+
+* lzh @ 2016.12.16.19.55
+  1. Add true textures with *Baidu emojis*.
+
+* Shlw @ 2016.12.16.16.16
+  1. Reverse global.cpp.
+  2. It turns out the new method is more time-consuming and less precise. QAQ
+  3. Stupid Geometry...
+
+* Shlw @ 2016.12.16.16.00
+  1. Update Models and Textures.
+
+* lzh @ 2016.12.16.14.47
+  1. Add pictures.
+  2. Add *GameInit* and a lot of functions about textures.
+
+* Shlw @ 2016.12.16.13.35
+  1. Add texture.
+
+* Shlw @ 2016.12.15.17.35
+  1. Re-write isinside.
+
+* lzh @ 2016.12.14.20.15
+  1. Fix memory leaks.
+  2. Let *nModelList* begin from 0.
+
+* Shlw @ 2016.12.14.17.40
+  1. Adjust the density.
+
+* ymw @ 2016.12.14.17.00
+  1. Finished the collision update algorithm, not perfect, though.
+  2. Adjusted the function *IsInside()*.
+
+* lzh @ 2016.12.14.16.53
+  1. Fix a lot of things including things about matrix transformations.
+
+* lzh @ 2016.12.12.21.51
+  1. Change vpSpeed to global coordinates from local coordinates.
+  2. Update GameDrag to ensure the objects dragged are released in correct
+  position.
+
 * lziad @ 2016.12.12.16.55
   1. Rewrite the function GameDrag.
   2. Using global coordinates when updating positions.

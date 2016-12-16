@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh lziad Shlw
+ * Modifier : Shlw lzh Shlw lzh lziad Shlw lzh lziad
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -21,15 +21,24 @@
 #include <algorithm>
 #include <vector>
 
+#include <jpeglib.h>
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #include <OpenGL/glu.h>
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#include <AL/alut.h>
 #else
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glu.h>
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
 #endif
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -39,14 +48,18 @@
 #define ERROR_UNKNOWN_MODEL 0x0001
 #define FILE_NOT_FOUND 0x0002
 #define ERROR_TOO_MANY_OBJ 0x0003
+#define ERROR_UNKNOWN_SOUND 0x0004
+#define ERROR_OPENAL 0x0005
 
 // class declarations
 class Point;
 class Triangle;
 class Model;
 class Object;
+class Audio;
 
 // typedef definitions
+typedef glm::vec2* PVec2;
 typedef glm::vec3* PVec3;
 typedef glm::vec4* PVec4;
 typedef glm::mat4* PMat4;
@@ -55,9 +68,11 @@ typedef Triangle* PTriangle;
 typedef Model* PModel;
 typedef Object* PObject;
 
-// matrix operations
+// complementary functions
 PPoint MultPoint(PMat4 matrix,PPoint p);
 PTriangle MultTriangle(PMat4 matrix,PTriangle cone);
+bool IsIntersect(PTriangle a,PVec4 tp,PVec3 vdir);
+bool IsInArea(PTriangle a,PVec4 tp);
 
 // point class represents the still point in local coordinate system
 class Point{
@@ -65,6 +80,7 @@ public:
     int nFlag;
     PVec4 vpCoordinate;
     PVec4 vpColor;
+    PVec2 vpTexture;
 
     Point();
     Point(PPoint example);
@@ -120,10 +136,32 @@ public:
     Object(int model,float vx=0,float vy=0,float vz=0,float mx=0,float my=0,float mz=0);
     ~Object();
 
-    PTriangle IsInside(PPoint tp);
+    PTriangle IsInside(PVec4 tp,PVec3 vdir=NULL);
+    //ymw changed tp from PPoint to PVec4
 
     void Draw();
     void Update();
+};
+
+// audio class contains functions to play wav files
+class Audio {
+private:
+    static Audio* PAudio;
+public:
+    Audio() {};
+    ~Audio() {};
+    
+    // construct a single instance
+    static Audio* CreateAudio();
+    
+    // deconstruct the single instance
+    void DestroyAudio();
+    
+    // load and play *.wav
+    void LoadFile(int index);
+    
+    // load the bgm file
+    void LoadBGM();
 };
 
 extern int nModelTot;
@@ -136,19 +174,40 @@ extern PObject oppObjectList[100];
 // extern int nWindowFlags;
 extern int nInitWindowWidth;
 extern int nInitWindowHeight;
-extern int nTimerSpeed;
 extern const char* cpWindowTitle;
 
 extern double dLastClock, dLastLastClock;
 extern double dLastMouseX, dLastMouseY;
 extern int npButtonState[3];
 extern glm::mat4 mModelTransformMat;
+extern int nLastSecond;
 
 extern float fRotateSpeed;
 extern float fTranslateSpeed;
 extern float fScrollSpeed;
 
 extern float fpBoxLimit[6];
+
+extern int nTextureLength;
+extern const char* cpTextureName;
+extern int* npPicWidth, * npPicHeight;
+extern unsigned char** ucppPicContent;
+extern int* npTextureIndex;
+
+extern float fppLightPosition[4];
+extern float fppLightAmbient[4];
+extern float fppLightDiffuse[4];
+extern float fppLightSpecular[4];
+extern float fpMaterialShininess[1];
+extern float fpMaterialSpecular[4];
+extern float fpMaterialAmbientDiffuse[4];
+
+extern char cpModFileList[100][256];
+extern int npTypeList[100];
+extern char cpSndFileList[100][256];
+extern int nSndFileCount;
+extern ALuint upSrcList[100];
+extern ALuint uCurSource;
 
 // Declarations of functions
 
@@ -167,12 +226,17 @@ void MouseDropEvent(GLFWwindow* w, int c, const char** p);
 
 void Draw();
 void DrawBox();
+void DrawReadFiles(int argc, char* argv[]);
+void DrawCreateTexture();
+void DrawCleanUp();
 
 void Update();
 
 void GameInit();
 void GameMove(GLFWwindow* w, double x, double y);
 void GameDrag(GLFWwindow* w, int c, const char** p);
+void GameSecond();
+void GameCleanUp();
 
 void ModelCleanUp();
 

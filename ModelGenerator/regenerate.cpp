@@ -24,7 +24,7 @@ FILE* input;
 FILE* output;
 int n,m;
 float vol,elas,dens;
-float x[N][3],y[N][3],z[N][3],vx[N],vy[N],vz[N];
+float x[N][3],y[N][3],z[N][3],vx[N],vy[N],vz[N],texx[N][3],texy[N][3];
 set<ppp,cmp> a;
 
 // calculate normal vector
@@ -53,7 +53,7 @@ float calc(float ax,float ay,float bx,float by,float cx,float cy){
 }
 
 void prt(int i,int j){
-    fprintf(output,"%.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j]);
+    fprintf(output,"%.10f %.10f %.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j],texx[i][j],texy[i][j]);
 }
 
 void trans(){
@@ -62,7 +62,7 @@ void trans(){
     fscanf(input,"%d",&n);
     for (int i=0;i<n;++i){
         for (int j=0;j<3;++j){
-            fscanf(input,"%f%f%f",x[i]+j,y[i]+j,z[i]+j);
+            fscanf(input,"%f%f%f%f%f",x[i]+j,y[i]+j,z[i]+j,texx[i]+j,texy[i]+j);
             maxdist=max(maxdist,dist(x[i][j],y[i][j],z[i][j],0,0,0));
         }
         normv(i,x[i][1]-x[i][0],y[i][1]-y[i][0],z[i][1]-z[i][0],
@@ -78,7 +78,7 @@ void trans(){
     }
 
     float dens=(rand()%100)/100.0;
-    fprintf(output,"%d %.10f %.10f %.10f %.10lf\n",n,vol,dens,(rand()%100)/100.0,maxdist);
+    fprintf(output,"%d %.10f %.10f %.10f %.10lf\n",n,vol,dens*10,(rand()%100)/100.0,maxdist);
     for (int i=0;i<n;++i){
         for (int j=0;j<3;++j){
             prt(i,j);

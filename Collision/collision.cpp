@@ -1,8 +1,7 @@
 /*************************************************************************
  * main.cpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh
- * Rev : 2016.12.05.18.43
+ * Modifier : Shlw lzh Shlw lzh lziad
  * Description : Source file to implement main, which calls functions and
  * enters glutMainLoop.
  ************************************************************************/
@@ -13,49 +12,90 @@
 // The main function
 int main(int argc, char *argv[])
 {
-    GLFWwindow* fwWindow;
-
-    srand(time(NULL));
-
-    EventInit();
-
-    GameInit();
-
-    if (!glfwInit())
-        return -1;
-
-    glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
-    glfwWindowHint(GLFW_SAMPLES, 8);
-
-    fwWindow = glfwCreateWindow(nInitWindowWidth, nInitWindowHeight, cpWindowTitle, NULL, NULL);
-
-    if (!fwWindow)
-    {
+    try {
+        GLFWwindow* fwWindow;
+        
+        srand(time(NULL));
+        
+        DrawReadFiles(argc, argv);
+        
+        if (!alutInit(&argc, argv)) {
+            ALenum error = alutGetError();
+            fprintf(stderr, "Error when initializing openAL: %s\n",
+                    alutGetErrorString(error));
+            throw ERROR_OPENAL;
+        }
+        
+        EventInit();
+        
+        GameInit();
+        
+        if (!glfwInit())
+            return -1;
+        
+        glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
+        glfwWindowHint(GLFW_SAMPLES, 8);
+        
+        fwWindow = glfwCreateWindow(nInitWindowWidth, nInitWindowHeight, cpWindowTitle, NULL, NULL);
+        
+        if (!fwWindow)
+        {
+            glfwTerminate();
+            return -1;
+        }
+        
+        // Create a window and initialilze
+        glfwMakeContextCurrent(fwWindow);
+        
+        WindowInit();
+        
+        DrawCreateTexture();
+        
+        glfwSetCursorPosCallback(fwWindow, MouseMotionEvent);
+        glfwSetScrollCallback(fwWindow, MouseWheelEvent);
+        glfwSetDropCallback(fwWindow, MouseDropEvent);
+        
+        while (!glfwWindowShouldClose(fwWindow))
+        {
+            // Display here
+            Display(fwWindow);
+            
+            // Poll for and process events
+            glfwPollEvents();
+        }
+        
         glfwTerminate();
-        return -1;
+        
+        WindowCleanUp();
+        
+        ModelCleanUp();
+        
+        DrawCleanUp();
+        
+        return 0;
+    } catch (int e) {
+        switch (e) {
+            case ERROR_UNKNOWN_MODEL:
+                fprintf(stderr, "Error: Unknown model!\n");
+                break;
+            case FILE_NOT_FOUND:
+                fprintf(stderr, "Error: The file to load is not found!\n");
+                break;
+            case ERROR_TOO_MANY_OBJ:
+                fprintf(stderr, "Error: Too many objects to load!\n");
+                break;
+            case ERROR_UNKNOWN_SOUND:
+                fprintf(stderr, "Error: Unknown sound!\n");
+                break;
+            case ERROR_OPENAL:
+                // Before throw this exception, do as the following:
+                /// ALenum error = alGetError();
+                /// fprintf(stderr, "[foo]: %s\n", alGetString(error));
+                // and openAL will print a detailed error message.
+                fprintf(stderr, "Error: OpenAL error, see above for details!\n");
+                break;
+            default:
+                fprintf(stderr, "Error: Unknown error!\n");
+        }
     }
-
-    // Create a window and initialilze
-    glfwMakeContextCurrent(fwWindow);
-
-    WindowInit();
-
-    glfwSetCursorPosCallback(fwWindow, MouseMotionEvent);
-    glfwSetScrollCallback(fwWindow, MouseWheelEvent);
-    glfwSetDropCallback(fwWindow, MouseDropEvent);
-
-    while (!glfwWindowShouldClose(fwWindow))
-    {
-        // Display here
-        Display(fwWindow);
-
-        // Poll for and process events
-        glfwPollEvents();
-    }
-
-    glfwTerminate();
-
-    ModelCleanUp();
-
-    return 0;
 }
