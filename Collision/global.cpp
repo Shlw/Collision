@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw lzh Shlw lzh Shlw
+ * Modifier : Shlw lzh Shlw lzh Shlw lzh Shlw
  * Description : Implementation of fundamental things.
  ************************************************************************/
 
@@ -34,10 +34,15 @@ float fScrollSpeed = 0.10;
 
 float fpBoxLimit[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
 
+int nTextureLength = 6;
+const char* cpTextureName = "texture.txt";
+extern struct jpeg_compress_struct* jpPics;
+
 // matrix multiplication left to a point
 PPoint MultPoint(PMat4 matrix,PPoint p){
-    Point* ret=new Point(p);
+    PPoint ret=new Point(p);
     *ret->vpCoordinate=(*matrix) * (*ret->vpCoordinate);
+    ret->nFlag = p->nFlag;
     return ret;
 }
 // matrix multiplication left to a triangle
@@ -50,6 +55,7 @@ PTriangle MultTriangle(PMat4 matrix,PTriangle cone){
 
     // rotate the normal vector
     ret->vpNormalVector=new glm::vec4((*matrix) * (*cone->vpNormalVector));
+
     return ret;
 }
 
@@ -57,12 +63,14 @@ PTriangle MultTriangle(PMat4 matrix,PTriangle cone){
 Point::Point(){
     vpCoordinate=NULL;
     vpColor=NULL;
+    vpTexture=NULL;
     nFlag=0;
 }
 // initialize the point class by duplicating an example
 Point::Point(PPoint example){
     vpColor=new glm::vec4(*example->vpColor);
     vpCoordinate=new glm::vec4(*example->vpCoordinate);
+    vpTexture=new glm::vec2(*example->vpTexture);
     nFlag=example->nFlag;
 }
 // initialize the point class according to all the data needed
@@ -72,12 +80,14 @@ Point::Point(
 
     vpCoordinate=new glm::vec4(x,y,z,1.0);
     vpColor=new glm::vec4(r,g,b,alpha);
+    vpTexture=new glm::vec2(0,0);
     nFlag=0;
 }
 // destroy the point class
 Point::~Point(){
     delete vpCoordinate;
     delete vpColor;
+    delete vpTexture;
 }
 
 // initialize the triangle class
@@ -90,8 +100,7 @@ Triangle::Triangle(PPoint a,PPoint b,PPoint c){
     pppVertex[0]=new Point(a);
     pppVertex[1]=new Point(b);
     pppVertex[2]=new Point(c);
-    vpNormalVector=new glm::vec4;
-    *vpNormalVector=glm::vec4(
+    vpNormalVector=new glm::vec4(
         glm::cross(glm::vec3(*b->vpCoordinate - *a->vpCoordinate),
         glm::vec3(*c->vpCoordinate - *b->vpCoordinate)),
         0.0
@@ -142,7 +151,7 @@ Object::~Object(){
 // also need to input the velocity
 Object::Object(int model,float vx,float vy,float vz,float mx,float my,float mz){
     // lzh : use throw to handle exceptions
-    if (model>nModelTot || model<1)
+    if (model>=nModelTot || model<0)
         throw ERROR_UNKNOWN_MODEL;
     vpSpeed=new glm::vec3(vx,vy,vz);
     vpAngularMomentum=new glm::vec3(mx,my,mz);
@@ -153,22 +162,100 @@ Object::Object(int model,float vx,float vy,float vz,float mx,float my,float mz){
     fMomentInertia=0;
 }
 
+// check if the point is in the triangle
+bool IsInArea(PTriangle a,PVec4 tp){
+    float tots=0;
+    glm::vec3 now1(*a->pppVertex[1]->vpCoordinate - *a->pppVertex[0]->vpCoordinate);
+    glm::vec3 now2(*tp- *a->pppVertex[0]->vpCoordinate);
+    tots=glm::length(glm::cross(now1,now2));
+
+    now1=glm::vec3(*a->pppVertex[2]->vpCoordinate - *a->pppVertex[1]->vpCoordinate);
+    now2=glm::vec3(*tp- *a->pppVertex[1]->vpCoordinate);
+    tots+=glm::length(glm::cross(now1,now2));
+
+    now1=glm::vec3(*a->pppVertex[0]->vpCoordinate - *a->pppVertex[2]->vpCoordinate);
+    now2=glm::vec3(*tp- *a->pppVertex[2]->vpCoordinate);
+    tots+=glm::length(glm::cross(now1,now2));
+
+    if (abs(tots-glm::length(*a->vpNormalVector))<1E-5) return 1;
+        else return 0;
+}
+
+// check if the vector intersects with the triangle plane
+bool IsIntersect(PTriangle a,PVec4 tp,PVec3 vdir){
+    glm::mat3 trans;
+    float* hd=glm::value_ptr(trans);
+    for (int i=0;i<3;++i){
+        hd[3*i]=(*a->pppVertex[0]->vpCoordinate)[0]-(*tp)[0];
+        hd[3*i+1]=(*a->pppVertex[1]->vpCoordinate)[1]-(*tp)[1];
+        hd[3*i+2]=(*a->pppVertex[2]->vpCoordinate)[2]-(*tp)[2];
+    }
+
+    if (abs(glm::determinant(trans))<1E-5) return IsInArea(a,tp);
+
+    glm::vec3 v=glm::inverse(trans)*(*vdir);
+    if (v[0]<0 || v[1]<0 || v[2]<0) return 0;
+        else return 1;
+}
+
+/*
 // check whether the point is in the object,
 // return NULL or the closest plane(in global coordinate system)
-PTriangle Object::IsInside(PVec4 tp){
+PTriangle Object::IsInside(PVec4 tp,PVec3 vdir){
+    if (!vdir) return NULL;
+
+    // duplicate the vector
+    glm::vec3 tvdir=-(*vdir);
+
+    // ymw changed tp from PPoint to PVec4, pointing to the global coordinate
+    int len=mppModelList[nModelType]->nLength;
+
+    // lzh : I changed INT_MAX into FLT_MAX
+    float dist=FLT_MAX;
+    PTriangle ret=NULL;
+    PTriangle now;
+    float vl;
+    int cnt=0;
+
+    for (int i=0;i<len;++i){
+        // get the Ith triangle's coordinates in global coordinate system
+        // also rotate the normal vector
+        now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
+
+        if (IsIntersect(now,tp,&tvdir)) ++cnt;
+
+        // calculate the distance between the given point and the plane where triangle lies
+        vl=glm::dot(*now->vpNormalVector,
+                    *tp - *now->pppVertex[0]->vpCoordinate)
+           /glm::length(*now->vpNormalVector);
+
+        // update the dist
+        if (abs(vl)<dist){dist=abs(vl); delete ret; ret=now;}
+            else delete now;
+    }
+
+    return ret;
+}
+*/
+
+// check whether the point is in the object,
+// return NULL or the closest plane(in global coordinate system)
+PTriangle Object::IsInside(PVec4 tp,PVec3 vdir){
     // ymw changed tp from PPoint to PVec4, pointing to the global coordinate
     int len=mppModelList[nModelType]->nLength;
     // lzh : I changed INT_MAX into FLT_MAX
     float dist=FLT_MAX;
     PTriangle ret=NULL;
+    PTriangle now;
+    float vl;
 
     for (int i=0;i<len;++i){
         // get the Ith triangle's coordinates in global coordinate system
         // also rotate the normal vector
-        PTriangle now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
+        now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
 
         // calculate the volume of the cone formed by given point and the Ith triangle
-        float vl=glm::dot(*now->vpNormalVector,
+        vl=glm::dot(*now->vpNormalVector,
                           *tp - *now->pppVertex[0]->vpCoordinate);
 
         // not inside the left half space , return not_inside
@@ -179,6 +266,8 @@ PTriangle Object::IsInside(PVec4 tp){
 
         // update the dist
         if (vl<dist) {dist=vl; delete ret; ret=now;}
+        else
+            delete now;
     }
 
     return ret;
@@ -187,13 +276,12 @@ PTriangle Object::IsInside(PVec4 tp){
 int ReadFiles(const char* str){
     FILE* modelin=fopen(str,"r");
     if (!modelin) throw FILE_NOT_FOUND;
-    ++nModelTot;
 
     int len;
     float vol,dens,elas,radi;
 
     fscanf(modelin,"%d%f%f%f%f",&len,&vol,&dens,&elas,&radi);
-    mppModelList[nModelTot] = new Model;
+    mppModelList[nModelTot]=new Model;
     mppModelList[nModelTot]->nLength=len;
     mppModelList[nModelTot]->fVolume=vol;
     mppModelList[nModelTot]->fMass=vol*dens;
@@ -204,9 +292,10 @@ int ReadFiles(const char* str){
     for (int j=0;j<len;++j){
         PPoint p[3];
         for (int k=0;k<3;++k){ // 3 points form a triangle
-            float x,y,z;
+            float x,y,z,texx,texy;
             int isocur;
-            fscanf(modelin,"%f%f%f%d",&x,&y,&z,&isocur);
+
+            fscanf(modelin,"%f%f%f%f%f%d",&x,&y,&z,&texx,&texy,&isocur);
 
             // generate random RGBcolor, no transparency
             p[k]=new Point(x,y,z,
@@ -214,6 +303,8 @@ int ReadFiles(const char* str){
                            (rand()%100)/100.0,
                            (rand()%100)/100.0,1.0);
             p[k]->nFlag=isocur;
+            (*p[k]->vpTexture)[0]=texx;
+            (*p[k]->vpTexture)[1]=texy;
         }
         float x,y,z;
         fscanf(modelin,"%f%f%f",&x,&y,&z);
@@ -231,14 +322,12 @@ int ReadFiles(const char* str){
                     col,col+3,col+6,
                     col+1,col+4,col+7,
                     col+2,col+5,col+8);
-
     fclose(modelin);
-    return nModelTot;
+    return nModelTot++;
 }
 
-void ModelCleanUp()
-{
-    for (int i = 1; i <= nModelTot; i++)
+void ModelCleanUp(){
+    for (int i = 0; i < nModelTot; i++)
         delete mppModelList[i];
     for (int i = 0; i < nObjectTot; i++)
         delete oppObjectList[i];

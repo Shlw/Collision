@@ -18,18 +18,18 @@ void Point::DrawVertex()
 
 void Triangle::Draw()
 {
-    glBegin(GL_TRIANGLES);
         pppVertex[0]->DrawVertex();
         pppVertex[1]->DrawVertex();
         pppVertex[2]->DrawVertex();
-    glEnd();
     return ;
 }
 
 void Model::Draw()
 {
+    glBegin(GL_TRIANGLES);
     for (int i = 0; i < nLength; i++)
         tppCone[i]->Draw();
+    glEnd();
     return ;
 }
 
@@ -96,4 +96,21 @@ void DrawBox()
         glVertex3f(fpBoxLimit[1], fpBoxLimit[3], fpBoxLimit[5]);
     glEnd();
     glDepthMask(GL_TRUE);
+    return ;
 }
+
+void DrawInit(int argc, char* argv[])
+{
+    
+    if (argc <= 1)
+    {
+        
+    }
+    return ;
+}
+
+void DrawCleanUp()
+{
+    
+}
+

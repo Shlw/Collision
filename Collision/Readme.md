@@ -8,6 +8,31 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.16.16.16
+  1. Reverse global.cpp.
+  2. It turns out the new method is more time-consuming and less precise. QAQ
+  3. Stupid Geometry...
+
+* Shlw @ 2016.12.16.16.00
+  1. Update Models and Textures.
+
+* lzh @ 2016.12.16.14.47
+  1. Add pictures.
+  2. Add *GameInit* and a lot of functions about textures.
+
+* Shlw @ 2016.12.16.13.35
+  1. Add texture.
+
+* Shlw @ 2016.12.15.17.35
+  1. Re-write isinside.
+
+* lzh @ 2016.12.14.20.15
+  1. Fix memory leaks.
+  2. Let *nModelList* begin from 0.
+
+* Shlw @ 2016.12.14.17.40
+  1. Adjust the density.
+
 * ymw @ 2016.12.14.17.00
   1. Finished the collision update algorithm, not perfect, though.
   2. Adjusted the function *IsInside()*.

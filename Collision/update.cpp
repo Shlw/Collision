@@ -80,7 +80,7 @@ bool collision_judge(PObject obj1, PObject obj2)
     float l = length(c1 - c2);
     PTriangle pside;
     if (l > maxRad1 + maxRad2) return 0;
-    
+
     glm::vec3 ic = (c2 - c1) / l;
     float nearest = 0.0;
     for (int i = 0; i < mod2 -> nLength; i++)
@@ -89,7 +89,7 @@ bool collision_judge(PObject obj1, PObject obj2)
         ctemp = *(obj2 -> mpFrame) *
             *(mod2 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
         glm::vec3 temp(ctemp);
-        if (glm::dot(temp - c2, ic) < nearest) 
+        if (glm::dot(temp - c2, ic) < nearest)
             nearest = glm::dot(temp - c2, ic);
     }
     l += nearest;
@@ -134,7 +134,7 @@ bool collision_judge(PObject obj1, PObject obj2)
         ctemp = *(obj1 -> mpFrame) *
             *(mod1 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
         glm::vec3 temp(ctemp);
-        if (glm::dot(temp - c1, ic) > nearest) 
+        if (glm::dot(temp - c1, ic) > nearest)
             nearest = glm::dot(temp - c1, ic);
     }
     l -= nearest;
@@ -225,7 +225,7 @@ void Update()
         (*pspeed)[2] = fabs((*pspeed)[2]);
     if ((*pframe)[3][2] > fpBoxLimit[5])
         (*pspeed)[2] = -fabs((*pspeed)[2]);
-    
+
     }
     return ;
 }
