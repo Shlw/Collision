@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw lzh Shlw lzh Shlw lzh
+ * Modifier : Shlw lzh Shlw lzh Shlw lzh Shlw
  * Description : Implementation of fundamental things.
  ************************************************************************/
 
@@ -59,12 +59,14 @@ PTriangle MultTriangle(PMat4 matrix,PTriangle cone){
 Point::Point(){
     vpCoordinate=NULL;
     vpColor=NULL;
+    vpTexture=NULL;
     nFlag=0;
 }
 // initialize the point class by duplicating an example
 Point::Point(PPoint example){
     vpColor=new glm::vec4(*example->vpColor);
     vpCoordinate=new glm::vec4(*example->vpCoordinate);
+    vpTexture=new glm::vec2(*example->vpTexture);
     nFlag=example->nFlag;
 }
 // initialize the point class according to all the data needed
@@ -80,6 +82,7 @@ Point::Point(
 Point::~Point(){
     delete vpCoordinate;
     delete vpColor;
+    delete vpTexture;
 }
 
 // initialize the triangle class
@@ -247,9 +250,9 @@ int ReadFiles(const char* str){
     for (int j=0;j<len;++j){
         PPoint p[3];
         for (int k=0;k<3;++k){ // 3 points form a triangle
-            float x,y,z;
+            float x,y,z,texx,texy;
             int isocur;
-            fscanf(modelin,"%f%f%f%d",&x,&y,&z,&isocur);
+            fscanf(modelin,"%f%f%f%f%f%d",&x,&y,&z,&texx,&texy,&isocur);
 
             // generate random RGBcolor, no transparency
             p[k]=new Point(x,y,z,
@@ -257,6 +260,8 @@ int ReadFiles(const char* str){
                            (rand()%100)/100.0,
                            (rand()%100)/100.0,1.0);
             p[k]->nFlag=isocur;
+            (*p[k]->vpTexture)[0]=texx;
+            (*p[k]->vpTexture)[1]=texy;
         }
         float x,y,z;
         fscanf(modelin,"%f%f%f",&x,&y,&z);

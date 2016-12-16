@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.16.13.35
+  1. Add texture.
+
 * Shlw @ 2016.12.15.17.35
   1. Re-write isinside.
 

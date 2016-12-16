@@ -47,6 +47,7 @@ class Model;
 class Object;
 
 // typedef definitions
+typedef glm::vec2* PVec2;
 typedef glm::vec3* PVec3;
 typedef glm::vec4* PVec4;
 typedef glm::mat4* PMat4;
@@ -67,6 +68,7 @@ public:
     int nFlag;
     PVec4 vpCoordinate;
     PVec4 vpColor;
+    PVec2 vpTexture;
 
     Point();
     Point(PPoint example);
