@@ -146,16 +146,18 @@ public:
 // audio class contains functions to play wav files
 class Audio {
 private:
-    static Audio* PAudio;
-public:
+    // The following functions are private to forbid the following uses:
+    /// Audio boo = Audio::GetAudio();
+    /// Audio booo = boo; (or rather *Audio booo;* without initialize)
+    // and in this way neither &boo nor &booo equals to &msAudio.
     Audio() {};
+    Audio(const Audio &);
+    Audio & operator =(const Audio &);
+public:
     ~Audio() {};
     
-    // construct a single instance
-    static Audio* CreateAudio();
-    
-    // deconstruct the single instance
-    void DestroyAudio();
+    // construct and return a single instance
+    static Audio* GetAudio();
     
     // load and play *.wav
     void LoadFile(int index);
