@@ -33,7 +33,7 @@ void Audio::LoadFile(int index) {
         if (status == AL_PLAYING)
             return ;
     }
-    
+
     if (index < 0 || index >= 100) {
         throw ERROR_UNKNOWN_SOUND;
     } else if (upSrcList[index]) {
@@ -44,29 +44,30 @@ void Audio::LoadFile(int index) {
         return ;
     }
     // else load the file
-    
+
     ALuint  buffer, source;
     ALenum  error;
-    
+
     ALenum  format;
     ALvoid  *data;
+
     ALsizei size;
     ALfloat freq;
-    
+
     // load the wav file
     alGenBuffers(1, &buffer);
     data = alutLoadMemoryFromFile(cpSndFileList[index], &format, &size, &freq);
     alBufferData(buffer, format, data, size, freq);
     alGenSources(1, &source);
-    
+
     if (buffer == AL_NONE) {
         alutExit();
         throw FILE_NOT_FOUND;
     }
-    
+
     alSourcei(source, AL_BUFFER, buffer);
     // TODO: alSourcefv(source, AL_POSITION, [SourcePosition]);
-    
+
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
@@ -74,23 +75,24 @@ void Audio::LoadFile(int index) {
         throw ERROR_OPENAL;
     }
     alSourcePlay(source);
-    
+
     // add the source and set the current playing source
     uCurSource = upSrcList[index] = source;
     
     // *alutLoadMemoryFromFile* allocates memory for *data*,
     // so delete it after use.
     delete data;
-    
+
     return ;
 }
 
 void Audio::LoadBGM() {
     ALuint  buffer, source;
     ALenum  error;
-    
+
     ALenum  format;
     ALvoid  *data;
+
     ALsizei size;
     ALfloat freq;
     
@@ -98,16 +100,16 @@ void Audio::LoadBGM() {
     data = alutLoadMemoryFromFile("bgm.wav", &format, &size, &freq);
     alBufferData(buffer, format, data, size, freq);
     alGenSources(1, &source);
-    
+
     if (buffer == AL_NONE) {
         alutExit();
         throw FILE_NOT_FOUND;
     }
-    
+
     alSourcei(source, AL_BUFFER, buffer);
     // loop
     alSourcei(source, AL_LOOPING, true);
-    
+
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
@@ -127,13 +129,13 @@ void GameInit()
     memset(npTypeList, 0, sizeof(npTypeList));
     memset(cpSndFileList, 0, sizeof(cpSndFileList));
     memset(upSrcList, 0, sizeof(upSrcList));
-    
+
     // init openAL
     ALCdevice *pDevice = alcOpenDevice(NULL);
     ALCcontext *pContext = alcCreateContext(pDevice, NULL);
     alcMakeContextCurrent(pContext);
     uCurSource = AL_NONE;
-    
+
     // read wav files
     FILE *fpSndEff = fopen("SoundEff.txt", "r");
     char cpSndFile[256];
@@ -143,7 +145,7 @@ void GameInit()
         memcpy(cpSndFileList[nSndFileCount], cpSndFile,
                strlen(cpSndFile) * sizeof(char));
     fclose(fpSndEff);
-    
+
     // play bgm
     Audio::GetAudio()->LoadBGM();
     
@@ -152,6 +154,9 @@ void GameInit()
 
 void GameMove(GLFWwindow* w, double x, double y)
 {
+    if (++nPtr % 10 == 0)
+    nPtr = 0;
+    dpPos[nPtr][0] = x; dpPos[nPtr][1] = y;
     return ;
 }
 
@@ -179,16 +184,15 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
     // convert mouse coordinates to OpenGL coordinates
     UnProjectNow(dLastMouseX, dLastMouseY, 0.95, &x2, &y2, &z2);
     UnProjectNow(dLastMouseX, dLastMouseY, 0.9, &x1, &y1, &z1);
-    
+
     // set the position
     *oppObjectList[nObjectTot]->mpFrame = glm::inverse(mModelTransformMat);
     (*oppObjectList[nObjectTot]->mpFrame)[3] = glm::vec4(x1, y1, z1, 1);
-    
+
     // set the speed
     *oppObjectList[nObjectTot]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
-    *oppObjectList[nObjectTot++]->vpAngularMomentum =
-    glm::vec3((x2-x1)*0.05, (y2-y1)*0.05, (z2-z1)*0.05);
-    
+    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::vec3((x2-x1)*0.05, (y2-y1)*0.05, (z2-z1)*0.05);
+
     return ;
 }
 
@@ -209,4 +213,5 @@ void GameCleanUp()
     alutExit;
     
     return ;
+
 }
