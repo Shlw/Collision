@@ -125,6 +125,16 @@ void Audio::LoadBGM() {
     return ;
 }
 
+// path and type of the files which are already loaded
+char cpFileList[100][256];
+int  npTypeList[100];
+// stack of past mouse positions
+double dpPos[10][2];
+// pointer of the stack
+int nPtr;
+int test=0;
+
+
 void GameInit()
 {
     memset(cpModFileList, 0, sizeof(cpModFileList));
@@ -180,6 +190,7 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
         nType = npTypeList[i] = ReadFiles(p[0]);
     }
     oppObjectList[nObjectTot] = new Object(nType, 0.0, 0.0, 0.0);
+
     // convert mouse coordinates to OpenGL coordinates
     UnProjectNow(dLastMouseX, dLastMouseY, 0.95, &x2, &y2, &z2);
     UnProjectNow(dLastMouseX, dLastMouseY, 0.9, &x1, &y1, &z1);
@@ -188,6 +199,7 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
     *oppObjectList[nObjectTot]->mpFrame = glm::inverse(mModelTransformMat);
     (*oppObjectList[nObjectTot]->mpFrame)[3] = glm::vec4(x1, y1, z1, 1);
     
+
     // set the speed
     *oppObjectList[nObjectTot]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
     *oppObjectList[nObjectTot++]->vpAngularMomentum =
@@ -213,6 +225,16 @@ void GameCleanUp()
     alcDestroyContext(pContext);
     alcCloseDevice(pDevice);
     alutExit;
+  
+    *oppObjectList[nObjectTot]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
+    *oppObjectList[nObjectTot++]->vpAngularMomentum = glm::vec3((x2-x1)*0.05, (y2-y1)*0.05, (z2-z1)*0.05);
     
+    return ;
+
+}
+
+void GameSecond()
+{
+    std::cout << nLastSecond << ' ' << nModelTot << ' ' << nObjectTot << std::endl;
     return ;
 }
