@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.17.20.00
+  1. Decrease the angular speed.
+
 * Shlw @ 2016.12.17.19.35
   1. Fix compile bugs in Linux.
   2. Correct some remaining conflicts.

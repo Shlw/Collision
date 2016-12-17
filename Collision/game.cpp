@@ -195,7 +195,7 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
 
     // set the speed
     *oppObjectList[nObjectTot]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
-    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::vec3((x2-x1)*0.05, (y2-y1)*0.05, (z2-z1)*0.05);
+    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::vec3((x2-x1)*0.01, (y2-y1)*0.01, (z2-z1)*0.01);
 
     return ;
 }
