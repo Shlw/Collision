@@ -193,7 +193,7 @@ void Update()
                 // if nSndFileCount == 0, disable it
                 if (nSndFileCount)
                     // play a random wav file
-                    Audio::CreateAudio()->LoadFile(rand() % nSndFileCount);
+                    Audio::GetAudio()->LoadFile(rand() % nSndFileCount);
             }
     }
     for (int i = 0; i < nObjectTot; i++)
