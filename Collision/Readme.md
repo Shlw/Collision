@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.17.20.48
+  1. Add Ellipsoid model.
+  2. Add Sphere model.
+
 * Shlw @ 2016.12.17.20.00
   1. Decrease the angular speed.
 
