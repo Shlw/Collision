@@ -6,7 +6,7 @@
 ##########################################################################
 
 collision : collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp event.cpp
-	g++ -o collision collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp event.cpp -lm -lglut -lGL -lGLU -lglfw -ljpeg
+	g++ -o collision global.cpp collision.cpp display.cpp draw.cpp update.cpp game.cpp event.cpp -lopenal -lalut -lm -lglut -lGL -lGLU -lglfw -ljpeg
 
 clean :
 	rm collision

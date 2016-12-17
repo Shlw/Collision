@@ -19,6 +19,10 @@ int    nSndFileCount;
 ALuint upSrcList[100];
 // current playing source
 ALuint uCurSource;
+// stack of past mouse positions
+double dpPos[10][2];
+// pointer of the stack
+int nPtr;
 
 Audio* Audio::GetAudio() {
     static Audio msAudio;
@@ -49,7 +53,7 @@ void Audio::LoadFile(int index) {
     ALenum  error;
 
     ALenum  format;
-    ALvoid  *data;
+    ALvoid  *data=NULL;
 
     ALsizei size;
     ALfloat freq;
@@ -78,7 +82,7 @@ void Audio::LoadFile(int index) {
 
     // add the source and set the current playing source
     uCurSource = upSrcList[index] = source;
-    
+
     // *alutLoadMemoryFromFile* allocates memory for *data*,
     // so delete it after use.
     delete data;
@@ -91,11 +95,11 @@ void Audio::LoadBGM() {
     ALenum  error;
 
     ALenum  format;
-    ALvoid  *data;
+    ALvoid  *data=NULL;
 
     ALsizei size;
     ALfloat freq;
-    
+
     alGenBuffers(1, &buffer);
     data = alutLoadMemoryFromFile("bgm.wav", &format, &size, &freq);
     alBufferData(buffer, format, data, size, freq);
@@ -117,9 +121,9 @@ void Audio::LoadBGM() {
         throw ERROR_OPENAL;
     }
     alSourcePlay(source);
-    
+
     delete data;
-    
+
     return ;
 }
 
@@ -148,7 +152,7 @@ void GameInit()
 
     // play bgm
     Audio::GetAudio()->LoadBGM();
-    
+
     return ;
 }
 
@@ -211,7 +215,7 @@ void GameCleanUp()
     alcDestroyContext(pContext);
     alcCloseDevice(pDevice);
     alutExit;
-    
+
     return ;
 
 }

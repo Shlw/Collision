@@ -14,64 +14,64 @@ int main(int argc, char *argv[])
 {
     try {
         GLFWwindow* fwWindow;
-        
+
         srand(time(NULL));
-        
+
         DrawReadFiles(argc, argv);
-        
+
         if (!alutInit(&argc, argv)) {
             ALenum error = alutGetError();
             fprintf(stderr, "Error when initializing openAL: %s\n",
                     alutGetErrorString(error));
             throw ERROR_OPENAL;
         }
-        
+
         EventInit();
-        
+
         GameInit();
-        
+
         if (!glfwInit())
             return -1;
-        
+
         glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
         glfwWindowHint(GLFW_SAMPLES, 8);
-        
+
         fwWindow = glfwCreateWindow(nInitWindowWidth, nInitWindowHeight, cpWindowTitle, NULL, NULL);
-        
+
         if (!fwWindow)
         {
             glfwTerminate();
             return -1;
         }
-        
+
         // Create a window and initialilze
         glfwMakeContextCurrent(fwWindow);
-        
+
         WindowInit();
-        
+
         DrawCreateTexture();
-        
+
         glfwSetCursorPosCallback(fwWindow, MouseMotionEvent);
         glfwSetScrollCallback(fwWindow, MouseWheelEvent);
         glfwSetDropCallback(fwWindow, MouseDropEvent);
-        
+
         while (!glfwWindowShouldClose(fwWindow))
         {
             // Display here
             Display(fwWindow);
-            
+
             // Poll for and process events
             glfwPollEvents();
         }
-        
+
         glfwTerminate();
-        
+
         WindowCleanUp();
-        
+
         ModelCleanUp();
-        
+
         DrawCleanUp();
-        
+
         return 0;
     } catch (int e) {
         switch (e) {
