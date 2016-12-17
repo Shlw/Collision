@@ -8,6 +8,13 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lziad @ 2016.12.17.02.16
+  1. Add class *Audio* to load *.wav files.
+  2. Add background music.
+  3. Add sound effects when collision happens.
+     (using *guichu* or *remix* materials)
+  4. Finally main function has try-catch!
+
 * lzh @ 2016.12.16.21.56
   1. Add lighting.
 

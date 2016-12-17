@@ -1,7 +1,7 @@
 /*************************************************************************
  * update.cpp for project Collision
  * Author : ymw
- * Modifier : ymw lzh
+ * Modifier : ymw lzh lziad
  * Description : Source file to implement functions about update and
  * collision detection.
  ************************************************************************/
@@ -188,6 +188,12 @@ void Update()
             else if (collision_judge(oppObjectList[i], oppObjectList[j]))
             {
                 judged[i] = judged[j] = true;
+                
+                // playing sounds
+                // if nSndFileCount == 0, disable it
+                if (nSndFileCount)
+                    // play a random wav file
+                    Audio::CreateAudio()->LoadFile(rand() % nSndFileCount);
             }
     }
     for (int i = 0; i < nObjectTot; i++)

@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh lziad Shlw lzh
+ * Modifier : Shlw lzh Shlw lzh lziad Shlw lzh lziad
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -27,10 +27,16 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #include <OpenGL/glu.h>
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#include <AL/alut.h>
 #else
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glu.h>
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
 #endif
 
 #include <GLFW/glfw3.h>
@@ -42,12 +48,15 @@
 #define ERROR_UNKNOWN_MODEL 0x0001
 #define FILE_NOT_FOUND 0x0002
 #define ERROR_TOO_MANY_OBJ 0x0003
+#define ERROR_UNKNOWN_SOUND 0x0004
+#define ERROR_OPENAL 0x0005
 
 // class declarations
 class Point;
 class Triangle;
 class Model;
 class Object;
+class Audio;
 
 // typedef definitions
 typedef glm::vec2* PVec2;
@@ -134,6 +143,27 @@ public:
     void Update();
 };
 
+// audio class contains functions to play wav files
+class Audio {
+private:
+    static Audio* PAudio;
+public:
+    Audio() {};
+    ~Audio() {};
+    
+    // construct a single instance
+    static Audio* CreateAudio();
+    
+    // deconstruct the single instance
+    void DestroyAudio();
+    
+    // load and play *.wav
+    void LoadFile(int index);
+    
+    // load the bgm file
+    void LoadBGM();
+};
+
 extern int nModelTot;
 extern int nObjectTot;
 extern PModel mppModelList[100];
@@ -171,6 +201,13 @@ extern float fppLightSpecular[4];
 extern float fpMaterialShininess[1];
 extern float fpMaterialSpecular[4];
 extern float fpMaterialAmbientDiffuse[4];
+
+extern char cpModFileList[100][256];
+extern int npTypeList[100];
+extern char cpSndFileList[100][256];
+extern int nSndFileCount;
+extern ALuint upSrcList[100];
+extern ALuint uCurSource;
 
 // Declarations of functions
 
