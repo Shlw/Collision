@@ -7,6 +7,11 @@ Sphere, Cylinder, Ellipsoid, Donut
 
 ## Changelog
 
+* Shlw @ 2016.12.17.20.47
+  1. Add Sphere Texture.
+  2. Add Ellipsoid Texture.
+  3. Little bugs to be fixed.
+
 * Shlw @ 2016.12.16.16.00
   1. Rewrite CubeGen and CuboidGen.
 

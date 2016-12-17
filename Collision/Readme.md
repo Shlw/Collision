@@ -8,6 +8,17 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.17.20.48
+  1. Add Ellipsoid model.
+  2. Add Sphere model.
+
+* Shlw @ 2016.12.17.20.00
+  1. Decrease the angular speed.
+
+* Shlw @ 2016.12.17.19.35
+  1. Fix compile bugs in Linux.
+  2. Correct some remaining conflicts.
+
 * lziad @ 2016.12.17.15.55
   1. *alutLoadWAVFile* and *alutUnloadWAV* are substituted with *alutLoadMemoryFromFile*.
   2. Rewrite the singleton pattern.

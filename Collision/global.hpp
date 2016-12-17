@@ -155,13 +155,13 @@ private:
     Audio & operator =(const Audio &);
 public:
     ~Audio() {};
-    
+
     // construct and return a single instance
     static Audio* GetAudio();
-    
+
     // load and play *.wav
     void LoadFile(int index);
-    
+
     // load the bgm file
     void LoadBGM();
 };
