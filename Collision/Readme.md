@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.18.00.38
+  1. Update CMakeLists.txt to compile with openal and alut under win-systems.
+
 * Shlw @ 2016.12.17.20.48
   1. Add Ellipsoid model.
   2. Add Sphere model.
