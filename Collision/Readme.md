@@ -12,6 +12,9 @@ modeling, rendering and collision detection.
   1. Change the logic of playing sound.
   2. Now main function will call *GameCleanUp*.
 
+* lzh @ 2016.12.18.00.38
+  1. Update CMakeLists.txt to compile with openal and alut under win-systems.
+
 * Shlw @ 2016.12.17.20.48
   1. Add Ellipsoid model.
   2. Add Sphere model.
