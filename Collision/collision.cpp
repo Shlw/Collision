@@ -65,6 +65,8 @@ int main(int argc, char *argv[])
         }
 
         glfwTerminate();
+        
+        GameCleanUp();
 
         WindowCleanUp();
 
