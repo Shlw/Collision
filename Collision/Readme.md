@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.18.21.17
+  1. Revert the changes 2. @ 2016.12.18.21.17 for some unknown issues
+  disabling the display of box.
+
 * lzh @ 2016.12.18.19.51
   1. Disable the ability to resize the window.
   2. Fix bugs about the depth when drawing box.
