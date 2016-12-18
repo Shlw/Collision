@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
 
         glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
         glfwWindowHint(GLFW_SAMPLES, 8);
-
+        glfwWindowHint(GLFW_RESIZABLE, 0);
+        
         fwWindow = glfwCreateWindow(nInitWindowWidth, nInitWindowHeight, cpWindowTitle, NULL, NULL);
 
         if (!fwWindow)

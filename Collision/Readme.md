@@ -8,7 +8,11 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
-* lziad @ 2016.12.18 17.32
+* lzh @ 2016.12.18.19.51
+  1. Disable the ability to resize the window.
+  2. Fix bugs about the depth when drawing box.
+
+* lziad @ 2016.12.18.17.32
   1. Change faces when collision happens.
 
 * lzh @ 2016.12.18.17.00
