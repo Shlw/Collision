@@ -11,10 +11,17 @@ modeling, rendering and collision detection.
 * lziad @ 2016.12.18 17.32
   1. Change faces when collision happens.
 
+* lzh @ 2016.12.18.17.00
+  1. Fix cmake configurations.
+  
 * lziad @ 2016.12.18.16.00
   1. Fix a bug causing memory leak when playing sounds.
   2. Volume can be adjusted using arrow keys.
   3. Fix the try-catch statement.
+
+* Shlw @ 2016.12.18.15.57
+  1. Fix Texture bugs.
+  2. Update models.
 
 * lziad @ 2016.12.18.11.38
   1. Change the logic of playing sound.
