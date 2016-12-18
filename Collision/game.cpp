@@ -72,3 +72,8 @@ void GameSecond()
     std::cout << nLastSecond << ' ' << nModelTot << ' ' << nObjectTot << std::endl;
     return ;
 }
+
+void GameCleanUp()
+{
+    
+}

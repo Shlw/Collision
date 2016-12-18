@@ -33,9 +33,9 @@ ADD_EXECUTABLE(${COLLISION_EXE_NAME} ${COLLISION_SRCS})
 # Setup libraries list
 
 IF (WIN32)
-    SET(COLLISION_LIBS glfw3 glu32 opengl32 winmm gdi32 m)
+    SET(COLLISION_LIBS glfw3 glu32 opengl32 winmm gdi32 jpeg m)
 ELSEIF (UNIX)
-    SET(COLLISION_LIBS glfw3 GL GLU m)
+    SET(COLLISION_LIBS glfw3 GL GLU jpeg m)
 ENDIF ()
 
 # Add libraries to link for the target

@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw lzh Shlw lzh Shlw lzh
+ * Modifier : Shlw lzh Shlw lzh Shlw lzh Shlw
  * Description : Implementation of fundamental things.
  ************************************************************************/
 
@@ -34,6 +34,10 @@ float fScrollSpeed = 0.10;
 
 float fpBoxLimit[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
 
+int nTextureLength = 6;
+const char* cpTextureName = "texture.txt";
+extern struct jpeg_compress_struct* jpPics;
+
 // matrix multiplication left to a point
 PPoint MultPoint(PMat4 matrix,PPoint p){
     PPoint ret=new Point(p);
@@ -59,12 +63,14 @@ PTriangle MultTriangle(PMat4 matrix,PTriangle cone){
 Point::Point(){
     vpCoordinate=NULL;
     vpColor=NULL;
+    vpTexture=NULL;
     nFlag=0;
 }
 // initialize the point class by duplicating an example
 Point::Point(PPoint example){
     vpColor=new glm::vec4(*example->vpColor);
     vpCoordinate=new glm::vec4(*example->vpCoordinate);
+    vpTexture=new glm::vec2(*example->vpTexture);
     nFlag=example->nFlag;
 }
 // initialize the point class according to all the data needed
@@ -74,12 +80,14 @@ Point::Point(
 
     vpCoordinate=new glm::vec4(x,y,z,1.0);
     vpColor=new glm::vec4(r,g,b,alpha);
+    vpTexture=new glm::vec2(0,0);
     nFlag=0;
 }
 // destroy the point class
 Point::~Point(){
     delete vpCoordinate;
     delete vpColor;
+    delete vpTexture;
 }
 
 // initialize the triangle class
@@ -190,6 +198,7 @@ bool IsIntersect(PTriangle a,PVec4 tp,PVec3 vdir){
         else return 1;
 }
 
+/*
 // check whether the point is in the object,
 // return NULL or the closest plane(in global coordinate system)
 PTriangle Object::IsInside(PVec4 tp,PVec3 vdir){
@@ -227,6 +236,42 @@ PTriangle Object::IsInside(PVec4 tp,PVec3 vdir){
 
     return ret;
 }
+*/
+
+// check whether the point is in the object,
+// return NULL or the closest plane(in global coordinate system)
+PTriangle Object::IsInside(PVec4 tp,PVec3 vdir){
+    // ymw changed tp from PPoint to PVec4, pointing to the global coordinate
+    int len=mppModelList[nModelType]->nLength;
+    // lzh : I changed INT_MAX into FLT_MAX
+    float dist=FLT_MAX;
+    PTriangle ret=NULL;
+    PTriangle now;
+    float vl;
+
+    for (int i=0;i<len;++i){
+        // get the Ith triangle's coordinates in global coordinate system
+        // also rotate the normal vector
+        now=MultTriangle(mpFrame,mppModelList[nModelType]->tppCone[i]);
+
+        // calculate the volume of the cone formed by given point and the Ith triangle
+        vl=glm::dot(*now->vpNormalVector,
+                          *tp - *now->pppVertex[0]->vpCoordinate);
+
+        // not inside the left half space , return not_inside
+        if (vl>0){delete now; delete ret; return NULL;}
+
+        // calculate the distance between the given point and the plane where triangle lies
+        vl=-vl/glm::length(*now->vpNormalVector);
+
+        // update the dist
+        if (vl<dist) {dist=vl; delete ret; ret=now;}
+        else
+            delete now;
+    }
+
+    return ret;
+}
 
 int ReadFiles(const char* str){
     FILE* modelin=fopen(str,"r");
@@ -236,7 +281,7 @@ int ReadFiles(const char* str){
     float vol,dens,elas,radi;
 
     fscanf(modelin,"%d%f%f%f%f",&len,&vol,&dens,&elas,&radi);
-    mppModelList[nModelTot] = new Model;
+    mppModelList[nModelTot]=new Model;
     mppModelList[nModelTot]->nLength=len;
     mppModelList[nModelTot]->fVolume=vol;
     mppModelList[nModelTot]->fMass=vol*dens;
@@ -247,9 +292,10 @@ int ReadFiles(const char* str){
     for (int j=0;j<len;++j){
         PPoint p[3];
         for (int k=0;k<3;++k){ // 3 points form a triangle
-            float x,y,z;
+            float x,y,z,texx,texy;
             int isocur;
-            fscanf(modelin,"%f%f%f%d",&x,&y,&z,&isocur);
+
+            fscanf(modelin,"%f%f%f%f%f%d",&x,&y,&z,&texx,&texy,&isocur);
 
             // generate random RGBcolor, no transparency
             p[k]=new Point(x,y,z,
@@ -257,6 +303,8 @@ int ReadFiles(const char* str){
                            (rand()%100)/100.0,
                            (rand()%100)/100.0,1.0);
             p[k]->nFlag=isocur;
+            (*p[k]->vpTexture)[0]=texx;
+            (*p[k]->vpTexture)[1]=texy;
         }
         float x,y,z;
         fscanf(modelin,"%f%f%f",&x,&y,&z);
@@ -274,7 +322,6 @@ int ReadFiles(const char* str){
                     col,col+3,col+6,
                     col+1,col+4,col+7,
                     col+2,col+5,col+8);
-
     fclose(modelin);
     return nModelTot++;
 }
