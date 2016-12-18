@@ -47,22 +47,22 @@ void Object::Draw(int index)
     // transform coordinates in each Object to the global coordinates of
     // OpenGL.
     glMultMatrixf(glm::value_ptr(*mpFrame));
-    
+
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_NORMALIZE);
-    
+
     glBindTexture(GL_TEXTURE_2D, npTextureIndex[index]);
-    
+
     glMaterialfv(GL_FRONT, GL_SHININESS, fpMaterialShininess);
     glMaterialfv(GL_FRONT, GL_SPECULAR, fpMaterialSpecular);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, fpMaterialAmbientDiffuse);
-    
+
     // Draw Model
     mppModelList[nModelType]->Draw();
-    
+
     glDisable(GL_NORMALIZE);
     glDisable(GL_TEXTURE_2D);
-    
+
     // Restore matrix
     glPopMatrix();
 
@@ -73,15 +73,15 @@ void Draw()
 {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    
+
     glLightfv(GL_LIGHT0, GL_POSITION, fppLightPosition);
-    
+
     for (int i = 0; i < nObjectTot; i++)
         oppObjectList[i]->Draw(npFaces[i]);
-    
+
     glDisable(GL_LIGHT0);
     glDisable(GL_LIGHTING);
-    
+
     return ;
 }
 

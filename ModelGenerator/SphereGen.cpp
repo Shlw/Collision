@@ -33,14 +33,14 @@ void prt_texture(int i,int j){
 
 void prt_two(int i1,int j1,int i2,int j2){
     int tj1=j1,tj2=j2;
-    if (abs(modmm(j1)-modmm(j2))>mm-2) tj2=tj1;
+    if (fabs(modmm(j1)-modmm(j2))>mm-2) tj2=tj1;
     prt_coord(i1,j1); prt_texture(i1,tj1);
     prt_coord(i2,j2); prt_texture(i2,tj2);
 }
 
 void prt_three(int i1,int j1,int i2,int j2,int i3,int j3){
     int tj1=j1,tj2=j2,tj3=j3;
-    if (abs(modmm(j1)-modmm(j2))>mm-2){
+    if (fabs(modmm(j1)-modmm(j2))>mm-2){
         tj2=tj3=tj1;
     }
     prt_coord(i1,j1); prt_texture(i1,tj1);
