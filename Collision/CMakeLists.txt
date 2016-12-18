@@ -42,17 +42,13 @@ ENDIF ()
 
 TARGET_LINK_LIBRARIES (${COLLISION_EXE_NAME} ${COLLISION_LIBS})
 
-# Setup link flags like -static
-
-IF (WIN32)
-    SET(COLLISION_FLAGS -static)
-ELSEIF (UNIX)
-    SET(COLLISION_FLAGS -static)
-ENDIF ()
-
 # Add flags for the target
 
-SET_TARGET_PROPERTIES(${COLLISION_EXE_NAME} PROPERTIES LINK_FLAGS -static)
+IF (WIN32)
+    SET_TARGET_PROPERTIES(${COLLISION_EXE_NAME} PROPERTIES LINK_FLAGS -static)
+ELSEIF (UNIX)
+
+ENDIF()
 
 # Do miscellaneous things for the target
 
