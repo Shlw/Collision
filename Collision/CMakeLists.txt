@@ -35,7 +35,7 @@ ADD_EXECUTABLE(${COLLISION_EXE_NAME} ${COLLISION_SRCS})
 IF (WIN32)
     SET(COLLISION_LIBS glfw3 glu32 opengl32 winmm gdi32 jpeg \"alut.dll\" \"openal.dll\" m)
 ELSEIF (UNIX)
-    SET(COLLISION_LIBS glfw3 GL GLU jpeg m)
+    SET(COLLISION_LIBS glfw GL GLU jpeg alut openal m)
 ENDIF ()
 
 # Add libraries to link for the target
