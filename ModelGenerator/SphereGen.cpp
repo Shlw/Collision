@@ -19,11 +19,33 @@ int n,m,parts; //n row, m column, parts images
 float mm;
 FILE* os;
 
-void prt(int i,int j){
+float modmm(float x){return x-floor(x/mm)*mm;}
+
+void prt_coord(int i,int j){
     fprintf(os,"%.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j]);
-    while (j>=mm) j-=mm;
-    fprintf(os,"%.10f %.10f ",0.5+float(mm+1-2*j)/(mm+1)/2*sqrt(x[i][j]*x[i][j]+y[i][j]*y[i][j])/R
+}
+
+void prt_texture(int i,int j){
+    j=modmm(j);
+    fprintf(os,"%.10f %.10f ",0.48+float(mm+1-2*j)/(mm+1)/2*sqrt(x[i][j]*x[i][j]+y[i][j]*y[i][j])/R
                              ,float(n-i)/n);
+}
+
+void prt_two(int i1,int j1,int i2,int j2){
+    int tj1=j1,tj2=j2;
+    if (abs(modmm(j1)-modmm(j2))>mm-2) tj2=tj1;
+    prt_coord(i1,j1); prt_texture(i1,tj1);
+    prt_coord(i2,j2); prt_texture(i2,tj2);
+}
+
+void prt_three(int i1,int j1,int i2,int j2,int i3,int j3){
+    int tj1=j1,tj2=j2,tj3=j3;
+    if (abs(modmm(j1)-modmm(j2))>mm-2){
+        tj2=tj3=tj1;
+    }
+    prt_coord(i1,j1); prt_texture(i1,tj1);
+    prt_coord(i2,j2); prt_texture(i2,tj2);
+    prt_coord(i3,j3); prt_texture(i3,tj3);
 }
 
 int main(){
@@ -48,20 +70,20 @@ int main(){
 //top
     for (int i=0;i<m;++i){
         fprintf(os,"%.10f %.10f %.10f 0.5 0 ",0.0,0.0,R);
-        prt(n-1,i+1); prt(n-1,i); fprintf(os,"\n");
+        prt_two(n-1,i+1,n-1,i); fprintf(os,"\n");
     }
 
 //button
     for (int i=0;i<m;++i){
-        prt(0,i); prt(0,i+1);
+        prt_two(0,i,0,i+1);
         fprintf(os,"%.10f %.10f %.10f\n 0.5 1 ",0.0,0.0,-R);
     }
 
 //middle
     for (int i=0;i<n-1;++i)
         for (int j=0;j<m;++j){
-            prt(i+1,j); prt(i+1,j+1); prt(i,j+1); fprintf(os,"\n");
-            prt(i+1,j); prt(i,j+1); prt(i,j); fprintf(os,"\n");
+            prt_three(i+1,j,i+1,j+1,i,j+1); fprintf(os,"\n");
+            prt_three(i+1,j,i,j+1,i,j); fprintf(os,"\n");
         }
 
     fclose(os);

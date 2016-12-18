@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.18.15.57
+  1. Fix Texture bugs.
+  2. Update models.
+
 * lziad @ 2016.12.18.11.38
   1. Change the logic of playing sound.
   2. Now main function will call *GameCleanUp*.
