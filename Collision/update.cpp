@@ -10,6 +10,9 @@
 
 #include "global.hpp"
 
+// whether two objects are crashing or not
+bool bpCrashing[100][100];
+
 bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2, 
             glm::vec3 duang, glm::vec3 c1, glm::vec3 c2, glm::vec3 n)
 {
@@ -189,12 +192,15 @@ void Update()
             {
                 judged[i] = judged[j] = true;
                 
-                // playing sounds
-                // if nSndFileCount == 0, disable it
-                if (nSndFileCount)
+                // only play sounds for once
+                // when bpCrashing[i][j] turns from false to true
+                if (!bpCrashing[i][j] && nSndFileCount)
                     // play a random wav file
                     Audio::GetAudio()->LoadFile(rand() % nSndFileCount);
+                bpCrashing[i][j] = true;
             }
+            else
+                bpCrashing[i][j] = false;
     }
     for (int i = 0; i < nObjectTot; i++)
     {

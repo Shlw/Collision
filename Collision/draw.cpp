@@ -163,7 +163,7 @@ void DrawReadFiles(int argc, char* argv[])
         jpeg_finish_decompress(&cinfo);
         jpeg_destroy_decompress(&cinfo);
     }
-    delete cp;
+    delete []cp;
     fclose(f);
     return ;
 }

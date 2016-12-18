@@ -121,3 +121,27 @@ void MouseDropEvent(GLFWwindow* w, int c, const char** p)
     GameDrag(w, c, p);
     return ;
 }
+
+void KeyEvent(GLFWwindow *w, int key, int scancode, int action, int mods)
+{
+    if (action != GLFW_RELEASE) {
+        switch (key) {
+            case GLFW_KEY_UP:
+                // +6dB
+                fEffVol *= 2;
+                break;
+            case GLFW_KEY_DOWN:
+                // -6dB
+                fEffVol /= 2;
+                break;
+            case GLFW_KEY_LEFT:
+                fBGMVol /= 2;
+                break;
+            case GLFW_KEY_RIGHT:
+                fBGMVol *= 2;
+                break;
+        }
+    }
+    Audio::GetAudio()->SetVolume();
+    return ;
+}

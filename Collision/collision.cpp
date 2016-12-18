@@ -12,26 +12,28 @@
 // The main function
 int main(int argc, char *argv[])
 {
+    int nExitCode = 0;
     try {
         GLFWwindow* fwWindow;
 
         srand(time(NULL));
 
         DrawReadFiles(argc, argv);
+        
+        if (!glfwInit())
+            return -1;
 
         if (!alutInit(&argc, argv)) {
             ALenum error = alutGetError();
             fprintf(stderr, "Error when initializing openAL: %s\n",
                     alutGetErrorString(error));
-            throw ERROR_OPENAL;
+            glfwTerminate();
+            return -1;
         }
 
         EventInit();
 
         GameInit();
-
-        if (!glfwInit())
-            return -1;
 
         glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
         glfwWindowHint(GLFW_SAMPLES, 8);
@@ -40,6 +42,8 @@ int main(int argc, char *argv[])
 
         if (!fwWindow)
         {
+            GameCleanUp();
+            alutExit();
             glfwTerminate();
             return -1;
         }
@@ -54,6 +58,7 @@ int main(int argc, char *argv[])
         glfwSetCursorPosCallback(fwWindow, MouseMotionEvent);
         glfwSetScrollCallback(fwWindow, MouseWheelEvent);
         glfwSetDropCallback(fwWindow, MouseDropEvent);
+        glfwSetKeyCallback(fwWindow, KeyEvent);
 
         while (!glfwWindowShouldClose(fwWindow))
         {
@@ -63,18 +68,6 @@ int main(int argc, char *argv[])
             // Poll for and process events
             glfwPollEvents();
         }
-
-        glfwTerminate();
-        
-        GameCleanUp();
-
-        WindowCleanUp();
-
-        ModelCleanUp();
-
-        DrawCleanUp();
-
-        return 0;
     } catch (int e) {
         switch (e) {
             case ERROR_UNKNOWN_MODEL:
@@ -99,5 +92,19 @@ int main(int argc, char *argv[])
             default:
                 fprintf(stderr, "Error: Unknown error!\n");
         }
+        nExitCode = e;
     }
+    WindowCleanUp();
+    
+    GameCleanUp();
+    
+    ModelCleanUp();
+    
+    alutExit();
+    
+    glfwTerminate();
+    
+    DrawCleanUp();
+    
+    return nExitCode;
 }
