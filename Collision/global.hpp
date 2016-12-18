@@ -20,6 +20,7 @@
 #include <ctime>
 #include <algorithm>
 #include <vector>
+#include <queue>
 
 #include <jpeglib.h>
 
@@ -212,8 +213,11 @@ extern int npTypeList[100];
 extern char cpSndFileList[100][256];
 extern int nSndFileCount;
 extern ALuint upBufList[100], upSrcList[100];
-extern int nSrcPtr;
+extern double dpDuration[100];
 extern ALfloat fBGMVol, fEffVol;
+extern std::priority_queue<long, std::vector<long>, std::greater<long>> qSrcQueue;
+extern int npSoundQueue[1000];
+extern int nSndQuePtr;
 
 extern bool bpCrashing[100][100];
 extern int npFaces[100];
@@ -247,6 +251,7 @@ void GameMove(GLFWwindow* w, double x, double y);
 void GameDrag(GLFWwindow* w, int c, const char** p);
 void GameSecond();
 void GameCleanUp();
+double CalWAVDuration(ALsizei size, ALfloat freq, ALenum format);
 
 void ModelCleanUp();
 
