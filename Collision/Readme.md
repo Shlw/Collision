@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lziad @ 2016.12.19.01.11
+  1. Use a minimum heap to record sources.
+  2. Use a queue to record the sounds which cannot be played on time.
+
 * lzh @ 2016.12.18.21.17
   1. Revert the changes 2. @ 2016.12.18.21.17 for some unknown issues
   disabling the display of box.

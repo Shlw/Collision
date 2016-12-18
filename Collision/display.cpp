@@ -70,6 +70,13 @@ void Display(GLFWwindow* w)
     dLastLastClock = dLastClock;
     dLastClock = glfwGetTime();
     
+    // Play delaying sounds
+    long lNxtSrc = qSrcQueue.top();
+    while (lNxtSrc / 1e5 <= dLastClock && nSndQuePtr) {
+        Audio::GetAudio()->LoadFile(npSoundQueue[--nSndQuePtr]);
+        lNxtSrc = qSrcQueue.top();
+    }
+    
     // Clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     

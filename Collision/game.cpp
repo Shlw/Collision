@@ -18,12 +18,40 @@ char   cpSndFileList[100][256];
 int    nSndFileCount;
 // buffers and sources
 ALuint upBufList[100], upSrcList[100];
-// pointer to the next free source
-// **ATTENTION** upSrcList[0] is reserved for playing bgm,
-// so nSrcPtr will NEVER equals to 0.
-int nSrcPtr;
+// the duration of the files
+double dpDuration[100];
+// the minimum heap records when each source will be valid to play sounds
+// the last two digits are the index of the source
+// **ATTENTION** Because of the above reason, the maximum of files must be 100
+//               or it would trouble a lot.
+std::priority_queue<long, std::vector<long>, std::greater<long>> qSrcQueue;
+// the wave files which cannot be played on time
+int npSoundQueue[1000];
+int nSndQuePtr;
 // volumes
 ALfloat fBGMVol, fEffVol;
+
+// The result is the wav file's duration in seconds.
+double CalWAVDuration(ALsizei size, ALfloat freq, ALenum format) {
+    double coef = 1.0;
+    switch (format) {
+        case AL_FORMAT_MONO8:
+            coef = 1.0;
+            break;
+        case AL_FORMAT_MONO16:
+            coef = 2.0;
+            break;
+        case AL_FORMAT_STEREO8:
+            coef = 2.0;
+            break;
+        case AL_FORMAT_STEREO16:
+            coef = 4.0;
+            break;
+        default:
+            ;
+    }
+    return (double)size / freq / coef;
+}
 
 Audio* Audio::GetAudio() {
     static Audio msAudio;
@@ -57,19 +85,19 @@ void Audio::LoadFile(int index) {
         }
         alBufferData(buffer, format, data, size, freq);
         upBufList[index] = buffer;
+        dpDuration[index] = CalWAVDuration(size, freq, format);
     }
     
     // find the next free source
-    for (i = 1; i < 100 && state == AL_PLAYING; ++i, ++nSrcPtr) {
-        if (nSrcPtr >= 100)
-            nSrcPtr = 1;
-        source = upSrcList[nSrcPtr];
-        alGetSourcei(source, AL_SOURCE_STATE, &state);
-    }
-    
-    if (i == 100) {
-        fprintf(stderr, "Error when playing wav file: Out of memory\n");
-        throw ERROR_OPENAL;
+    long lNxtSrc = qSrcQueue.top();
+    if (lNxtSrc / 1e5 > dLastClock) {
+        // no vacant seats
+        if (nSndQuePtr < 1000)
+            // if 1000+100 sources are not even enough, ignore it
+            npSoundQueue[nSndQuePtr++] = index;
+        return ;
+    } else {
+        source = upSrcList[lNxtSrc % 100];
     }
     
     // be sure that the source is cleaned
@@ -80,12 +108,17 @@ void Audio::LoadFile(int index) {
     
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
+        alGetSourcei(source, AL_SOURCE_STATE, &state);
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
         alutExit();
         throw ERROR_OPENAL;
     }
     
     alSourcePlay(source);
+    qSrcQueue.pop();
+    // 100 ms for delay
+    qSrcQueue.push(lNxtSrc % 100 + 10000 +
+                   long((dpDuration[index] + dLastClock) * 1e3) * 100);
     
     // *alutLoadMemoryFromFile* allocates memory for *data*,
     // so free it after use.
@@ -144,11 +177,16 @@ void GameInit()
     memset(cpSndFileList, 0, sizeof(cpSndFileList));
     memset(upBufList, 0, sizeof(upBufList));
     memset(upSrcList, 0, sizeof(upSrcList));
+    memset(dpDuration, 0, sizeof(dpDuration));
+    memset(npSoundQueue, 0, sizeof(npSoundQueue));
     
     memset(bpCrashing, 0, sizeof(bpCrashing));
     
-    nSrcPtr = 1;
+    nSndQuePtr = 0;
     fBGMVol = fEffVol = 1.0;
+    
+    for (int i = 1; i < 100; ++i)
+        qSrcQueue.push(i);
 
     // init openAL
     ALCdevice *pDevice = alcOpenDevice(NULL);
@@ -234,7 +272,7 @@ void GameCleanUp()
     alcMakeContextCurrent(NULL);
     alcDestroyContext(pContext);
     alcCloseDevice(pDevice);
-    alutExit;
+    alutExit();
 
     return ;
 
