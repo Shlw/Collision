@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.18.17.00
+  1. Fix cmake configurations.
+
 * Shlw @ 2016.12.18.15.57
   1. Fix Texture bugs.
   2. Update models.

@@ -35,24 +35,20 @@ ADD_EXECUTABLE(${COLLISION_EXE_NAME} ${COLLISION_SRCS})
 IF (WIN32)
     SET(COLLISION_LIBS glfw3 glu32 opengl32 winmm gdi32 jpeg \"alut.dll\" \"openal.dll\" m)
 ELSEIF (UNIX)
-    SET(COLLISION_LIBS glfw3 GL GLU jpeg m)
+    SET(COLLISION_LIBS glfw GL GLU jpeg alut openal m)
 ENDIF ()
 
 # Add libraries to link for the target
 
 TARGET_LINK_LIBRARIES (${COLLISION_EXE_NAME} ${COLLISION_LIBS})
 
-# Setup link flags like -static
-
-IF (WIN32)
-    SET(COLLISION_FLAGS -static)
-ELSEIF (UNIX)
-    SET(COLLISION_FLAGS -static)
-ENDIF ()
-
 # Add flags for the target
 
-SET_TARGET_PROPERTIES(${COLLISION_EXE_NAME} PROPERTIES LINK_FLAGS -static)
+IF (WIN32)
+    SET_TARGET_PROPERTIES(${COLLISION_EXE_NAME} PROPERTIES LINK_FLAGS -static)
+ELSEIF (UNIX)
+
+ENDIF()
 
 # Do miscellaneous things for the target
 
