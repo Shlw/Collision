@@ -12,6 +12,8 @@
 
 // whether two objects are crashing or not
 bool bpCrashing[100][100];
+// faces each object shows
+int npFaces[100];
 
 bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2, 
             glm::vec3 duang, glm::vec3 c1, glm::vec3 c2, glm::vec3 n)
@@ -194,9 +196,14 @@ void Update()
                 
                 // only play sounds for once
                 // when bpCrashing[i][j] turns from false to true
-                if (!bpCrashing[i][j] && nSndFileCount)
-                    // play a random wav file
-                    Audio::GetAudio()->LoadFile(rand() % nSndFileCount);
+                if (!bpCrashing[i][j]) {
+                    if (nSndFileCount)
+                        // play a random wav file
+                        Audio::GetAudio()->LoadFile(rand() % nSndFileCount);
+                    ++npFaces[i]; ++npFaces[j];
+                    if (npFaces[i] == nTextureLength) npFaces[i] = 0;
+                    if (npFaces[j] == nTextureLength) npFaces[j] = 0;
+                }
                 bpCrashing[i][j] = true;
             }
             else

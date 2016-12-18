@@ -139,7 +139,7 @@ public:
     PTriangle IsInside(PVec4 tp,PVec3 vdir=NULL);
     //ymw changed tp from PPoint to PVec4
 
-    void Draw();
+    void Draw(int index);
     void Update();
 };
 
@@ -216,6 +216,7 @@ extern int nSrcPtr;
 extern ALfloat fBGMVol, fEffVol;
 
 extern bool bpCrashing[100][100];
+extern int npFaces[100];
 
 // Declarations of functions
 

@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lziad @ 2016.12.18 17.32
+  1. Change faces when collision happens.
+
 * lziad @ 2016.12.18.16.00
   1. Fix a bug causing memory leak when playing sounds.
   2. Volume can be adjusted using arrow keys.
