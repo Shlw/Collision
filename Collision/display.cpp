@@ -13,7 +13,6 @@
 // Initialize the windows as well as initialize some variables.
 void WindowInit()
 {
-    
     dLastClock = 0.0;
     dLastLastClock = 0.0;
     nLastSecond = -1;
@@ -37,6 +36,9 @@ void WindowInit()
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     
+    glShadeModel(GL_FLAT);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    
     // Set up the projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -50,6 +52,10 @@ void WindowInit()
     
     glPointSize(2.0);
     glLineWidth(1.5);
+    
+    glLightfv(GL_LIGHT0, GL_AMBIENT, fppLightAmbient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, fppLightDiffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, fppLightSpecular);
     
     glfwSwapInterval(1);
     

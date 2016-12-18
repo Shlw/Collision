@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh lziad Shlw
+ * Modifier : Shlw lzh Shlw lzh lziad Shlw lzh lziad
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
@@ -27,10 +27,16 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #include <OpenGL/glu.h>
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#include <AL/alut.h>
 #else
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glu.h>
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
 #endif
 
 #include <GLFW/glfw3.h>
@@ -42,12 +48,15 @@
 #define ERROR_UNKNOWN_MODEL 0x0001
 #define FILE_NOT_FOUND 0x0002
 #define ERROR_TOO_MANY_OBJ 0x0003
+#define ERROR_UNKNOWN_SOUND 0x0004
+#define ERROR_OPENAL 0x0005
 
 // class declarations
 class Point;
 class Triangle;
 class Model;
 class Object;
+class Audio;
 
 // typedef definitions
 typedef glm::vec2* PVec2;
@@ -134,6 +143,29 @@ public:
     void Update();
 };
 
+// audio class contains functions to play wav files
+class Audio {
+private:
+    // The following functions are private to forbid the following uses:
+    /// Audio boo = Audio::GetAudio();
+    /// Audio booo = boo; (or rather *Audio booo;* without initialize)
+    // and in this way neither &boo nor &booo equals to &msAudio.
+    Audio() {};
+    Audio(const Audio &);
+    Audio & operator =(const Audio &);
+public:
+    ~Audio() {};
+
+    // construct and return a single instance
+    static Audio* GetAudio();
+
+    // load and play *.wav
+    void LoadFile(int index);
+
+    // load the bgm file
+    void LoadBGM();
+};
+
 extern int nModelTot;
 extern int nObjectTot;
 extern PModel mppModelList[100];
@@ -160,7 +192,24 @@ extern float fpBoxLimit[6];
 
 extern int nTextureLength;
 extern const char* cpTextureName;
-extern struct jpeg_compress_struct* jpPics;
+extern int* npPicWidth, * npPicHeight;
+extern unsigned char** ucppPicContent;
+extern int* npTextureIndex;
+
+extern float fppLightPosition[4];
+extern float fppLightAmbient[4];
+extern float fppLightDiffuse[4];
+extern float fppLightSpecular[4];
+extern float fpMaterialShininess[1];
+extern float fpMaterialSpecular[4];
+extern float fpMaterialAmbientDiffuse[4];
+
+extern char cpModFileList[100][256];
+extern int npTypeList[100];
+extern char cpSndFileList[100][256];
+extern int nSndFileCount;
+extern ALuint upSrcList[100];
+extern ALuint uCurSource;
 
 // Declarations of functions
 
@@ -179,7 +228,8 @@ void MouseDropEvent(GLFWwindow* w, int c, const char** p);
 
 void Draw();
 void DrawBox();
-void DrawInit(int argc, char* argv[]);
+void DrawReadFiles(int argc, char* argv[]);
+void DrawCreateTexture();
 void DrawCleanUp();
 
 void Update();

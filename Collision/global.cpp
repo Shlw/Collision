@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw lzh Shlw lzh Shlw lzh Shlw
+ * Modifier : Shlw lzh Shlw lzh Shlw lzh Shlw lzh
  * Description : Implementation of fundamental things.
  ************************************************************************/
 
@@ -34,9 +34,19 @@ float fScrollSpeed = 0.10;
 
 float fpBoxLimit[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
 
-int nTextureLength = 6;
-const char* cpTextureName = "texture.txt";
-extern struct jpeg_compress_struct* jpPics;
+int nTextureLength = 5;
+const char* cpTextureName = "Texture.txt";
+int* npPicWidth, * npPicHeight;
+unsigned char** ucppPicContent;
+int* npTextureIndex;
+
+float fppLightPosition[4] = {0.0, 2.0, 0.0, 0.0};
+float fppLightAmbient[4] = {0.2, 0.2, 0.2, 1.0};
+float fppLightDiffuse[4] = {0.8, 0.6, 0.4, 1.0};
+float fppLightSpecular[4] = {0.2, 0.15, 0.1, 1.0};
+float fpMaterialShininess[1] = {24.0f};
+float fpMaterialSpecular[4] = {1.0, 1.0, 1.0, 1.0};
+float fpMaterialAmbientDiffuse[4] = {1.0, 1.0, 1.0, 1.0};
 
 // matrix multiplication left to a point
 PPoint MultPoint(PMat4 matrix,PPoint p){

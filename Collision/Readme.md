@@ -8,6 +8,34 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.17.20.48
+  1. Add Ellipsoid model.
+  2. Add Sphere model.
+
+* Shlw @ 2016.12.17.20.00
+  1. Decrease the angular speed.
+
+* Shlw @ 2016.12.17.19.35
+  1. Fix compile bugs in Linux.
+  2. Correct some remaining conflicts.
+
+* lziad @ 2016.12.17.15.55
+  1. *alutLoadWAVFile* and *alutUnloadWAV* are substituted with *alutLoadMemoryFromFile*.
+  2. Rewrite the singleton pattern.
+
+* lziad @ 2016.12.17.02.16
+  1. Add class *Audio* to load *.wav files.
+  2. Add background music.
+  3. Add sound effects when collision happens.
+     (using *guichu* or *remix* materials)
+  4. Finally main function has try-catch!
+
+* lzh @ 2016.12.16.21.56
+  1. Add lighting.
+
+* lzh @ 2016.12.16.19.55
+  1. Add true textures with *Baidu emojis*.
+
 * Shlw @ 2016.12.16.16.16
   1. Reverse global.cpp.
   2. It turns out the new method is more time-consuming and less precise. QAQ
