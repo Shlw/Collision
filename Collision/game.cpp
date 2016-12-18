@@ -30,48 +30,35 @@ Audio* Audio::GetAudio() {
 }
 
 void Audio::LoadFile(int index) {
-    // waiting until the current playing source stops
-    if (uCurSource != AL_NONE) {
-        ALint status;
-        alGetSourcei(uCurSource, AL_SOURCE_STATE, &status);
-        if (status == AL_PLAYING)
-            return ;
-    }
-
+    ALuint  buffer, source;
+    ALenum  error;
+    
+    ALenum  format;
+    ALvoid  *data=NULL;
+    
+    ALsizei size;
+    ALfloat freq;
+    
     if (index < 0 || index >= 100) {
         throw ERROR_UNKNOWN_SOUND;
     } else if (upSrcList[index]) {
         // the source has been already loaded, simply play it
-        alSourcePlay(upSrcList[index]);
-        // set the current playing source
-        uCurSource = upSrcList[index];
-        return ;
+        buffer = upSrcList[index];
+    } else {
+        // else load the file
+        alGenBuffers(1, &buffer);
+        data = alutLoadMemoryFromFile(cpSndFileList[index], &format, &size, &freq);
+        if (NULL == data) {
+            alutExit();
+            throw FILE_NOT_FOUND;
+        }
+        alBufferData(buffer, format, data, size, freq);
+        upSrcList[index] = buffer;
     }
-    // else load the file
-
-    ALuint  buffer, source;
-    ALenum  error;
-
-    ALenum  format;
-    ALvoid  *data=NULL;
-
-    ALsizei size;
-    ALfloat freq;
-
-    // load the wav file
-    alGenBuffers(1, &buffer);
-    data = alutLoadMemoryFromFile(cpSndFileList[index], &format, &size, &freq);
-    alBufferData(buffer, format, data, size, freq);
     alGenSources(1, &source);
-
-    if (buffer == AL_NONE) {
-        alutExit();
-        throw FILE_NOT_FOUND;
-    }
-
+    
     alSourcei(source, AL_BUFFER, buffer);
-    // TODO: alSourcefv(source, AL_POSITION, [SourcePosition]);
-
+    
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
@@ -79,14 +66,11 @@ void Audio::LoadFile(int index) {
         throw ERROR_OPENAL;
     }
     alSourcePlay(source);
-
-    // add the source and set the current playing source
-    uCurSource = upSrcList[index] = source;
-
+    
     // *alutLoadMemoryFromFile* allocates memory for *data*,
     // so delete it after use.
     delete data;
-
+    
     return ;
 }
 
@@ -102,18 +86,17 @@ void Audio::LoadBGM() {
 
     alGenBuffers(1, &buffer);
     data = alutLoadMemoryFromFile("bgm.wav", &format, &size, &freq);
-    alBufferData(buffer, format, data, size, freq);
-    alGenSources(1, &source);
-
-    if (buffer == AL_NONE) {
+    if (NULL == data) {
         alutExit();
         throw FILE_NOT_FOUND;
     }
-
+    alBufferData(buffer, format, data, size, freq);
+    alGenSources(1, &source);
+    
     alSourcei(source, AL_BUFFER, buffer);
     // loop
     alSourcei(source, AL_LOOPING, true);
-
+    
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));

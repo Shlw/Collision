@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lziad @ 2016.12.18.11.38
+  1. Change the logic of playing sound.
+  2. Now main function will call *GameCleanUp*.
+
 * lzh @ 2016.12.18.00.38
   1. Update CMakeLists.txt to compile with openal and alut under win-systems.
 
