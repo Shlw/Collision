@@ -139,7 +139,7 @@ public:
     PTriangle IsInside(PVec4 tp,PVec3 vdir=NULL);
     //ymw changed tp from PPoint to PVec4
 
-    void Draw();
+    void Draw(int index);
     void Update();
 };
 
@@ -164,6 +164,9 @@ public:
 
     // load the bgm file
     void LoadBGM();
+    
+    // set the volume
+    void SetVolume();
 };
 
 extern int nModelTot;
@@ -208,8 +211,12 @@ extern char cpModFileList[100][256];
 extern int npTypeList[100];
 extern char cpSndFileList[100][256];
 extern int nSndFileCount;
-extern ALuint upSrcList[100];
-extern ALuint uCurSource;
+extern ALuint upBufList[100], upSrcList[100];
+extern int nSrcPtr;
+extern ALfloat fBGMVol, fEffVol;
+
+extern bool bpCrashing[100][100];
+extern int npFaces[100];
 
 // Declarations of functions
 
@@ -225,6 +232,7 @@ void EventInit();
 void MouseMotionEvent(GLFWwindow* w, double x, double y);
 void MouseWheelEvent(GLFWwindow* w, double x, double y);
 void MouseDropEvent(GLFWwindow* w, int c, const char** p);
+void KeyEvent(GLFWwindow* w, int key, int scancode, int action, int mods);
 
 void Draw();
 void DrawBox();

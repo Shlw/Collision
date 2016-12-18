@@ -16,13 +16,14 @@ int    npTypeList[100];
 // path of the files of the sound files which are already loaded
 char   cpSndFileList[100][256];
 int    nSndFileCount;
-ALuint upSrcList[100];
-// current playing source
-ALuint uCurSource;
-// stack of past mouse positions
-double dpPos[10][2];
-// pointer of the stack
-int nPtr;
+// buffers and sources
+ALuint upBufList[100], upSrcList[100];
+// pointer to the next free source
+// **ATTENTION** upSrcList[0] is reserved for playing bgm,
+// so nSrcPtr will NEVER equals to 0.
+int nSrcPtr;
+// volumes
+ALfloat fBGMVol, fEffVol;
 
 Audio* Audio::GetAudio() {
     static Audio msAudio;
@@ -33,17 +34,19 @@ void Audio::LoadFile(int index) {
     ALuint  buffer, source;
     ALenum  error;
     
-    ALenum  format;
+    ALenum  format, state = AL_PLAYING;
     ALvoid  *data=NULL;
     
     ALsizei size;
     ALfloat freq;
     
+    int i;
+    
     if (index < 0 || index >= 100) {
         throw ERROR_UNKNOWN_SOUND;
-    } else if (upSrcList[index]) {
+    } else if (upBufList[index]) {
         // the source has been already loaded, simply play it
-        buffer = upSrcList[index];
+        buffer = upBufList[index];
     } else {
         // else load the file
         alGenBuffers(1, &buffer);
@@ -53,11 +56,27 @@ void Audio::LoadFile(int index) {
             throw FILE_NOT_FOUND;
         }
         alBufferData(buffer, format, data, size, freq);
-        upSrcList[index] = buffer;
+        upBufList[index] = buffer;
     }
-    alGenSources(1, &source);
     
+    // find the next free source
+    for (i = 1; i < 100 && state == AL_PLAYING; ++i, ++nSrcPtr) {
+        if (nSrcPtr >= 100)
+            nSrcPtr = 1;
+        source = upSrcList[nSrcPtr];
+        alGetSourcei(source, AL_SOURCE_STATE, &state);
+    }
+    
+    if (i == 100) {
+        fprintf(stderr, "Error when playing wav file: Out of memory\n");
+        throw ERROR_OPENAL;
+    }
+    
+    // be sure that the source is cleaned
+    alSourcei(source, AL_BUFFER, AL_NONE);
     alSourcei(source, AL_BUFFER, buffer);
+    // set volume
+    alSourcef(source, AL_GAIN, fEffVol);
     
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
@@ -65,17 +84,18 @@ void Audio::LoadFile(int index) {
         alutExit();
         throw ERROR_OPENAL;
     }
+    
     alSourcePlay(source);
     
     // *alutLoadMemoryFromFile* allocates memory for *data*,
-    // so delete it after use.
-    delete data;
+    // so free it after use.
+    free(data);
     
     return ;
 }
 
 void Audio::LoadBGM() {
-    ALuint  buffer, source;
+    ALuint  buffer, source = upSrcList[0];
     ALenum  error;
 
     ALenum  format;
@@ -91,11 +111,11 @@ void Audio::LoadBGM() {
         throw FILE_NOT_FOUND;
     }
     alBufferData(buffer, format, data, size, freq);
-    alGenSources(1, &source);
     
     alSourcei(source, AL_BUFFER, buffer);
     // loop
     alSourcei(source, AL_LOOPING, true);
+    alSourcef(source, AL_GAIN, fBGMVol);
     
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
@@ -103,11 +123,18 @@ void Audio::LoadBGM() {
         alutExit();
         throw ERROR_OPENAL;
     }
+    
     alSourcePlay(source);
 
-    delete data;
+    free(data);
 
     return ;
+}
+
+void Audio::SetVolume() {
+    alSourcef(upSrcList[0], AL_GAIN, fBGMVol);
+    for (int i = 1; i < 100; ++i)
+        alSourcef(upSrcList[i], AL_GAIN, fEffVol);
 }
 
 void GameInit()
@@ -115,13 +142,18 @@ void GameInit()
     memset(cpModFileList, 0, sizeof(cpModFileList));
     memset(npTypeList, 0, sizeof(npTypeList));
     memset(cpSndFileList, 0, sizeof(cpSndFileList));
+    memset(upBufList, 0, sizeof(upBufList));
     memset(upSrcList, 0, sizeof(upSrcList));
+    
+    memset(bpCrashing, 0, sizeof(bpCrashing));
+    
+    nSrcPtr = 1;
+    fBGMVol = fEffVol = 1.0;
 
     // init openAL
     ALCdevice *pDevice = alcOpenDevice(NULL);
     ALCcontext *pContext = alcCreateContext(pDevice, NULL);
     alcMakeContextCurrent(pContext);
-    uCurSource = AL_NONE;
 
     // read wav files
     FILE *fpSndEff = fopen("SoundEff.txt", "r");
@@ -132,6 +164,9 @@ void GameInit()
         memcpy(cpSndFileList[nSndFileCount], cpSndFile,
                strlen(cpSndFile) * sizeof(char));
     fclose(fpSndEff);
+    
+    // allocate memory for sources
+    alGenSources(100, upSrcList);
 
     // play bgm
     Audio::GetAudio()->LoadBGM();
@@ -141,9 +176,6 @@ void GameInit()
 
 void GameMove(GLFWwindow* w, double x, double y)
 {
-    if (++nPtr % 10 == 0)
-    nPtr = 0;
-    dpPos[nPtr][0] = x; dpPos[nPtr][1] = y;
     return ;
 }
 
@@ -191,6 +223,11 @@ void GameSecond()
 
 void GameCleanUp()
 {
+    // delete buffers and sources
+    for (int i = 0; i < 100; ++i)
+        if (upBufList[i])
+            alDeleteBuffers(1, upBufList+i);
+    alDeleteSources(100, upSrcList);
     // shutdown openAL
     ALCcontext *pContext = alcGetCurrentContext();
     ALCdevice *pDevice = alcGetContextsDevice(pContext);
