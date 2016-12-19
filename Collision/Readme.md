@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.18.22.34
+  1. Update CMakeLists.txt for building under Mac OS X.
+
 * Shlw @ 2016.12.19.20.13
   1. Generate two rather rougher divided models.
   2. Update model generator.
@@ -20,7 +23,8 @@ modeling, rendering and collision detection.
   2. Use a queue to record the sounds which cannot be played on time.
 
 * lzh @ 2016.12.18.21.17
-  1. Revert the changes 2. @ 2016.12.18.21.17 for some unknown issues
+  1. Revert the changes
+  2. @ 2016.12.18.21.17 for some unknown issues
   disabling the display of box.
 
 * lzh @ 2016.12.18.19.51

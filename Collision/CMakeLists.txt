@@ -15,12 +15,7 @@ PROJECT(COLLISION)
 
 # Setup executable file name
 
-# Due to the usage of MSYS, that in WIN32 is identical to that in UNIX.
-IF (WIN32)
-    SET(COLLISION_EXE_NAME collision)
-ELSEIF (UNIX)
-    SET(COLLISION_EXE_NAME collision)
-ENDIF ()
+SET(COLLISION_EXE_NAME collision)
 
 # Setup source files list
 
@@ -34,11 +29,14 @@ ADD_EXECUTABLE(${COLLISION_EXE_NAME} ${COLLISION_SRCS})
 
 IF (WIN32)
     SET(COLLISION_LIBS glfw3 glu32 opengl32 winmm gdi32 jpeg \"alut.dll\" \"openal.dll\" m)
+ELSEIF (APPLE)
+    SET(COLLISION_LIBS glfw openal jpeg "-framework GLUT" alut "-framework OpenGL")
 ELSEIF (UNIX)
     SET(COLLISION_LIBS glfw GL GLU jpeg alut openal m)
 ENDIF ()
 
-# Add libraries to link for the target
+
+# Add include directories to search for the target
 
 TARGET_LINK_LIBRARIES (${COLLISION_EXE_NAME} ${COLLISION_LIBS})
 
@@ -52,11 +50,5 @@ ENDIF()
 
 # Do miscellaneous things for the target
 
-IF (WIN32)
-# In MSYS environments, freeglut is used instead of the original glut,
-# which requires a specific definition to switch on usage of the static
-# libraries.
-    ADD_DEFINITIONS(-DFREEGLUT_STATIC -DCL_SYSTEM_WIN)
-ELSEIF (UNIX)
-    ADD_DEFINITIONS(-DCL_SYSTEM_UNIX)
-ENDIF ()
+SET(COLLISION_DEFS -DDEBUG)
+ADD_DEFINITIONS(${COLLISION_DEFS})
