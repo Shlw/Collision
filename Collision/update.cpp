@@ -22,21 +22,18 @@ bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2,
     //needed: P(v), L(w), r
     glm::vec3 rc1 = duang - c1;
     glm::vec3 rc2 = duang - c2;//from c1 or c2 to duang
-    glm::vec3 vc1 = *obj1 -> vpSpeed;
-    glm::vec3 vc2 = *obj2 -> vpSpeed;
-    glm::vec3 L1 = *obj1 -> vpAngularMomentum;
-    glm::vec3 L2 = *obj2 -> vpAngularMomentum;
-    glm::mat3
-        frame1 = glm::mat3(*obj1 -> mpFrame),
-        frame2 = glm::mat3(*obj2 -> mpFrame);
-    glm::mat3 I1 =(frame1)*(*mod1 -> mMomentOfInertia)*(glm::inverse(frame1));      //I(global) = A * I(model) * A'
-    glm::mat3 I2 =(frame2)*(*mod2 -> mMomentOfInertia)*(glm::inverse(frame2));
-    glm::vec3 w1 = L1 * glm::inverse(I1);
-    glm::vec3 w2 = L2 * glm::inverse(I2);
-    glm::vec3 v1_bef = glm::cross(w1, rc1) + vc1;
-    glm::vec3 v2_bef = glm::cross(w2, rc2) + vc2;
-    float dv_bef = dot((v1_bef - v2_bef), -n);
-    if (dv_bef <= 0.0)
+    glm::mat3 I1 = glm::mat3(*obj1 -> mpFrame) * 
+            *mod1 -> mMomentOfInertia * 
+            glm::inverse(glm::mat3(*obj1 -> mpFrame));  //I(global) = A * I(model) * A^-1
+    glm::mat3 I2 = glm::mat3(*obj2 -> mpFrame) *
+            *mod2 -> mMomentOfInertia *
+            glm::inverse(glm::mat3(*obj2 -> mpFrame));
+    glm::vec3 w1 = *obj1 -> vpAngularMomentum * glm::inverse(I1);
+    glm::vec3 w2 = *obj2 -> vpAngularMomentum * glm::inverse(I2);
+    glm::vec3 v1_bef = *obj1 -> vpSpeed + glm::cross(w1, rc1);
+    glm::vec3 v2_bef = *obj2 -> vpSpeed + glm::cross(w2, rc2);
+    float dv_bef = dot((v1_bef - v2_bef), n);
+    if (dv_bef >= 0.0)
     {/*
         printf("c1 = %f,%f,%f\n", c1[0], c1[1], c1[2]);
         printf("c2 = %f,%f,%f\n", c2[0], c2[1], c2[2]);
@@ -62,10 +59,10 @@ bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2,
                             n) + 1.0 / mod2 -> fMass;
     float dP = (/*mod1 -> fElastic * mod2 -> fElastic*/1.0 + 1.0) * (dv_bef)
                     / (fenmu1 + fenmu2);
-    *obj1 -> vpSpeed += (dP / mod1 -> fMass)*n;
-    *obj2 -> vpSpeed -= (dP / mod2 -> fMass)*n;
-    *obj1 -> vpAngularMomentum += glm::cross(rc1, dP*n);
-    *obj2 -> vpAngularMomentum += glm::cross(rc2,(-dP)*n);
+    *obj1 -> vpSpeed -= (dP / mod1 -> fMass)*n;
+    *obj2 -> vpSpeed += (dP / mod2 -> fMass)*n;
+    *obj1 -> vpAngularMomentum -= dP * glm::cross(rc1, n);
+    *obj2 -> vpAngularMomentum += dP * glm::cross(rc2, n);
     return true;
 }
 
@@ -152,12 +149,12 @@ bool collision_judge(PObject obj1, PObject obj2)
         glm::vec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c2, ic) <= -l)
         {
-            glm::vec3 wspeed = 
+            /*glm::vec3 wspeed = 
                 glm::mat3(*obj2 -> mpFrame) * 
                 *mod2 -> mMomentOfInertia *
                 glm::inverse(glm::mat3(*obj2 -> mpFrame)) *
-                *obj2 -> vpAngularMomentum;
-            glm::vec3 vpoint = glm::cross(wspeed, temp - c1) + *obj2 -> vpSpeed;
+                *obj2 -> vpAngularMomentum;*/
+            glm::vec3 vpoint/* = glm::cross(wspeed, temp - c1) + *obj2 -> vpSpeed*/;
             pside =             //collision: triangle
                 obj1 -> IsInside(&ctemp, &vpoint);
             if (pside != NULL)            //IsInside: true
