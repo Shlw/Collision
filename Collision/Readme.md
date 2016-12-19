@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.19.20.13
+  1. Generate two rather rougher divided models.
+  2. Update model generator.
+
 * Shlw @ 2016.12.19.19.36
   1. Replace >> in priority_queue with > >.
 

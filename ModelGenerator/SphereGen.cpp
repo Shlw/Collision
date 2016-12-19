@@ -49,6 +49,12 @@ void prt_three(int i1,int j1,int i2,int j2,int i3,int j3){
 }
 
 int main(){
+    printf("Please input 3 integers N, M, P:\n"
+           "I will divide the sphere into N rows and M columns with P faces\n"
+           "Also, M should be aliquot by P\n"
+           "Or, the result can not be guaranteed:)\n");
+
+
     scanf("%d%d%d",&n,&m,&parts); mm=m/float(parts);
     deltan=M_PI/(n+1); deltam=2*M_PI/m;
     for (int i=0;i<n;++i) thetan[i]=(i+1)*deltan-M_PI/2;
