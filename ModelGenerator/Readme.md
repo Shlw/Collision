@@ -7,6 +7,10 @@ Sphere, Cylinder, Ellipsoid, Donut
 
 ## Changelog
 
+* Shlw @ 2016.12.19.20.11
+  1. Fix Texture bugs with new formula(classification).
+  2. Print hint before input.
+
 * Shlw @ 2016.12.18.15.57
   1. Fix bugs on Sphere & Ellipsoid Texture.
 

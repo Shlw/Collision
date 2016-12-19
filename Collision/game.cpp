@@ -24,7 +24,7 @@ double dpDuration[100];
 // the last two digits are the index of the source
 // **ATTENTION** Because of the above reason, the maximum of files must be 100
 //               or it would trouble a lot.
-std::priority_queue<long, std::vector<long>, std::greater<long>> qSrcQueue;
+std::priority_queue<long, std::vector<long>, std::greater<long> > qSrcQueue;
 // the wave files which cannot be played on time
 int npSoundQueue[1000];
 int nSndQuePtr;
@@ -256,6 +256,22 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
 void GameSecond()
 {
     std::cout << nLastSecond << ' ' << nModelTot << ' ' << nObjectTot << std::endl;
+    printf("%ds:\n",nLastSecond);
+    float E = 0.0;
+    for (int i = 0; i < nObjectTot; i++)
+    {
+        glm::mat3 I = glm::mat3(*oppObjectList[i] -> mpFrame) * 
+            *mppModelList[oppObjectList[i]->nModelType]->mMomentOfInertia * 
+            glm::inverse(glm::mat3(*oppObjectList[i] -> mpFrame));
+        glm::vec3 v = *oppObjectList[i]->vpSpeed;
+        glm::vec3 w = glm::inverse(I)* *oppObjectList[i]->vpAngularMomentum;
+        float e = 0.5 * mppModelList[oppObjectList[i]->nModelType]->fMass * glm::dot(v, v) +
+                0.5 * glm::dot(w, *oppObjectList[i] -> vpAngularMomentum);
+        printf("object%d:\n v = (%f, %f, %f),\n w = (%f, %f, %f),\n Ek = %f\n", 
+                i, v[0], v[1], v[2], w[0], w[1], w[2], e);
+        E += e;
+    }
+    printf("total: Ek = %f\n", E);
     return ;
 }
 

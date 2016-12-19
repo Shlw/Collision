@@ -21,7 +21,10 @@ int n,m,parts; //n row, m column, parts images
 float mm;
 FILE* os;
 
-float modmm(float x){return x-floor(x/mm)*mm;}
+float modmm(float x){
+    while (x>mm) x-=mm;
+    return x;
+}
 
 void prt_coord(int i,int j){
     fprintf(os,"%.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j]);
@@ -29,21 +32,25 @@ void prt_coord(int i,int j){
 
 void prt_texture(int i,int j){
     j=modmm(j);
-    fprintf(os,"%.10f %.10f ",0.44+float(mm+1-2*j)/(mm+1)/2*sqrt(x[i][j]*x[i][j]+y[i][j]*y[i][j])/sqrt(A*B)
-                             ,float(n-i)/n);
+    float tx=0.5+float(mm+1-2*j)/(mm+1)/2*sqrt(x[i][j]*x[i][j]+y[i][j]*y[i][j])/sqrt(A*B);
+    float ty=float(n-i)/n;
+    if (tx>1) tx=1;
+        else if (tx<0) tx=0;
+    fprintf(os,"%.10f %.10f ",tx,ty);
 }
 
 void prt_two(int i1,int j1,int i2,int j2){
     int tj1=j1,tj2=j2;
-    if (fabs(modmm(j1)-modmm(j2))>mm-2) tj2=tj1;
+    if (fabs(modmm(j1)-modmm(j2))>=mm-1) tj2=tj1;
     prt_coord(i1,j1); prt_texture(i1,tj1);
     prt_coord(i2,j2); prt_texture(i2,tj2);
 }
 
 void prt_three(int i1,int j1,int i2,int j2,int i3,int j3){
     int tj1=j1,tj2=j2,tj3=j3;
-    if (fabs(modmm(j1)-modmm(j2))>mm-2){
-        tj2=tj3=tj1;
+    if (tj1%(m/parts)==0){
+        if (tj3==tj1) tj3=tj1=0,tj2=1;
+            else tj1=0,tj2=tj3=1; 
     }
     prt_coord(i1,j1); prt_texture(i1,tj1);
     prt_coord(i2,j2); prt_texture(i2,tj2);
@@ -51,6 +58,11 @@ void prt_three(int i1,int j1,int i2,int j2,int i3,int j3){
 }
 
 int main(){
+    printf("Please input 3 integers N, M, P:\n"
+           "I will divide the ellipsoid into N rows and M columns with P faces\n"
+           "Also, M should be aliquot by P\n"
+           "Or, the result can not be guaranteed:)\n");
+
     scanf("%d%d%d",&n,&m,&parts); mm=m/float(parts);
     deltan=M_PI/(n+1); deltam=2*M_PI/m;
     for (int i=0;i<n;++i) thetan[i]=(i+1)*deltan-M_PI/2;

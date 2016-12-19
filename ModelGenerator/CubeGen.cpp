@@ -35,6 +35,8 @@ void prtsquare(float tx,float ty,float tz,float xx,float xy,float xz,float yx,fl
 }
 
 int main(){
+    printf("Please input 1 integer N:\n"
+           "I will divide each surface of the cube into N*N subdivided square\n");
     scanf("%d",&n);
     fprintf(os,"%d\n",6*n*n*2);
 
