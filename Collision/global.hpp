@@ -131,6 +131,7 @@ public:
     PMat4 mpFrame;
     PVec3 vpSpeed;
     PVec3 vpAngularMomentum;
+
     float fMomentInertia;
 
     Object();
@@ -215,7 +216,7 @@ extern int nSndFileCount;
 extern ALuint upBufList[100], upSrcList[100];
 extern double dpDuration[100];
 extern ALfloat fBGMVol, fEffVol;
-extern std::priority_queue<long, std::vector<long>, std::greater<long> > qSrcQueue;
+extern std::priority_queue<long, std::vector<long>, std::greater<long>> qSrcQueue;
 extern int npSoundQueue[1000];
 extern int nSndQuePtr;
 
