@@ -8,6 +8,43 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.19.19.36
+  1. Replace >> in priority_queue with > >.
+
+* lziad @ 2016.12.19.01.11
+  1. Use a minimum heap to record sources.
+  2. Use a queue to record the sounds which cannot be played on time.
+
+* lzh @ 2016.12.18.21.17
+  1. Revert the changes 2. @ 2016.12.18.21.17 for some unknown issues
+  disabling the display of box.
+
+* lzh @ 2016.12.18.19.51
+  1. Disable the ability to resize the window.
+  2. Fix bugs about the depth when drawing box.
+
+* lziad @ 2016.12.18.17.32
+  1. Change faces when collision happens.
+
+* lzh @ 2016.12.18.17.00
+  1. Fix cmake configurations.
+  
+* lziad @ 2016.12.18.16.00
+  1. Fix a bug causing memory leak when playing sounds.
+  2. Volume can be adjusted using arrow keys.
+  3. Fix the try-catch statement.
+
+* Shlw @ 2016.12.18.15.57
+  1. Fix Texture bugs.
+  2. Update models.
+
+* lziad @ 2016.12.18.11.38
+  1. Change the logic of playing sound.
+  2. Now main function will call *GameCleanUp*.
+
+* lzh @ 2016.12.18.00.38
+  1. Update CMakeLists.txt to compile with openal and alut under win-systems.
+
 * Shlw @ 2016.12.17.20.48
   1. Add Ellipsoid model.
   2. Add Sphere model.

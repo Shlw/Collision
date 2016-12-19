@@ -25,9 +25,13 @@ void WindowInit()
     glEnable(GL_POLYGON_SMOOTH);
     glEnable(GL_MULTISAMPLE);
     
+    glDepthRange(0.0, 1.0);
+    glDepthFunc(GL_LESS);
+    
     // Set up the values when clearing buffers
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClearDepth(1.0);
+    
     
     // Set up blend function
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -36,7 +40,6 @@ void WindowInit()
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     
-    glShadeModel(GL_FLAT);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     
     // Set up the projection
@@ -51,7 +54,7 @@ void WindowInit()
     glPushMatrix();
     
     glPointSize(2.0);
-    glLineWidth(1.5);
+    glLineWidth(2.0);
     
     glLightfv(GL_LIGHT0, GL_AMBIENT, fppLightAmbient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, fppLightDiffuse);
@@ -66,6 +69,13 @@ void Display(GLFWwindow* w)
 {
     dLastLastClock = dLastClock;
     dLastClock = glfwGetTime();
+    
+    // Play delaying sounds
+    long lNxtSrc = qSrcQueue.top();
+    while (lNxtSrc / 1e5 <= dLastClock && nSndQuePtr) {
+        Audio::GetAudio()->LoadFile(npSoundQueue[--nSndQuePtr]);
+        lNxtSrc = qSrcQueue.top();
+    }
     
     // Clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

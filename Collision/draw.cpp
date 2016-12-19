@@ -35,7 +35,7 @@ void Model::Draw()
 }
 
 // Implementation of Object::Draw
-void Object::Draw()
+void Object::Draw(int index)
 {
     // Switch to ModelView Matrix
     glMatrixMode(GL_MODELVIEW);
@@ -47,22 +47,22 @@ void Object::Draw()
     // transform coordinates in each Object to the global coordinates of
     // OpenGL.
     glMultMatrixf(glm::value_ptr(*mpFrame));
-    
+
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_NORMALIZE);
-    
-    glBindTexture(GL_TEXTURE_2D, npTextureIndex[0]);
-    
+
+    glBindTexture(GL_TEXTURE_2D, npTextureIndex[index]);
+
     glMaterialfv(GL_FRONT, GL_SHININESS, fpMaterialShininess);
     glMaterialfv(GL_FRONT, GL_SPECULAR, fpMaterialSpecular);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, fpMaterialAmbientDiffuse);
-    
+
     // Draw Model
     mppModelList[nModelType]->Draw();
-    
+
     glDisable(GL_NORMALIZE);
     glDisable(GL_TEXTURE_2D);
-    
+
     // Restore matrix
     glPopMatrix();
 
@@ -73,16 +73,15 @@ void Draw()
 {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    
+
     glLightfv(GL_LIGHT0, GL_POSITION, fppLightPosition);
-    
+
     for (int i = 0; i < nObjectTot; i++)
-        oppObjectList[i]->Draw();
-    
+        oppObjectList[i]->Draw(npFaces[i]);
+
     glDisable(GL_LIGHT0);
-    
     glDisable(GL_LIGHTING);
-    
+
     return ;
 }
 
@@ -163,7 +162,7 @@ void DrawReadFiles(int argc, char* argv[])
         jpeg_finish_decompress(&cinfo);
         jpeg_destroy_decompress(&cinfo);
     }
-    delete cp;
+    delete []cp;
     fclose(f);
     return ;
 }
@@ -180,6 +179,8 @@ void DrawCreateTexture()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
+    for (int i = 0; i < 100; ++i)
+        npFaces[i] = i % nTextureLength;
     return ;
 }
 

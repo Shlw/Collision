@@ -16,13 +16,42 @@ int    npTypeList[100];
 // path of the files of the sound files which are already loaded
 char   cpSndFileList[100][256];
 int    nSndFileCount;
-ALuint upSrcList[100];
-// current playing source
-ALuint uCurSource;
-// stack of past mouse positions
-double dpPos[10][2];
-// pointer of the stack
-int nPtr;
+// buffers and sources
+ALuint upBufList[100], upSrcList[100];
+// the duration of the files
+double dpDuration[100];
+// the minimum heap records when each source will be valid to play sounds
+// the last two digits are the index of the source
+// **ATTENTION** Because of the above reason, the maximum of files must be 100
+//               or it would trouble a lot.
+std::priority_queue<long, std::vector<long>, std::greater<long> > qSrcQueue;
+// the wave files which cannot be played on time
+int npSoundQueue[1000];
+int nSndQuePtr;
+// volumes
+ALfloat fBGMVol, fEffVol;
+
+// The result is the wav file's duration in seconds.
+double CalWAVDuration(ALsizei size, ALfloat freq, ALenum format) {
+    double coef = 1.0;
+    switch (format) {
+        case AL_FORMAT_MONO8:
+            coef = 1.0;
+            break;
+        case AL_FORMAT_MONO16:
+            coef = 2.0;
+            break;
+        case AL_FORMAT_STEREO8:
+            coef = 2.0;
+            break;
+        case AL_FORMAT_STEREO16:
+            coef = 4.0;
+            break;
+        default:
+            ;
+    }
+    return (double)size / freq / coef;
+}
 
 Audio* Audio::GetAudio() {
     static Audio msAudio;
@@ -30,68 +59,76 @@ Audio* Audio::GetAudio() {
 }
 
 void Audio::LoadFile(int index) {
-    // waiting until the current playing source stops
-    if (uCurSource != AL_NONE) {
-        ALint status;
-        alGetSourcei(uCurSource, AL_SOURCE_STATE, &status);
-        if (status == AL_PLAYING)
-            return ;
-    }
-
-    if (index < 0 || index >= 100) {
-        throw ERROR_UNKNOWN_SOUND;
-    } else if (upSrcList[index]) {
-        // the source has been already loaded, simply play it
-        alSourcePlay(upSrcList[index]);
-        // set the current playing source
-        uCurSource = upSrcList[index];
-        return ;
-    }
-    // else load the file
-
     ALuint  buffer, source;
     ALenum  error;
-
-    ALenum  format;
+    
+    ALenum  format, state = AL_PLAYING;
     ALvoid  *data=NULL;
-
+    
     ALsizei size;
     ALfloat freq;
-
-    // load the wav file
-    alGenBuffers(1, &buffer);
-    data = alutLoadMemoryFromFile(cpSndFileList[index], &format, &size, &freq);
-    alBufferData(buffer, format, data, size, freq);
-    alGenSources(1, &source);
-
-    if (buffer == AL_NONE) {
-        alutExit();
-        throw FILE_NOT_FOUND;
+    
+    int i;
+    
+    if (index < 0 || index >= 100) {
+        throw ERROR_UNKNOWN_SOUND;
+    } else if (upBufList[index]) {
+        // the source has been already loaded, simply play it
+        buffer = upBufList[index];
+    } else {
+        // else load the file
+        alGenBuffers(1, &buffer);
+        data = alutLoadMemoryFromFile(cpSndFileList[index], &format, &size, &freq);
+        if (NULL == data) {
+            alutExit();
+            throw FILE_NOT_FOUND;
+        }
+        alBufferData(buffer, format, data, size, freq);
+        upBufList[index] = buffer;
+        dpDuration[index] = CalWAVDuration(size, freq, format);
     }
-
+    
+    // find the next free source
+    long lNxtSrc = qSrcQueue.top();
+    if (lNxtSrc / 1e5 > dLastClock) {
+        // no vacant seats
+        if (nSndQuePtr < 1000)
+            // if 1000+100 sources are not even enough, ignore it
+            npSoundQueue[nSndQuePtr++] = index;
+        return ;
+    } else {
+        source = upSrcList[lNxtSrc % 100];
+    }
+    
+    // be sure that the source is cleaned
+    alSourcei(source, AL_BUFFER, AL_NONE);
     alSourcei(source, AL_BUFFER, buffer);
-    // TODO: alSourcefv(source, AL_POSITION, [SourcePosition]);
-
+    // set volume
+    alSourcef(source, AL_GAIN, fEffVol);
+    
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
+        alGetSourcei(source, AL_SOURCE_STATE, &state);
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
         alutExit();
         throw ERROR_OPENAL;
     }
+    
     alSourcePlay(source);
-
-    // add the source and set the current playing source
-    uCurSource = upSrcList[index] = source;
-
+    qSrcQueue.pop();
+    // 100 ms for delay
+    qSrcQueue.push(lNxtSrc % 100 + 10000 +
+                   long((dpDuration[index] + dLastClock) * 1e3) * 100);
+    
     // *alutLoadMemoryFromFile* allocates memory for *data*,
-    // so delete it after use.
-    delete data;
-
+    // so free it after use.
+    free(data);
+    
     return ;
 }
 
 void Audio::LoadBGM() {
-    ALuint  buffer, source;
+    ALuint  buffer, source = upSrcList[0];
     ALenum  error;
 
     ALenum  format;
@@ -102,29 +139,35 @@ void Audio::LoadBGM() {
 
     alGenBuffers(1, &buffer);
     data = alutLoadMemoryFromFile("bgm.wav", &format, &size, &freq);
-    alBufferData(buffer, format, data, size, freq);
-    alGenSources(1, &source);
-
-    if (buffer == AL_NONE) {
+    if (NULL == data) {
         alutExit();
         throw FILE_NOT_FOUND;
     }
-
+    alBufferData(buffer, format, data, size, freq);
+    
     alSourcei(source, AL_BUFFER, buffer);
     // loop
     alSourcei(source, AL_LOOPING, true);
-
+    alSourcef(source, AL_GAIN, fBGMVol);
+    
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
         alutExit();
         throw ERROR_OPENAL;
     }
+    
     alSourcePlay(source);
 
-    delete data;
+    free(data);
 
     return ;
+}
+
+void Audio::SetVolume() {
+    alSourcef(upSrcList[0], AL_GAIN, fBGMVol);
+    for (int i = 1; i < 100; ++i)
+        alSourcef(upSrcList[i], AL_GAIN, fEffVol);
 }
 
 void GameInit()
@@ -132,13 +175,23 @@ void GameInit()
     memset(cpModFileList, 0, sizeof(cpModFileList));
     memset(npTypeList, 0, sizeof(npTypeList));
     memset(cpSndFileList, 0, sizeof(cpSndFileList));
+    memset(upBufList, 0, sizeof(upBufList));
     memset(upSrcList, 0, sizeof(upSrcList));
+    memset(dpDuration, 0, sizeof(dpDuration));
+    memset(npSoundQueue, 0, sizeof(npSoundQueue));
+    
+    memset(bpCrashing, 0, sizeof(bpCrashing));
+    
+    nSndQuePtr = 0;
+    fBGMVol = fEffVol = 1.0;
+    
+    for (int i = 1; i < 100; ++i)
+        qSrcQueue.push(i);
 
     // init openAL
     ALCdevice *pDevice = alcOpenDevice(NULL);
     ALCcontext *pContext = alcCreateContext(pDevice, NULL);
     alcMakeContextCurrent(pContext);
-    uCurSource = AL_NONE;
 
     // read wav files
     FILE *fpSndEff = fopen("SoundEff.txt", "r");
@@ -149,6 +202,9 @@ void GameInit()
         memcpy(cpSndFileList[nSndFileCount], cpSndFile,
                strlen(cpSndFile) * sizeof(char));
     fclose(fpSndEff);
+    
+    // allocate memory for sources
+    alGenSources(100, upSrcList);
 
     // play bgm
     Audio::GetAudio()->LoadBGM();
@@ -158,9 +214,6 @@ void GameInit()
 
 void GameMove(GLFWwindow* w, double x, double y)
 {
-    if (++nPtr % 10 == 0)
-    nPtr = 0;
-    dpPos[nPtr][0] = x; dpPos[nPtr][1] = y;
     return ;
 }
 
@@ -208,13 +261,18 @@ void GameSecond()
 
 void GameCleanUp()
 {
+    // delete buffers and sources
+    for (int i = 0; i < 100; ++i)
+        if (upBufList[i])
+            alDeleteBuffers(1, upBufList+i);
+    alDeleteSources(100, upSrcList);
     // shutdown openAL
     ALCcontext *pContext = alcGetCurrentContext();
     ALCdevice *pDevice = alcGetContextsDevice(pContext);
     alcMakeContextCurrent(NULL);
     alcDestroyContext(pContext);
     alcCloseDevice(pDevice);
-    alutExit;
+    alutExit();
 
     return ;
 

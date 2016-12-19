@@ -7,6 +7,9 @@ Sphere, Cylinder, Ellipsoid, Donut
 
 ## Changelog
 
+* Shlw @ 2016.12.18.15.57
+  1. Fix bugs on Sphere & Ellipsoid Texture.
+
 * Shlw @ 2016.12.17.20.47
   1. Add Sphere Texture.
   2. Add Ellipsoid Texture.
