@@ -24,7 +24,7 @@ double dpDuration[100];
 // the last two digits are the index of the source
 // **ATTENTION** Because of the above reason, the maximum of files must be 100
 //               or it would trouble a lot.
-std::priority_queue<long, std::vector<long>, std::greater<long>> qSrcQueue;
+std::priority_queue<long, std::vector<long>, std::greater<long> > qSrcQueue;
 // the wave files which cannot be played on time
 int npSoundQueue[1000];
 int nSndQuePtr;
