@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @ 2016.12.19.19.36
+  1. Replace >> in priority_queue with > >.
+
 * lziad @ 2016.12.19.01.11
   1. Use a minimum heap to record sources.
   2. Use a queue to record the sounds which cannot be played on time.
