@@ -80,13 +80,13 @@ void Display(GLFWwindow* w)
     // Clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+    // Update each Object
+    Update();
+    
     // Draw each Object
     Draw();
     
     DrawBox();
-    
-    // Update each Object
-    Update();
     
     // Swap buffers to refresh
     glfwSwapBuffers(w);
