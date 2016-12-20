@@ -1,7 +1,7 @@
 /*************************************************************************
  * CubeGen.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw
+ * Modifier : Shlw lzh
  * Description : Generate Cube.
  ************************************************************************/
 #include <bits/stdc++.h>

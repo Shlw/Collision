@@ -1,7 +1,7 @@
 /*************************************************************************
  * CuboidGen.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw
+ * Modifier : Shlw lzh
  * Description : Generate Cuboid.
  ************************************************************************/
 #include <bits/stdc++.h>

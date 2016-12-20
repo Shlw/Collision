@@ -1,7 +1,7 @@
 /*************************************************************************
  * EllipsoidGen.cpp for project Collision
  * Author : Shlw
- * Modifier : Shlw
+ * Modifier : Shlw lzh
  * Description : Generate Ellipsoid.
  ************************************************************************/
 #include <bits/stdc++.h>
