@@ -242,11 +242,11 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
 
     // set the position
     *oppObjectList[nObjectTot]->mpFrame = glm::inverse(mModelTransformMat);
-    (*oppObjectList[nObjectTot]->mpFrame)[3] = glm::vec4(x1, y1, z1, 1);
+    (*oppObjectList[nObjectTot]->mpFrame)[3] = glm::dvec4(x1, y1, z1, 1);
 
     // set the speed
     *oppObjectList[nObjectTot]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
-    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::vec3((x2-x1)*0.02, (y2-y1)*0.02, (z2-z1)*0.02);
+    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::dvec3((x2-x1)*0.02, (y2-y1)*0.02, (z2-z1)*0.02);
 
     return ;
 }
@@ -260,19 +260,19 @@ void GameSecond()
     float dets = 0.0;
     for (int i = 0; i < nObjectTot; i++)
     {
-        glm::mat3 I = glm::mat3(*oppObjectList[i] -> mpFrame) * 
+        glm::dmat3 I = glm::dmat3(*oppObjectList[i] -> mpFrame) * 
             *mppModelList[oppObjectList[i]->nModelType]->mMomentOfInertia * 
-            glm::transpose(glm::mat3(*oppObjectList[i] -> mpFrame));
-        glm::vec3 v = *oppObjectList[i]->vpSpeed;
-        glm::vec3 w = glm::inverse(I)* *oppObjectList[i]->vpAngularMomentum;
-        float e = 0.5 * mppModelList[oppObjectList[i]->nModelType]->fMass * glm::dot(v, v) +
+            glm::transpose(glm::dmat3(*oppObjectList[i] -> mpFrame));
+        glm::dvec3 v = *oppObjectList[i]->vpSpeed;
+        glm::dvec3 w = glm::inverse(I)* *oppObjectList[i]->vpAngularMomentum;
+        float e = 0.5 * mppModelList[oppObjectList[i]->nModelType]->dMass * glm::dot(v, v) +
                 0.5 * glm::dot(w, *oppObjectList[i] -> vpAngularMomentum);
         dets = glm::determinant(*oppObjectList[i] -> mpFrame);
-         printf("object%d:\n v = (%f, %f, %f),\n w = (%f, %f, %f),\n Ek = %.10f, det = %.10f\n",
+         printf("object%d:\n v = (%lf, %lf, %lf),\n w = (%lf, %lf, %lf),\n Ek = %.10lf, det = %.10lf\n",
                 i, v[0], v[1], v[2], w[0], w[1], w[2], e, dets);
         E += e;
     }
-    printf("total: Ek = %.10f\n", E);
+    printf("total: Ek = %.10lf\n", E);
 #endif
     return ;
 }

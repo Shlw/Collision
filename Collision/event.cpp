@@ -14,23 +14,23 @@ void EventInit()
     for (int i = 0; i < 3; i++)
         npButtonState[i] = 0;
     mModelTransformMat = glm::mat4(1.0);
-    dLastMouseX = FLT_MAX;
-    dLastMouseY = FLT_MAX;
+    dLastMouseX = DBL_MAX;
+    dLastMouseY = DBL_MAX;
     return ;
 }
 
 void MouseMotionEvent(GLFWwindow* w, double x, double y)
 {
     int npState[3];
-    float d = sqrt(
-        (float)((x-dLastMouseX) * (x-dLastMouseX))
-        +(float)((y-dLastMouseY) * (y-dLastMouseY))
+    double d = sqrt(
+        (x-dLastMouseX) * (x-dLastMouseX)
+        +(y-dLastMouseY) * (y-dLastMouseY)
     ), theta;
     int nWindowWidth, nWindowHeight;
     npState[0] = glfwGetMouseButton(w, GLFW_MOUSE_BUTTON_LEFT);
     npState[1] = glfwGetMouseButton(w, GLFW_MOUSE_BUTTON_MIDDLE);
     npState[2] = glfwGetMouseButton(w, GLFW_MOUSE_BUTTON_RIGHT);
-    if (dLastMouseX == FLT_MAX || dLastMouseY == FLT_MAX)
+    if (dLastMouseX == DBL_MAX || dLastMouseY == DBL_MAX)
         ;
     else if (dLastMouseX == x && dLastMouseY == y)
         ;
@@ -40,17 +40,17 @@ void MouseMotionEvent(GLFWwindow* w, double x, double y)
         (npState[2] == GLFW_RELEASE)
     )
     {
-        mModelTransformMat = glm::rotate(glm::mat4(1.0), d*fRotateSpeed ,
-            glm::vec3(
-                ((float)(y-dLastMouseY)) / d,
-                ((float)(x-dLastMouseX)) / d,
+        mModelTransformMat = glm::rotate(glm::dmat4(1.0), d*dRotateSpeed ,
+            glm::dvec3(
+                (y-dLastMouseY) / d,
+                (x-dLastMouseX) / d,
                 0.0
             )
         ) * mModelTransformMat;
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
         glPushMatrix();
-        glMultMatrixf(glm::value_ptr(mModelTransformMat));
+        glMultMatrixd(glm::value_ptr(mModelTransformMat));
     }
     else if (
         (npState[0] == GLFW_RELEASE) && 
@@ -58,17 +58,17 @@ void MouseMotionEvent(GLFWwindow* w, double x, double y)
         (npState[2] == GLFW_PRESS)
     )
     {
-        mModelTransformMat = glm::translate(glm::mat4(1.0),
-            glm::vec3(
-                ((float)(x-dLastMouseX)) * fTranslateSpeed,
-                -((float)(y-dLastMouseY)) * fTranslateSpeed,
+        mModelTransformMat = glm::translate(glm::dmat4(1.0),
+            glm::dvec3(
+                ((float)(x-dLastMouseX)) * dTranslateSpeed,
+                -((float)(y-dLastMouseY)) * dTranslateSpeed,
                 0.0
             )
         ) * mModelTransformMat;
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
         glPushMatrix();
-        glMultMatrixf(glm::value_ptr(mModelTransformMat));
+        glMultMatrixd(glm::value_ptr(mModelTransformMat));
     }
     else if (
         (npState[0] == GLFW_RELEASE) && 
@@ -78,25 +78,21 @@ void MouseMotionEvent(GLFWwindow* w, double x, double y)
     {
         glfwGetWindowSize(w, &nWindowWidth, &nWindowHeight);
         theta = atan2(
-            (float)x - 
-            ((float)(nWindowWidth/2) + 0.5),
-            ((float)(nWindowHeight/2) + 0.5) 
-            - (float)y
+            x - (nWindowWidth/2) + 0.5,
+            (nWindowHeight/2) + 0.5 - y
         );
         theta -= atan2(
-            (float)dLastMouseX - 
-            ((float)(nWindowWidth/2) + 0.5),
-            ((float)(nWindowHeight/2) + 0.5) 
-            - (float)dLastMouseY
+            dLastMouseX - (nWindowWidth/2) + 0.5,
+            (nWindowHeight/2) + 0.5 - dLastMouseY
         );
-        mModelTransformMat = glm::rotate(glm::mat4(1.0),
+        mModelTransformMat = glm::rotate(glm::dmat4(1.0),
             -theta,
-            glm::vec3(0.0, 0.0, 1.0)
+            glm::dvec3(0.0, 0.0, 1.0)
         ) * mModelTransformMat;
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
         glPushMatrix();
-        glMultMatrixf(glm::value_ptr(mModelTransformMat));
+        glMultMatrixd(glm::value_ptr(mModelTransformMat));
     }
     dLastMouseX = x;
     dLastMouseY = y;
@@ -106,13 +102,13 @@ void MouseMotionEvent(GLFWwindow* w, double x, double y)
 
 void MouseWheelEvent(GLFWwindow* w, double x, double y)
 {
-    mModelTransformMat = glm::translate(glm::mat4(1.0),
-        glm::vec3(0.0, 0.0, (float)y*fScrollSpeed)
+    mModelTransformMat = glm::translate(glm::dmat4(1.0),
+        glm::dvec3(0.0, 0.0, y*dScrollSpeed)
     ) * mModelTransformMat;
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
     glPushMatrix();
-    glMultMatrixf(glm::value_ptr(mModelTransformMat));
+    glMultMatrixd(glm::value_ptr(mModelTransformMat));
     return ;
 }
 

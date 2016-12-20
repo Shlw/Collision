@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.20.22.44
+  1. Change everything to double.
+
 * Shlw @2016.12.20.20.56
   1. Update models.
   2. Adjust the velocity.
