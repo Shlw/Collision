@@ -7,6 +7,9 @@ Sphere, Cylinder, Ellipsoid, Donut
 
 ## Changelog
 
+* lzh @ 2016.12.20.20.04
+  1. Fix bugs about the density and I tensor.
+
 * Shlw @ 2016.12.19.20.11
   1. Fix Texture bugs with new formula(classification).
   2. Print hint before input.

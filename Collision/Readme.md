@@ -8,6 +8,16 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.20.19.58
+  1. Fix bugs about the collision, and now the energy in total remains a
+  constant.
+  2. Replace *glm::inverse* with *glm::transpose* when dealing with frame
+  matrix, which is in SO(3).
+  3. Add *DEBUG* macro judges to hide outputs in console.
+  4. Use Schmidt Orthogonalization to keep frame matrix orthogonal.
+  5. Fix bugs in game, which doesn't delete buffers of the BGM.
+  6. Update CMakeLists.txt for building under Mac OS X.
+
 * lziad @ 2016.12.20.15.18
   1. Do some minor edits.
 

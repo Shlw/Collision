@@ -1,7 +1,7 @@
 /*************************************************************************
  * regenerate for project Collision
  * Author : Shlw
- * Modifier : Shlw
+ * Modifier : Shlw lzh
  * Description : Calculate normal-vector, volumes and so on.
  ************************************************************************/
 #include <bits/stdc++.h>
@@ -69,12 +69,12 @@ void trans(){
                 x[i][2]-x[i][1],y[i][2]-y[i][1],z[i][2]-z[i][1]);
         float tv=dot(x[i][0],y[i][0],z[i][0],i);
         vol+=tv/6;
-        ixy+=tv/20*calc(x[i][0],y[i][0],x[i][1],y[i][1],x[i][2],y[i][2]);
-        ixz+=tv/20*calc(x[i][0],z[i][0],x[i][1],z[i][1],x[i][2],z[i][2]);
-        iyz+=tv/20*calc(y[i][0],z[i][0],y[i][1],z[i][1],y[i][2],z[i][2]);
-        ixx+=tv/20*calc(x[i][0],x[i][0],x[i][1],x[i][1],x[i][2],x[i][2]);
-        iyy+=tv/20*calc(y[i][0],y[i][0],y[i][1],y[i][1],y[i][2],y[i][2]);
-        izz+=tv/20*calc(z[i][0],z[i][0],z[i][1],z[i][1],z[i][2],z[i][2]);
+        ixy+=tv/120*calc(x[i][0],y[i][0],x[i][1],y[i][1],x[i][2],y[i][2]);
+        ixz+=tv/120*calc(x[i][0],z[i][0],x[i][1],z[i][1],x[i][2],z[i][2]);
+        iyz+=tv/120*calc(y[i][0],z[i][0],y[i][1],z[i][1],y[i][2],z[i][2]);
+        ixx+=tv/120*calc(x[i][0],x[i][0],x[i][1],x[i][1],x[i][2],x[i][2]);
+        iyy+=tv/120*calc(y[i][0],y[i][0],y[i][1],y[i][1],y[i][2],y[i][2]);
+        izz+=tv/120*calc(z[i][0],z[i][0],z[i][1],z[i][1],z[i][2],z[i][2]);
     }
 
     float dens=(rand()%100)/100.0;

@@ -18,7 +18,12 @@ float fppMaterialList[100][2];
 // Declarations of global variables
 // int nWindowFlags = GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_MULTISAMPLE;
 int nInitWindowWidth = 1024, nInitWindowHeight = 768;
+
+#ifdef DEBUG
 const char* cpWindowTitle = "Collision Demo";
+#else
+const char* cpWindowTitle = "Collision";
+#endif
 
 double dLastClock, dLastLastClock;
 int nLastSecond;
@@ -332,6 +337,8 @@ int ReadFiles(const char* str){
                     col,col+3,col+6,
                     col+1,col+4,col+7,
                     col+2,col+5,col+8);
+    for (int i = 0; i < 9; i++)
+        col[i] *= dens;
     fclose(modelin);
     return nModelTot++;
 }
