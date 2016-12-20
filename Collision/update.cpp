@@ -28,8 +28,8 @@ bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2,
     glm::dmat3 I2 = glm::dmat3(*obj2 -> mpFrame) *
             *mod2 -> mMomentOfInertia *
             glm::transpose(glm::dmat3(*obj2 -> mpFrame));
-    glm::dvec3 w1 = *obj1 -> vpAngularMomentum * glm::inverse(I1);
-    glm::dvec3 w2 = *obj2 -> vpAngularMomentum * glm::inverse(I2);
+    glm::dvec3 w1 = glm::inverse(I1) * *obj1 -> vpAngularMomentum;
+    glm::dvec3 w2 = glm::inverse(I2) * *obj2 -> vpAngularMomentum; 
     glm::dvec3 v1_bef = *obj1 -> vpSpeed + glm::cross(w1, rc1);
     glm::dvec3 v2_bef = *obj2 -> vpSpeed + glm::cross(w2, rc2);
     double dv_bef = dot((v1_bef - v2_bef), n);
@@ -179,6 +179,7 @@ bool collision_judge(PObject obj1, PObject obj2)
 void Update()
 {
     double dt = dLastClock - dLastLastClock;
+    double E1, E2;
     bool judged[nObjectTot];
     const double fEpsilon = 1.0E-7;
     memset(judged, false, sizeof(nObjectTot));
@@ -217,6 +218,7 @@ void Update()
         glm::dmat3 frame(*pframe);
         glm::dmat3 I = (frame)*(*pmodi -> mMomentOfInertia)*(glm::transpose(frame));
         glm::dvec3 omega = glm::inverse(I) * *pobji -> vpAngularMomentum;
+        E1 = glm::dot(*pobji -> vpAngularMomentum, omega);
         if (glm::length(omega) > fEpsilon)
         {
             double x = (*pframe)[3][0]; (*pframe)[3][0] = .0;
@@ -227,7 +229,13 @@ void Update()
             (*pframe)[3][1] = y;
             (*pframe)[3][2] = z;
             (*pframe)[3][3] = 1.0;
+            frame = glm::dmat3(*pframe);
+            I = (frame)*(*pmodi -> mMomentOfInertia)*(glm::transpose(frame));
+            omega = glm::inverse(I) * *pobji -> vpAngularMomentum;
+            E2 = glm::dot(*pobji -> vpAngularMomentum, omega);
+            *pobji -> vpAngularMomentum *= sqrt(E1/E2);
         }
+    
     // (*pobji -> vpAngularMomentum) = glm::dvec3(glm::rotate(glm::ddmat4(1.0), glm::length(omega)*dt, omega/glm::length(omega)) * glm::dvec4(*pobji -> vpAngularMomentum, 1.0));
     /*
     (*pframe)[0] /= glm::length((*pframe)[0]);
