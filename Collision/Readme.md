@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.20.23.40
+  1. Use Chinese triditional magic arts to control energy.
+
 * Shlw @ 2016.12.20.22.58
   1. Re-generate models.
 
