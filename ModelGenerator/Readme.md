@@ -7,6 +7,9 @@ Sphere, Cylinder, Ellipsoid, Donut
 
 ## Changelog
 
+* Shlw @ 2016.12.20.22.58
+  1. Re-generate models.
+
 * lzh @ 2016.12.20.22.44
   1. Change everything to double.
 
