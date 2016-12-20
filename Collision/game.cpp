@@ -62,13 +62,11 @@ void Audio::LoadFile(int index) {
     ALuint  buffer, source;
     ALenum  error;
     
-    ALenum  format, state = AL_PLAYING;
+    ALenum  format;
     ALvoid  *data=NULL;
     
     ALsizei size;
     ALfloat freq;
-    
-    int i;
     
     if (index < 0 || index >= 100) {
         throw ERROR_UNKNOWN_SOUND;
@@ -79,10 +77,9 @@ void Audio::LoadFile(int index) {
         // else load the file
         alGenBuffers(1, &buffer);
         data = alutLoadMemoryFromFile(cpSndFileList[index], &format, &size, &freq);
-        if (NULL == data) {
-            alutExit();
+        if (NULL == data)
             throw FILE_NOT_FOUND;
-        }
+        
         alBufferData(buffer, format, data, size, freq);
         upBufList[index] = buffer;
         dpDuration[index] = CalWAVDuration(size, freq, format);
@@ -108,15 +105,13 @@ void Audio::LoadFile(int index) {
     
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
-        alGetSourcei(source, AL_SOURCE_STATE, &state);
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
-        alutExit();
         throw ERROR_OPENAL;
     }
     
     alSourcePlay(source);
     qSrcQueue.pop();
-    // 100 ms for delay
+    // add 100 ms for delay
     qSrcQueue.push(lNxtSrc % 100 + 10000 +
                    long((dpDuration[index] + dLastClock) * 1e3) * 100);
     
@@ -139,10 +134,9 @@ void Audio::LoadBGM() {
 
     alGenBuffers(1, &buffer);
     data = alutLoadMemoryFromFile("bgm.wav", &format, &size, &freq);
-    if (NULL == data) {
-        alutExit();
+    if (NULL == data)
         throw FILE_NOT_FOUND;
-    }
+    
     alBufferData(buffer, format, data, size, freq);
     
     alSourcei(source, AL_BUFFER, buffer);
@@ -153,7 +147,6 @@ void Audio::LoadBGM() {
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
-        alutExit();
         throw ERROR_OPENAL;
     }
     
@@ -248,7 +241,7 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
 
     // set the speed
     *oppObjectList[nObjectTot]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
-    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::vec3((x2-x1)*0.01, (y2-y1)*0.01, (z2-z1)*0.01);
+    *oppObjectList[nObjectTot++]->vpAngularMomentum = glm::vec3((x2-x1)*0.01, (y2-y1)*0.01, (z2-z1)*0.01);
 
     return ;
 }
@@ -256,22 +249,6 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
 void GameSecond()
 {
     std::cout << nLastSecond << ' ' << nModelTot << ' ' << nObjectTot << std::endl;
-    printf("%ds:\n",nLastSecond);
-    float E = 0.0;
-    for (int i = 0; i < nObjectTot; i++)
-    {
-        glm::mat3 I = glm::mat3(*oppObjectList[i] -> mpFrame) * 
-            *mppModelList[oppObjectList[i]->nModelType]->mMomentOfInertia * 
-            glm::inverse(glm::mat3(*oppObjectList[i] -> mpFrame));
-        glm::vec3 v = *oppObjectList[i]->vpSpeed;
-        glm::vec3 w = glm::inverse(I)* *oppObjectList[i]->vpAngularMomentum;
-        float e = 0.5 * mppModelList[oppObjectList[i]->nModelType]->fMass * glm::dot(v, v) +
-                0.5 * glm::dot(w, *oppObjectList[i] -> vpAngularMomentum);
-        printf("object%d:\n v = (%f, %f, %f),\n w = (%f, %f, %f),\n Ek = %f\n", 
-                i, v[0], v[1], v[2], w[0], w[1], w[2], e);
-        E += e;
-    }
-    printf("total: Ek = %f\n", E);
     return ;
 }
 
@@ -288,8 +265,6 @@ void GameCleanUp()
     alcMakeContextCurrent(NULL);
     alcDestroyContext(pContext);
     alcCloseDevice(pDevice);
-    alutExit();
 
     return ;
-
 }

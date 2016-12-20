@@ -8,7 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
-* lzh @ 2016.12.18.22.34
+* lziad @ 2016.12.20.15.18
+  1. Do some minor edits.
+
+* lzh @ 2016.12.19.22.34
   1. Update CMakeLists.txt for building under Mac OS X.
 
 * Shlw @ 2016.12.19.20.13
