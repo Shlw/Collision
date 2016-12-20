@@ -13,7 +13,7 @@ auxiliary programs. The main program is in the *Collision* folder.
 	 Wheel---Scroll:  &nbsp;&nbsp;&nbsp;&nbsp;  Scaling  
 	 Wheel---Press + Drag:  &nbsp;&nbsp;&nbsp;&nbsp;  Center Rotation  
 	 Left Mouse Button---Press + Drag:  &nbsp;&nbsp;&nbsp;&nbsp;  Horizontal Rotation  
-	 Right Mouse Button---Press + Drage:  &nbsp;&nbsp;&nbsp;&nbsp;  Translation   
+	 Right Mouse Button---Press + Drag:  &nbsp;&nbsp;&nbsp;&nbsp;  Translation   
 	 Drag Model into the Window:  &nbsp;&nbsp;&nbsp;&nbsp;  Drop Model  
   4. <b>Model Generator</b>  
 	 Cube, Cuboid, Sphere, Ellipsoid  
