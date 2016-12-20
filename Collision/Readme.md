@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @2016.12.20.20.56
+  1. Update models.
+  2. Adjust the velocity.
+
 * lzh @ 2016.12.20.19.58
   1. Fix bugs about the collision, and now the energy in total remains a
   constant.
@@ -18,7 +22,10 @@ modeling, rendering and collision detection.
   5. Fix bugs in game, which doesn't delete buffers of the BGM.
   6. Update CMakeLists.txt for building under Mac OS X.
 
-* lzh @ 2016.12.18.22.34
+* lziad @ 2016.12.20.15.18
+  1. Do some minor edits.
+
+* lzh @ 2016.12.19.22.34
   1. Update CMakeLists.txt for building under Mac OS X.
 
 * Shlw @ 2016.12.19.20.13

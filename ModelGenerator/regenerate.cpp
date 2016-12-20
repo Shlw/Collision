@@ -1,7 +1,7 @@
 /*************************************************************************
  * regenerate for project Collision
  * Author : Shlw
- * Modifier : Shlw lzh
+ * Modifier : Shlw lzh Shlw
  * Description : Calculate normal-vector, volumes and so on.
  ************************************************************************/
 #include <bits/stdc++.h>
@@ -78,7 +78,7 @@ void trans(){
     }
 
     float dens=(rand()%100)/100.0;
-    fprintf(output,"%d %.10f %.10f %.10f %.10lf\n",n,vol,dens*10,(rand()%100)/100.0,maxdist);
+    fprintf(output,"%d %.10f %.10f %.10f %.10lf\n",n,vol,dens+10,10+(rand()%100)/100.0,maxdist);
     for (int i=0;i<n;++i){
         for (int j=0;j<3;++j){
             prt(i,j);
