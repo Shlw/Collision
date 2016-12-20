@@ -7,6 +7,9 @@ Sphere, Cylinder, Ellipsoid, Donut
 
 ## Changelog
 
+* Shlw @ 2016.12.20.20.56
+  1. Re-set density and elasticity.
+
 * lzh @ 2016.12.20.20.04
   1. Fix bugs about the density and I tensor.
 

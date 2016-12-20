@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* Shlw @2016.12.20.20.56
+  1. Update models.
+  2. Adjust the velocity.
+
 * lzh @ 2016.12.20.19.58
   1. Fix bugs about the collision, and now the energy in total remains a
   constant.

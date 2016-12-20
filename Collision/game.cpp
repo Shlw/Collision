@@ -65,13 +65,13 @@ Audio* Audio::GetAudio() {
 void Audio::LoadFile(int index) {
     ALuint  buffer, source;
     ALenum  error;
-    
+
     ALenum  format;
     ALvoid  *data=NULL;
-    
+
     ALsizei size;
     ALfloat freq;
-    
+
     if (index < 0 || index >= 100) {
         throw ERROR_UNKNOWN_SOUND;
     } else if (upBufList[index]) {
@@ -83,12 +83,12 @@ void Audio::LoadFile(int index) {
         data = alutLoadMemoryFromFile(cpSndFileList[index], &format, &size, &freq);
         if (NULL == data)
             throw FILE_NOT_FOUND;
-        
+
         alBufferData(buffer, format, data, size, freq);
         upBufList[index] = buffer;
         dpDuration[index] = CalWAVDuration(size, freq, format);
     }
-    
+
     // find the next free source
     long lNxtSrc = qSrcQueue.top();
     if (lNxtSrc / 1e5 > dLastClock) {
@@ -100,29 +100,29 @@ void Audio::LoadFile(int index) {
     } else {
         source = upSrcList[lNxtSrc % 100];
     }
-    
+
     // be sure that the source is cleaned
     alSourcei(source, AL_BUFFER, AL_NONE);
     alSourcei(source, AL_BUFFER, buffer);
     // set volume
     alSourcef(source, AL_GAIN, fEffVol);
-    
+
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
         throw ERROR_OPENAL;
     }
-    
+
     alSourcePlay(source);
     qSrcQueue.pop();
     // add 100 ms for delay
     qSrcQueue.push(lNxtSrc % 100 + 10000 +
                    long((dpDuration[index] + dLastClock) * 1e3) * 100);
-    
+
     // *alutLoadMemoryFromFile* allocates memory for *data*,
     // so free it after use.
     free(data);
-    
+
     return ;
 }
 void Audio::LoadBGM() {
@@ -139,20 +139,20 @@ void Audio::LoadBGM() {
     data = alutLoadMemoryFromFile("bgm.wav", &format, &size, &freq);
     if (NULL == data)
         throw FILE_NOT_FOUND;
-    
+
     alBufferData(buffer, format, data, size, freq);
-    
+
     alSourcei(source, AL_BUFFER, buffer);
     // loop
     alSourcei(source, AL_LOOPING, true);
     alSourcef(source, AL_GAIN, fBGMVol);
-    
+
     error = alGetError();
     if (error != ALUT_ERROR_NO_ERROR) {
         fprintf(stderr, "Error when playing wav file: %s\n", alGetString(error));
         throw ERROR_OPENAL;
     }
-    
+
     alSourcePlay(source);
 
     free(data);
@@ -177,12 +177,12 @@ void GameInit()
     memset(upSrcList, 0, sizeof(upSrcList));
     memset(dpDuration, 0, sizeof(dpDuration));
     memset(npSoundQueue, 0, sizeof(npSoundQueue));
-    
+
     memset(bpCrashing, 0, sizeof(bpCrashing));
-    
+
     nSndQuePtr = 0;
     fBGMVol = fEffVol = 1.0;
-    
+
     for (int i = 1; i < 100; ++i)
         qSrcQueue.push(i);
 
@@ -200,7 +200,7 @@ void GameInit()
         memcpy(cpSndFileList[nSndFileCount], cpSndFile,
                strlen(cpSndFile) * sizeof(char));
     fclose(fpSndEff);
-    
+
     // allocate memory for sources
     alGenSources(100, upSrcList);
 
@@ -246,7 +246,7 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
 
     // set the speed
     *oppObjectList[nObjectTot]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
-    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::vec3((x2-x1)*0.02, (y2-y1)*0.02, (z2-z1)*0.02);
+    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::vec3((x2-x1)*0.01, (y2-y1)*0.01, (z2-z1)*0.01);
 
     return ;
 }
@@ -260,15 +260,15 @@ void GameSecond()
     float dets = 0.0;
     for (int i = 0; i < nObjectTot; i++)
     {
-        glm::mat3 I = glm::mat3(*oppObjectList[i] -> mpFrame) * 
-            *mppModelList[oppObjectList[i]->nModelType]->mMomentOfInertia * 
+        glm::mat3 I = glm::mat3(*oppObjectList[i] -> mpFrame) *
+            *mppModelList[oppObjectList[i]->nModelType]->mMomentOfInertia *
             glm::transpose(glm::mat3(*oppObjectList[i] -> mpFrame));
         glm::vec3 v = *oppObjectList[i]->vpSpeed;
         glm::vec3 w = glm::inverse(I)* *oppObjectList[i]->vpAngularMomentum;
         float e = 0.5 * mppModelList[oppObjectList[i]->nModelType]->fMass * glm::dot(v, v) +
                 0.5 * glm::dot(w, *oppObjectList[i] -> vpAngularMomentum);
         dets = glm::determinant(*oppObjectList[i] -> mpFrame);
-        // printf("object%d:\n v = (%f, %f, %f),\n w = (%f, %f, %f),\n Ek = %f, det = %f\n", 
+        // printf("object%d:\n v = (%f, %f, %f),\n w = (%f, %f, %f),\n Ek = %f, det = %f\n",
         //        i, v[0], v[1], v[2], w[0], w[1], w[2], e, dets);
         E += e;
     }
