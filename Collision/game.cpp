@@ -1,7 +1,7 @@
 /*************************************************************************
  * game.cpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh lziad lzh lziad
+ * Modifier : Shlw lzh Shlw lzh lziad lzh lziad lzh
  * Description : Source file to implement Game, which handles the game
  * logic, that is, to determine when to release a new object and something
  * like that.
@@ -18,6 +18,7 @@ char   cpSndFileList[100][256];
 int    nSndFileCount;
 // buffers and sources
 ALuint upBufList[100], upSrcList[100];
+ALuint uBGMBuf;
 // the duration of the files
 double dpDuration[100];
 // the minimum heap records when each source will be valid to play sounds
@@ -30,6 +31,9 @@ int npSoundQueue[1000];
 int nSndQuePtr;
 // volumes
 ALfloat fBGMVol, fEffVol;
+
+ALCdevice *pDevice;
+ALCcontext *pContext;
 
 // The result is the wav file's duration in seconds.
 double CalWAVDuration(ALsizei size, ALfloat freq, ALenum format) {
@@ -126,7 +130,6 @@ void Audio::LoadFile(int index) {
     
     return ;
 }
-
 void Audio::LoadBGM() {
     ALuint  buffer, source = upSrcList[0];
     ALenum  error;
@@ -161,6 +164,8 @@ void Audio::LoadBGM() {
 
     free(data);
 
+    uBGMBuf = buffer;
+
     return ;
 }
 
@@ -189,8 +194,8 @@ void GameInit()
         qSrcQueue.push(i);
 
     // init openAL
-    ALCdevice *pDevice = alcOpenDevice(NULL);
-    ALCcontext *pContext = alcCreateContext(pDevice, NULL);
+    pDevice = alcOpenDevice(NULL);
+    pContext = alcCreateContext(pDevice, NULL);
     alcMakeContextCurrent(pContext);
 
     // read wav files
@@ -248,48 +253,52 @@ void GameDrag(GLFWwindow* w, int c, const char** p)
 
     // set the speed
     *oppObjectList[nObjectTot]->vpSpeed = glm::vec3(x2-x1, y2-y1, z2-z1);
-    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::vec3((x2-x1)*0.01, (y2-y1)*0.01, (z2-z1)*0.01);
+    *oppObjectList[nObjectTot++]->vpAngularMomentum =glm::vec3((x2-x1)*0.02, (y2-y1)*0.02, (z2-z1)*0.02);
 
     return ;
 }
 
 void GameSecond()
 {
+#ifdef DEBUG
     std::cout << nLastSecond << ' ' << nModelTot << ' ' << nObjectTot << std::endl;
     printf("%ds:\n",nLastSecond);
     float E = 0.0;
+    float dets = 0.0;
     for (int i = 0; i < nObjectTot; i++)
     {
         glm::mat3 I = glm::mat3(*oppObjectList[i] -> mpFrame) * 
             *mppModelList[oppObjectList[i]->nModelType]->mMomentOfInertia * 
-            glm::inverse(glm::mat3(*oppObjectList[i] -> mpFrame));
+            glm::transpose(glm::mat3(*oppObjectList[i] -> mpFrame));
         glm::vec3 v = *oppObjectList[i]->vpSpeed;
         glm::vec3 w = glm::inverse(I)* *oppObjectList[i]->vpAngularMomentum;
         float e = 0.5 * mppModelList[oppObjectList[i]->nModelType]->fMass * glm::dot(v, v) +
                 0.5 * glm::dot(w, *oppObjectList[i] -> vpAngularMomentum);
-        printf("object%d:\n v = (%f, %f, %f),\n w = (%f, %f, %f),\n Ek = %f\n", 
-                i, v[0], v[1], v[2], w[0], w[1], w[2], e);
+        dets = glm::determinant(*oppObjectList[i] -> mpFrame);
+        // printf("object%d:\n v = (%f, %f, %f),\n w = (%f, %f, %f),\n Ek = %f, det = %f\n", 
+        //        i, v[0], v[1], v[2], w[0], w[1], w[2], e, dets);
         E += e;
     }
     printf("total: Ek = %f\n", E);
+#endif
     return ;
 }
 
 void GameCleanUp()
 {
+    for (int i = 0; i < 100; i++)
+        alSourceStop(upSrcList[i]);
     // delete buffers and sources
     for (int i = 0; i < 100; ++i)
         if (upBufList[i])
             alDeleteBuffers(1, upBufList+i);
+    alDeleteBuffers(1, &uBGMBuf);
     alDeleteSources(100, upSrcList);
     // shutdown openAL
-    ALCcontext *pContext = alcGetCurrentContext();
-    ALCdevice *pDevice = alcGetContextsDevice(pContext);
     alcMakeContextCurrent(NULL);
     alcDestroyContext(pContext);
     alcCloseDevice(pDevice);
     alutExit();
 
     return ;
-
 }

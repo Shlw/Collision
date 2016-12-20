@@ -30,7 +30,7 @@ ADD_EXECUTABLE(${COLLISION_EXE_NAME} ${COLLISION_SRCS})
 IF (WIN32)
     SET(COLLISION_LIBS glfw3 glu32 opengl32 winmm gdi32 jpeg \"alut.dll\" \"openal.dll\" m)
 ELSEIF (APPLE)
-    SET(COLLISION_LIBS glfw openal jpeg "-framework GLUT" alut "-framework OpenGL")
+    SET(COLLISION_LIBS "-dylib libglfw" "-dylib openal" jpeg "-framework GLUT" alut "-framework OpenGL")
 ELSEIF (UNIX)
     SET(COLLISION_LIBS glfw GL GLU jpeg alut openal m)
 ENDIF ()
@@ -50,5 +50,5 @@ ENDIF()
 
 # Do miscellaneous things for the target
 
-SET(COLLISION_DEFS -DDEBUG)
+SET(COLLISION_DEFS -DRELEASE)
 ADD_DEFINITIONS(${COLLISION_DEFS})

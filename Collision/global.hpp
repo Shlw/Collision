@@ -1,7 +1,7 @@
 /*************************************************************************
  * global.hpp for project Collision
  * Author : lzh
- * Modifier : Shlw lzh Shlw lzh lziad Shlw lzh lziad
+ * Modifier : Shlw lzh Shlw lzh lziad Shlw lzh lziad lzh
  * Description : Global header for the whole project, including
  * inclusion of public headers and declarations.
  ************************************************************************/
