@@ -8,35 +8,35 @@
 
 using namespace std;
 
-const float A=0.3;
-const float B=0.25;
-const float C=0.2;
+const double A=0.3;
+const double B=0.25;
+const double C=0.2;
 const int N=1000;
 typedef long long LL;
-typedef float SEQ[N];
+typedef double SEQ[N];
 
-float deltan,deltam;
+double deltan,deltam;
 SEQ x[N],y[N],z[N],thetan,thetam;
 int n,m,parts; //n row, m column, parts images
-float mm;
+double mm;
 FILE* os;
 
-float modmm(float x){
+double modmm(double x){
     while (x>mm) x-=mm;
     return x;
 }
 
 void prt_coord(int i,int j){
-    fprintf(os,"%.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j]);
+    fprintf(os,"%.20lf %.20lf %.20lf ",x[i][j],y[i][j],z[i][j]);
 }
 
 void prt_texture(int i,int j){
     j=modmm(j);
-    float tx=0.5+float(mm+1-2*j)/(mm+1)/2*sqrt(x[i][j]*x[i][j]+y[i][j]*y[i][j])/sqrt(A*B);
-    float ty=float(n-i)/n;
+    double tx=0.5+double(mm+1-2*j)/(mm+1)/2*sqrt(x[i][j]*x[i][j]+y[i][j]*y[i][j])/sqrt(A*B);
+    double ty=double(n-i)/n;
     if (tx>1) tx=1;
         else if (tx<0) tx=0;
-    fprintf(os,"%.10f %.10f ",tx,ty);
+    fprintf(os,"%.20lf %.20lf ",tx,ty);
 }
 
 void prt_two(int i1,int j1,int i2,int j2){
@@ -63,7 +63,7 @@ int main(){
            "Also, M should be aliquot by P\n"
            "Or, the result can not be guaranteed:)\n");
 
-    scanf("%d%d%d",&n,&m,&parts); mm=m/float(parts);
+    scanf("%d%d%d",&n,&m,&parts); mm=m/double(parts);
     deltan=M_PI/(n+1); deltam=2*M_PI/m;
     for (int i=0;i<n;++i) thetan[i]=(i+1)*deltan-M_PI/2;
     for (int i=0;i<m;++i) thetam[i]=i*deltam;
@@ -83,14 +83,14 @@ int main(){
 //top
     fprintf(os,"%d\n",m+m+(n-1)*m*2);
     for (int i=0;i<m;++i){
-        fprintf(os,"%.10f %.10f %.10f 0.5 0 ",0.0,0.0,C);
+        fprintf(os,"%.20lf %.20lf %.20lf 0.5 0 ",0.0,0.0,C);
         prt_two(n-1,i+1,n-1,i); fprintf(os,"\n");
     }
 
 //button
     for (int i=0;i<m;++i){
         prt_two(0,i,0,i+1);
-        fprintf(os,"%.10f %.10f %.10f 0.5 1\n",0.0,0.0,-C);
+        fprintf(os,"%.20lf %.20lf %.20lf 0.5 1\n",0.0,0.0,-C);
     }
 
 //middle

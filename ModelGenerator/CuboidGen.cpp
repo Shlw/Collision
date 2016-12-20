@@ -8,19 +8,19 @@
 
 using namespace std;
 
-const float L=0.2;
-const float R=0.3;
-const float H=0.25;
+const double L=0.2;
+const double R=0.3;
+const double H=0.25;
 const int N=100;
 int n;
-float x[N][N],y[N][N],z[N][N];
+double x[N][N],y[N][N],z[N][N];
 FILE* os=fopen("cuboid.txt","w");
 
 void prt(int i,int j){
-    fprintf(os,"%.10f %.10f %.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j],float(j)/n,float(i)/n);
+    fprintf(os,"%.20lf %.20lf %.20lf %.20lf %.20lf ",x[i][j],y[i][j],z[i][j],double(j)/n,double(i)/n);
 }
 
-void prtsquare(float tx,float ty,float tz,float xx,float xy,float xz,float yx,float yy,float yz){
+void prtsquare(double tx,double ty,double tz,double xx,double xy,double xz,double yx,double yy,double yz){
     xx/=n; xy/=n; xz/=n; yx/=n; yy/=n; yz/=n;
     for (int i=0;i<=n;++i)
         for (int j=0;j<=n;++j)

@@ -7,6 +7,9 @@ Sphere, Cylinder, Ellipsoid, Donut
 
 ## Changelog
 
+* lzh @ 2016.12.20.22.44
+  1. Change everything to double.
+
 * Shlw @ 2016.12.20.20.56
   1. Re-set density and elasticity.
 
