@@ -9,10 +9,10 @@ modeling, rendering and collision detection.
 ## Changelog and Note
 
 * lzh @ 2016.12.20.23.40
-  1. Use Chinese triditional magic arts to control energy.
+  1. Use Chinese traditional magic arts to control energy.
 
 * Shlw @ 2016.12.20.22.58
-  1. Re-generate models.
+  1. Regenerate models.
 
 * lzh @ 2016.12.20.22.44
   1. Change everything to double.
@@ -49,7 +49,7 @@ modeling, rendering and collision detection.
   2. Use a queue to record the sounds which cannot be played on time.
 
 * lzh @ 2016.12.18.21.17
-  1. Revert the changes
+  1. Revert the changes.
   2. @ 2016.12.18.21.17 for some unknown issues
   disabling the display of box.
 
@@ -99,7 +99,7 @@ modeling, rendering and collision detection.
   2. Add background music.
   3. Add sound effects when collision happens.
      (using *guichu* or *remix* materials)
-  4. Finally main function has try-catch!
+  4. Finally, main function has try-catch!
 
 * lzh @ 2016.12.16.21.56
   1. Add lighting.
@@ -154,7 +154,7 @@ modeling, rendering and collision detection.
 * Shlw @ 2016.12.10.23.24
   1. Add Moment of Inertia(mat3).
   2. Update models.
-  3. Make directory Models.
+  3. Make directory-Models.
 
 * lzh @ 2016.12.10.21.00
   1. Substitute cross, dot and length with the that in glm.
