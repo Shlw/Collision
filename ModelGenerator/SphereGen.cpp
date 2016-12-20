@@ -8,27 +8,27 @@
 
 using namespace std;
 
-const float R=0.2;
+const double R=0.2;
 const int N=1000;
 typedef long long LL;
-typedef float SEQ[N];
+typedef double SEQ[N];
 
-float deltan,deltam;
+double deltan,deltam;
 SEQ x[N],y[N],z[N],thetan,thetam;
 int n,m,parts; //n row, m column, parts images
-float mm;
+double mm;
 FILE* os;
 
-float modmm(float x){return x-floor(x/mm)*mm;}
+double modmm(double x){return x-floor(x/mm)*mm;}
 
 void prt_coord(int i,int j){
-    fprintf(os,"%.10f %.10f %.10f ",x[i][j],y[i][j],z[i][j]);
+    fprintf(os,"%.20lf %.20lf %.20lf ",x[i][j],y[i][j],z[i][j]);
 }
 
 void prt_texture(int i,int j){
     j=modmm(j);
-    fprintf(os,"%.10f %.10f ",0.48+float(mm+1-2*j)/(mm+1)/2*sqrt(x[i][j]*x[i][j]+y[i][j]*y[i][j])/R
-                             ,float(n-i)/n);
+    fprintf(os,"%.20lf %.20lf ",0.48+double(mm+1-2*j)/(mm+1)/2*sqrt(x[i][j]*x[i][j]+y[i][j]*y[i][j])/R
+                             ,double(n-i)/n);
 }
 
 void prt_two(int i1,int j1,int i2,int j2){
@@ -55,7 +55,7 @@ int main(){
            "Or, the result can not be guaranteed:)\n");
 
 
-    scanf("%d%d%d",&n,&m,&parts); mm=m/float(parts);
+    scanf("%d%d%d",&n,&m,&parts); mm=m/double(parts);
     deltan=M_PI/(n+1); deltam=2*M_PI/m;
     for (int i=0;i<n;++i) thetan[i]=(i+1)*deltan-M_PI/2;
     for (int i=0;i<m;++i) thetam[i]=i*deltam;
@@ -75,14 +75,14 @@ int main(){
 
 //top
     for (int i=0;i<m;++i){
-        fprintf(os,"%.10f %.10f %.10f 0.5 0 ",0.0,0.0,R);
+        fprintf(os,"%.20lf %.20lf %.20lf 0.5 0 ",0.0,0.0,R);
         prt_two(n-1,i+1,n-1,i); fprintf(os,"\n");
     }
 
 //button
     for (int i=0;i<m;++i){
         prt_two(0,i,0,i+1);
-        fprintf(os,"%.10f %.10f %.10f\n 0.5 1 ",0.0,0.0,-R);
+        fprintf(os,"%.20lf %.20lf %.20lf\n 0.5 1 ",0.0,0.0,-R);
     }
 
 //middle
