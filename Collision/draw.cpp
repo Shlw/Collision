@@ -11,14 +11,14 @@
 
 void Point::DrawVertex()
 {
-    glTexCoord2fv(glm::value_ptr(*vpTexture));
-    glVertex4fv(glm::value_ptr(*vpCoordinate));
+    glTexCoord2dv(glm::value_ptr(*vpTexture));
+    glVertex4dv(glm::value_ptr(*vpCoordinate));
     return ;
 }
 
 void Triangle::Draw()
 {
-    glNormal3fv(glm::value_ptr(*vpNormalVector));
+    glNormal3dv(glm::value_ptr(*vpNormalVector));
     pppVertex[0]->DrawVertex();
     pppVertex[1]->DrawVertex();
     pppVertex[2]->DrawVertex();
@@ -46,7 +46,7 @@ void Object::Draw(int index)
     // Multiply mFrame to the right of current matrix in order to
     // transform coordinates in each Object to the global coordinates of
     // OpenGL.
-    glMultMatrixf(glm::value_ptr(*mpFrame));
+    glMultMatrixd(glm::value_ptr(*mpFrame));
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_NORMALIZE);
@@ -74,7 +74,7 @@ void Draw()
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    glLightfv(GL_LIGHT0, GL_POSITION, fppLightPosition);
+    glLightfv(GL_LIGHT0, GL_POSITION, fpLightPosition);
 
     for (int i = 0; i < nObjectTot; i++)
         oppObjectList[i]->Draw(npFaces[i]);
@@ -89,33 +89,33 @@ void DrawBox()
 {
     glDepthMask(GL_FALSE);
     glBegin(GL_LINES);
-        glColor4f(0.7, 0.0, 0.0, 1.0);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[2], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[2], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[3], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[3], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[2], fpBoxLimit[5]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[2], fpBoxLimit[5]);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[3], fpBoxLimit[5]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[3], fpBoxLimit[5]);
-        glColor4f(0.0, 0.7, 0.0, 1.0);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[2], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[3], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[2], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[3], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[2], fpBoxLimit[5]);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[3], fpBoxLimit[5]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[2], fpBoxLimit[5]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[3], fpBoxLimit[5]);
-        glColor4f(0.0, 0.0, 0.7, 1.0);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[2], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[2], fpBoxLimit[5]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[2], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[2], fpBoxLimit[5]);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[3], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[0], fpBoxLimit[3], fpBoxLimit[5]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[3], fpBoxLimit[4]);
-        glVertex3f(fpBoxLimit[1], fpBoxLimit[3], fpBoxLimit[5]);
+        glColor4d(0.7, 0.0, 0.0, 1.0);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[2], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[2], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[3], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[3], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[2], dpBoxLimit[5]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[2], dpBoxLimit[5]);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[3], dpBoxLimit[5]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[3], dpBoxLimit[5]);
+        glColor4d(0.0, 0.7, 0.0, 1.0);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[2], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[3], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[2], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[3], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[2], dpBoxLimit[5]);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[3], dpBoxLimit[5]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[2], dpBoxLimit[5]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[3], dpBoxLimit[5]);
+        glColor4d(0.0, 0.0, 0.7, 1.0);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[2], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[2], dpBoxLimit[5]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[2], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[2], dpBoxLimit[5]);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[3], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[0], dpBoxLimit[3], dpBoxLimit[5]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[3], dpBoxLimit[4]);
+        glVertex3d(dpBoxLimit[1], dpBoxLimit[3], dpBoxLimit[5]);
     glEnd();
     glDepthMask(GL_TRUE);
     return ;

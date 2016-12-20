@@ -56,9 +56,9 @@ void WindowInit()
     glPointSize(2.0);
     glLineWidth(2.0);
     
-    glLightfv(GL_LIGHT0, GL_AMBIENT, fppLightAmbient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, fppLightDiffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, fppLightSpecular);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, fpLightAmbient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, fpLightDiffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, fpLightSpecular);
     
     glfwSwapInterval(1);
     

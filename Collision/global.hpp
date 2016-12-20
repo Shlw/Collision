@@ -60,10 +60,11 @@ class Object;
 class Audio;
 
 // typedef definitions
-typedef glm::vec2* PVec2;
-typedef glm::vec3* PVec3;
-typedef glm::vec4* PVec4;
-typedef glm::mat4* PMat4;
+typedef glm::dvec2* PVec2;
+typedef glm::dvec3* PVec3;
+typedef glm::dvec4* PVec4;
+typedef glm::dmat3* PMat3;
+typedef glm::dmat4* PMat4;
 typedef Point* PPoint;
 typedef Triangle* PTriangle;
 typedef Model* PModel;
@@ -113,8 +114,8 @@ class Model{
 public:
     int nLength; // the number of triangular cones
     PTriangle* tppCone; // the point array of triangle pointers
-    float fVolume,fElastic,fMass,fMaxRadius;
-    glm::mat3* mMomentOfInertia;
+    double dVolume,dElastic,dMass,dMaxRadius;
+    PMat3 mMomentOfInertia;
 
     Model();
     ~Model();
@@ -132,10 +133,10 @@ public:
     PVec3 vpSpeed;
     PVec3 vpAngularMomentum;
 
-    float fMomentInertia;
+    double dMomentInertia;
 
     Object();
-    Object(int model,float vx=0,float vy=0,float vz=0,float mx=0,float my=0,float mz=0);
+    Object(int model,double vx=0,double vy=0,double vz=0,double mx=0,double my=0,double mz=0);
     ~Object();
 
     PTriangle IsInside(PVec4 tp,PVec3 vdir=NULL);
@@ -186,14 +187,14 @@ extern const char* cpWindowTitle;
 extern double dLastClock, dLastLastClock;
 extern double dLastMouseX, dLastMouseY;
 extern int npButtonState[3];
-extern glm::mat4 mModelTransformMat;
+extern glm::dmat4 mModelTransformMat;
 extern int nLastSecond;
 
-extern float fRotateSpeed;
-extern float fTranslateSpeed;
-extern float fScrollSpeed;
+extern double dRotateSpeed;
+extern double dTranslateSpeed;
+extern double dScrollSpeed;
 
-extern float fpBoxLimit[6];
+extern double dpBoxLimit[6];
 
 extern int nTextureLength;
 extern const char* cpTextureName;
@@ -201,10 +202,10 @@ extern int* npPicWidth, * npPicHeight;
 extern unsigned char** ucppPicContent;
 extern int* npTextureIndex;
 
-extern float fppLightPosition[4];
-extern float fppLightAmbient[4];
-extern float fppLightDiffuse[4];
-extern float fppLightSpecular[4];
+extern float fpLightPosition[4];
+extern float fpLightAmbient[4];
+extern float fpLightDiffuse[4];
+extern float fpLightSpecular[4];
 extern float fpMaterialShininess[1];
 extern float fpMaterialSpecular[4];
 extern float fpMaterialAmbientDiffuse[4];

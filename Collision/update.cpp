@@ -16,23 +16,23 @@ bool bpCrashing[100][100];
 int npFaces[100];
 
 bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2, 
-            glm::vec3 duang, glm::vec3 c1, glm::vec3 c2, glm::vec3 n)
+            glm::dvec3 duang, glm::dvec3 c1, glm::dvec3 c2, glm::dvec3 n)
 {
     n = n / glm::length(n); //I'm speechless.
     //needed: P(v), L(w), r
-    glm::vec3 rc1 = duang - c1;
-    glm::vec3 rc2 = duang - c2;//from c1 or c2 to duang
-    glm::mat3 I1 = glm::mat3(*obj1 -> mpFrame) * 
+    glm::dvec3 rc1 = duang - c1;
+    glm::dvec3 rc2 = duang - c2;//from c1 or c2 to duang
+    glm::dmat3 I1 = glm::dmat3(*obj1 -> mpFrame) * 
             *mod1 -> mMomentOfInertia * 
-            glm::transpose(glm::mat3(*obj1 -> mpFrame));  //I(global) = A * I(model) * A^-1
-    glm::mat3 I2 = glm::mat3(*obj2 -> mpFrame) *
+            glm::transpose(glm::dmat3(*obj1 -> mpFrame));  //I(global) = A * I(model) * A^-1
+    glm::dmat3 I2 = glm::dmat3(*obj2 -> mpFrame) *
             *mod2 -> mMomentOfInertia *
-            glm::transpose(glm::mat3(*obj2 -> mpFrame));
-    glm::vec3 w1 = *obj1 -> vpAngularMomentum * glm::inverse(I1);
-    glm::vec3 w2 = *obj2 -> vpAngularMomentum * glm::inverse(I2);
-    glm::vec3 v1_bef = *obj1 -> vpSpeed + glm::cross(w1, rc1);
-    glm::vec3 v2_bef = *obj2 -> vpSpeed + glm::cross(w2, rc2);
-    float dv_bef = dot((v1_bef - v2_bef), n);
+            glm::transpose(glm::dmat3(*obj2 -> mpFrame));
+    glm::dvec3 w1 = *obj1 -> vpAngularMomentum * glm::inverse(I1);
+    glm::dvec3 w2 = *obj2 -> vpAngularMomentum * glm::inverse(I2);
+    glm::dvec3 v1_bef = *obj1 -> vpSpeed + glm::cross(w1, rc1);
+    glm::dvec3 v2_bef = *obj2 -> vpSpeed + glm::cross(w2, rc2);
+    double dv_bef = dot((v1_bef - v2_bef), n);
     if (dv_bef >= 0.0)
     {/*
         printf("c1 = %f,%f,%f\n", c1[0], c1[1], c1[2]);
@@ -47,20 +47,20 @@ bool collision_calc(PObject obj1, PModel mod1, PObject obj2, PModel mod2,
         system("pause");*/
         return false;
     }
-    float fenmu1 = glm::dot(
+    double fenmu1 = glm::dot(
                     glm::cross(
                         glm::inverse(I1)*glm::cross(rc1, n),
                             rc1),
-                            n) + 1.0 / mod1 -> fMass;
-    float fenmu2 = glm::dot(
+                            n) + 1.0 / mod1 -> dMass;
+    double fenmu2 = glm::dot(
                     glm::cross(
                         glm::inverse(I2)*glm::cross(rc2, n),
                             rc2),
-                            n) + 1.0 / mod2 -> fMass;
-    float dP = (/*mod1 -> fElastic * mod2 -> fElastic*/1.0 + 1.0) * (dv_bef)
+                            n) + 1.0 / mod2 -> dMass;
+    double dP = (/*mod1 -> fElastic * mod2 -> fElastic*/1.0 + 1.0) * (dv_bef)
                     / (fenmu1 + fenmu2);
-    *obj1 -> vpSpeed -= (dP / mod1 -> fMass)*n;
-    *obj2 -> vpSpeed += (dP / mod2 -> fMass)*n;
+    *obj1 -> vpSpeed -= (dP / mod1 -> dMass)*n;
+    *obj2 -> vpSpeed += (dP / mod2 -> dMass)*n;
     *obj1 -> vpAngularMomentum -= dP * glm::cross(rc1, n);
     *obj2 -> vpAngularMomentum += dP * glm::cross(rc2, n);
     return true;
@@ -71,26 +71,26 @@ bool collision_judge(PObject obj1, PObject obj2)
     bool flag = 0;
     PModel mod1 = mppModelList[obj1 -> nModelType];
     PModel mod2 = mppModelList[obj2 -> nModelType];
-    float maxRad1 = mod1 -> fMaxRadius;
-    float maxRad2 = mod2 -> fMaxRadius;
-    glm::vec4 zero4 = glm::vec4(glm::vec3(0.0), 1.0);
-    glm::vec4 ctemp;
+    double maxRad1 = mod1 -> dMaxRadius;
+    double maxRad2 = mod2 -> dMaxRadius;
+    glm::dvec4 zero4 = glm::dvec4(glm::dvec3(0.0), 1.0);
+    glm::dvec4 ctemp;
     ctemp = *(obj1 -> mpFrame) * zero4;
-    glm::vec3 c1 = glm::vec3(ctemp);
+    glm::dvec3 c1 = glm::dvec3(ctemp);
     ctemp = *(obj2 -> mpFrame) * zero4;
-    glm::vec3 c2 = glm::vec3(ctemp);
-    float l = glm::length(c1 - c2);
+    glm::dvec3 c2 = glm::dvec3(ctemp);
+    double l = glm::length(c1 - c2);
     PTriangle pside;
     if (l > maxRad1 + maxRad2) return 0;
 
-    glm::vec3 ic = (c2 - c1) / l;
-    float nearest = 0.0;
+    glm::dvec3 ic = (c2 - c1) / l;
+    double nearest = 0.0;
     for (int i = 0; i < mod2 -> nLength; i++)
     for (int j = 0; j < 3; j++)
     {
         ctemp = *(obj2 -> mpFrame) *
             *(mod2 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
-        glm::vec3 temp(ctemp);
+        glm::dvec3 temp(ctemp);
         if (glm::dot(temp - c2, ic) < nearest)
             nearest = glm::dot(temp - c2, ic);
     }
@@ -101,21 +101,21 @@ bool collision_judge(PObject obj1, PObject obj2)
     {
         ctemp = *(obj1 -> mpFrame) *
             *(mod1 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
-        glm::vec3 temp(ctemp);     //collision: point
+        glm::dvec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c1, ic) >= l)
         {
-            glm::vec3 wspeed = 
-                glm::mat3(*obj1 -> mpFrame) * 
+            glm::dvec3 wspeed = 
+                glm::dmat3(*obj1 -> mpFrame) * 
                 *mod1 -> mMomentOfInertia *
-                glm::transpose(glm::mat3(*obj1 -> mpFrame)) *
+                glm::transpose(glm::dmat3(*obj1 -> mpFrame)) *
                 *obj1 -> vpAngularMomentum;
-            glm::vec3 vpoint = glm::cross(wspeed, temp - c1) + *obj1 -> vpSpeed;
+            glm::dvec3 vpoint = glm::cross(wspeed, temp - c1) + *obj1 -> vpSpeed;
             pside =             //collision: triangle
                 obj2 -> IsInside(&ctemp, &vpoint);
             if (pside != NULL)            //IsInside: true
             {
                 if ( collision_calc(obj1, mod1, obj2, mod2, temp, c1, c2,
-                            glm::vec3(*pside -> vpNormalVector)
+                            glm::dvec3(*pside -> vpNormalVector)
                         )       //moving closer: true
                    )
                 // lzh : IsInside allocates memory, and you're supposed
@@ -135,7 +135,7 @@ bool collision_judge(PObject obj1, PObject obj2)
     {
         ctemp = *(obj1 -> mpFrame) *
             *(mod1 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
-        glm::vec3 temp(ctemp);
+        glm::dvec3 temp(ctemp);
         if (glm::dot(temp - c1, ic) > nearest)
             nearest = glm::dot(temp - c1, ic);
     }
@@ -146,21 +146,21 @@ bool collision_judge(PObject obj1, PObject obj2)
     {
         ctemp = *(obj2 -> mpFrame) *
             *(mod2 -> tppCone[i] -> pppVertex[j] -> vpCoordinate);
-        glm::vec3 temp(ctemp);     //collision: point
+        glm::dvec3 temp(ctemp);     //collision: point
         if (glm::dot(temp - c2, ic) <= -l)
         {
-            /*glm::vec3 wspeed = 
-                glm::mat3(*obj2 -> mpFrame) * 
+            /*glm::dvec3 wspeed = 
+                glm::dmat3(*obj2 -> mpFrame) * 
                 *mod2 -> mMomentOfInertia *
-                glm::transpose(glm::mat3(*obj2 -> mpFrame)) *
+                glm::transpose(glm::dmat3(*obj2 -> mpFrame)) *
                 *obj2 -> vpAngularMomentum;*/
-            glm::vec3 vpoint/* = glm::cross(wspeed, temp - c1) + *obj2 -> vpSpeed*/;
+            glm::dvec3 vpoint/* = glm::cross(wspeed, temp - c1) + *obj2 -> vpSpeed*/;
             pside =             //collision: triangle
                 obj1 -> IsInside(&ctemp, &vpoint);
             if (pside != NULL)            //IsInside: true
             {
                 if ( collision_calc(obj2, mod2, obj1, mod1, temp, c2, c1,
-                            glm::vec3(*pside -> vpNormalVector)
+                            glm::dvec3(*pside -> vpNormalVector)
                         )       //moving closer: true
                    )
                 // lzh : IsInside allocates memory, and you're supposed
@@ -178,9 +178,9 @@ bool collision_judge(PObject obj1, PObject obj2)
 
 void Update()
 {
-    float dt = dLastClock - dLastLastClock;
+    double dt = dLastClock - dLastLastClock;
     bool judged[nObjectTot];
-    const float fEpsilon = 1.0E-7;
+    const double fEpsilon = 1.0E-7;
     memset(judged, false, sizeof(nObjectTot));
     for (int i = 0; i < nObjectTot; i++)
     {
@@ -213,22 +213,23 @@ void Update()
         PMat4 pframe = pobji -> mpFrame;
         PVec3 pspeed = pobji -> vpSpeed;
         (*pframe)[3] = glm::translate
-            (glm::mat4(1.0), (*pspeed)*dt) * (*pframe)[3];
-        glm::mat3 frame(*pframe);
-        glm::mat3 I = (frame)*(*pmodi -> mMomentOfInertia)*(glm::transpose(frame));
-        glm::vec3 omega = glm::inverse(I) * *pobji -> vpAngularMomentum;
+            (glm::dmat4(1.0), (*pspeed)*dt) * (*pframe)[3];
+        glm::dmat3 frame(*pframe);
+        glm::dmat3 I = (frame)*(*pmodi -> mMomentOfInertia)*(glm::transpose(frame));
+        glm::dvec3 omega = glm::inverse(I) * *pobji -> vpAngularMomentum;
         if (glm::length(omega) > fEpsilon)
         {
-            float x = (*pframe)[3][0]; (*pframe)[3][0] = .0;
-            float y = (*pframe)[3][1]; (*pframe)[3][1] = .0;
-            float z = (*pframe)[3][2]; (*pframe)[3][2] = .0;
-            (*pframe) = glm::rotate(glm::mat4(1.0), glm::length(omega)*dt, omega/glm::length(omega)) * (*pframe) ;
+            double x = (*pframe)[3][0]; (*pframe)[3][0] = .0;
+            double y = (*pframe)[3][1]; (*pframe)[3][1] = .0;
+            double z = (*pframe)[3][2]; (*pframe)[3][2] = .0;
+            (*pframe) = glm::rotate(glm::dmat4(1.0), glm::length(omega)*dt, omega/glm::length(omega)) * (*pframe) ;
             (*pframe)[3][0] = x;
             (*pframe)[3][1] = y;
             (*pframe)[3][2] = z;
             (*pframe)[3][3] = 1.0;
         }
-    // (*pobji -> vpAngularMomentum) = glm::vec3(glm::rotate(glm::mat4(1.0), glm::length(omega)*dt, omega/glm::length(omega)) * glm::vec4(*pobji -> vpAngularMomentum, 1.0));
+    // (*pobji -> vpAngularMomentum) = glm::dvec3(glm::rotate(glm::ddmat4(1.0), glm::length(omega)*dt, omega/glm::length(omega)) * glm::dvec4(*pobji -> vpAngularMomentum, 1.0));
+    /*
     (*pframe)[0] /= glm::length((*pframe)[0]);
     (*pframe)[1] -= (*pframe)[0]*glm::dot((*pframe)[0], (*pframe)[1]);
     (*pframe)[1] /= glm::length((*pframe)[1]);
@@ -236,17 +237,18 @@ void Update()
     (*pframe)[2] -= (*pframe)[1]*glm::dot((*pframe)[1], (*pframe)[2]);
     (*pframe)[2] /= glm::length((*pframe)[2]);
     (*pframe)[3][3] = 1.0;
-    if ((*pframe)[3][0] < fpBoxLimit[0])
+    */
+    if ((*pframe)[3][0] < dpBoxLimit[0])
         (*pspeed)[0] = fabs((*pspeed)[0]);
-    if ((*pframe)[3][0] > fpBoxLimit[1])
+    if ((*pframe)[3][0] > dpBoxLimit[1])
         (*pspeed)[0] = -fabs((*pspeed)[0]);
-    if ((*pframe)[3][1] < fpBoxLimit[2])
+    if ((*pframe)[3][1] < dpBoxLimit[2])
         (*pspeed)[1] = fabs((*pspeed)[1]);
-    if ((*pframe)[3][1] > fpBoxLimit[3])
+    if ((*pframe)[3][1] > dpBoxLimit[3])
         (*pspeed)[1] = -fabs((*pspeed)[1]);
-    if ((*pframe)[3][2] < fpBoxLimit[4])
+    if ((*pframe)[3][2] < dpBoxLimit[4])
         (*pspeed)[2] = fabs((*pspeed)[2]);
-    if ((*pframe)[3][2] > fpBoxLimit[5])
+    if ((*pframe)[3][2] > dpBoxLimit[5])
         (*pspeed)[2] = -fabs((*pspeed)[2]);
 
     }
