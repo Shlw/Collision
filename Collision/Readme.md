@@ -8,6 +8,9 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.21.18.11
+  1. Update CMakeLists.txt.
+
 * lzh @ 2016.12.20.23.40
   1. Use Chinese traditional magic arts to control energy.
 
