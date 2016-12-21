@@ -21,10 +21,6 @@ SET(COLLISION_EXE_NAME collision)
 
 SET(COLLISION_SRCS collision.cpp display.cpp draw.cpp update.cpp game.cpp global.cpp event.cpp)
 
-# Generate instruction for target in Makefile
-
-ADD_EXECUTABLE(${COLLISION_EXE_NAME} ${COLLISION_SRCS})
-
 # Setup option list
 
 OPTION(CMAKE_WITH_DEBUG "Generate Makefile in debug mode in cmake" OFF)
@@ -59,10 +55,14 @@ OPTION(HINT_ALUT_FOUND "Switch to hint for alut" OFF)
 SET(HINT_ALUT_INCLUDE_DIR "" CACHE STRING "Include directories hinting for alut")
 SET(HINT_ALUT_LIBRARY "" CACHE STRING "Library names hinting for alut")
 
-# Setup libraries list
+# Generate instruction for target in Makefile
 
 INCLUDE_DIRECTORIES(${COLLISION_INCLUDE_DIR})
 LINK_DIRECTORIES(${COLLISION_LIBRARY_DIR})
+
+ADD_EXECUTABLE(${COLLISION_EXE_NAME} ${COLLISION_SRCS})
+
+# Setup libraries list
 
 FIND_PACKAGE(PkgConfig)
 
