@@ -7,6 +7,9 @@ Sphere, Cylinder, Ellipsoid, Donut
 
 ## Changelog
 
+* Shlw @ 2016.12.22.20.54
+  1. Add hint in regenerate.cpp.
+
 * Shlw @ 2016.12.20.22.58
   1. Regenerate models.
 
