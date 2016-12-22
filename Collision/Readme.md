@@ -8,6 +8,10 @@ modeling, rendering and collision detection.
 
 ## Changelog and Note
 
+* lzh @ 2016.12.22.23.17
+  1. Update CMakeLists.txt to add search of glm, fix -O2 flags and add
+  *RPATH*.
+
 * lzh @ 2016.12.21.18.11
   1. Update CMakeLists.txt.
 
