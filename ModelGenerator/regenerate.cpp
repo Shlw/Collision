@@ -95,6 +95,9 @@ void trans(){
 }
 
 int main(){
+    printf("Please input the model filename,\n"
+           "for example, \'cuboid\', and I will regenerate the model in cuboid.txt,\n"
+           "then write the new model into \'Modelcuboid.txt\'\n");
     srand(time(0));
     char st[N],tst[N];
     scanf("%s",st);
